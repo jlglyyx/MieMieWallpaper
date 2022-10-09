@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_10"
+    android:padding="@dimen/dp_5"
+    android:background="@color/white">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="标题"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/textColor"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/textColor_999999"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="佣金：￥6"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/textColor_999999"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="单量：3/5"
+            android:layout_marginStart="@dimen/dp_10"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/textColor_999999"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="进行中"
+            android:background="@drawable/shape_task_status_bg"
+            android:textSize="@dimen/sp_15"
+            android:layout_marginStart="@dimen/dp_10"
+            android:paddingHorizontal="@dimen/dp_5"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <com.yang.lib_common.widget.AccountImageListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/accountImageListView"
+        android:orientation="horizontal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2020-7-26 10:20:22"
+        android:textSize="@dimen/sp_14"
+        android:layout_gravity="end"
+        android:textColor="@color/textColor_999999"/>
+</LinearLayout>

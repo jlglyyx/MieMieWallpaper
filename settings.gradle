@@ -1,0 +1,8 @@
+rootProject.name = "SHelp"
+include ':app'
+include ':lib_common'
+include ':module_mine'
+include ':module_main'
+include ':apt-processor'
+include ':apt-annotation'
+include ':module_task'
