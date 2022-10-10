@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.yang.lib_common.widget.CommonToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:leftImgVisible="false"
+        android:visibility="gone"
+        app:centerContent="首页"/>
+    <com.yang.lib_common.widget.CommonSearchToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:leftImgVisible="true"
+        app:rightImgVisible="true"/>
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:id="@id/tabLayout"
+        android:background="@color/white"
+        style="@style/mainTopTabTabLayout"
+        android:overScrollMode="never"
+        app:tabIndicator="@drawable/layer_list_tab_indicator"
+        android:layout_height="wrap_content"/>
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never"
+        android:id="@id/viewPager"/>
+</LinearLayout>

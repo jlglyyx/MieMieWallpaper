@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:gravity="bottom"
+    android:id="@+id/ll_container"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/dp_10"
+    android:layout_height="@dimen/dp_80">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:padding="@dimen/dp_10"
+        android:id="@+id/iv_back"
+        android:src="@drawable/iv_back"/>
+
+    <com.hjq.shape.view.ShapeEditText
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:background="@null"
+        android:hint="马上搜索"
+        android:enabled="false"
+        android:textSize="@dimen/sp_16"
+        android:id="@+id/et_search"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/dp_10"
+        app:shape_radius="@dimen/dp_20"
+        app:shape_solidColor="@color/grey_1f"
+        android:layout_height="40dp"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:padding="@dimen/dp_10"
+        android:id="@+id/iv_add"
+        android:src="@drawable/iv_add"/>
+
+</LinearLayout>

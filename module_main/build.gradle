@@ -1,0 +1,21 @@
+apply from: '../module_config.gradle'
+
+
+android {
+
+
+    defaultConfig {
+        if (isModule.toBoolean()) {
+            applicationId 'com.android.module_main'
+        }
+
+    }
+
+
+}
+
+dependencies {
+
+
+}
+
