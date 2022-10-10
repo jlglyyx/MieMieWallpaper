@@ -24,7 +24,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
+                <com.youth.banner.Banner
+                    android:id="@id/banner"
+                    android:layout_marginVertical="@dimen/dp_8"
+                    android:layout_width="match_parent"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_height="@dimen/dp_160" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/top_recyclerView"
@@ -35,6 +40,52 @@
                     android:paddingVertical="@dimen/dp_10"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dp_5"
+                    android:layout_marginVertical="@dimen/dp_5"
+                    android:orientation="horizontal">
+                    <com.hjq.shape.view.ShapeTextView
+                        android:layout_width="@dimen/dp_5"
+                        android:layout_height="match_parent"
+                        app:shape_radius="@dimen/dp_2"
+                        android:layout_marginVertical="@dimen/dp_4"
+                        app:shape_solidColor="@color/colorBar"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/sp_14"
+                        android:textColor="@color/textColor"
+                        android:layout_height="match_parent"
+                        android:textStyle="bold"
+                        android:layout_marginHorizontal="@dimen/dp_6"
+                        android:gravity="center_vertical"
+                        android:text="按热度"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="@dimen/sp_14"
+                        android:textColor="@color/textColor"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:text="排序"/>
+                    <ImageView
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_30"
+                        android:textSize="@dimen/sp_16"
+                        android:textColor="@color/textColor"
+                        android:padding="@dimen/dp_5"
+                        android:src="@drawable/iv_sort"
+                        app:tint="@color/textColor"
+                        android:text="排序"/>
+                    </LinearLayout>
+
+                </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"

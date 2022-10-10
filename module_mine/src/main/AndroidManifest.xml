@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yang.module_mine">
+
+    <application>
+        <activity android:name=".ui.activity.MineSettingActivity" />
+        <activity android:name=".ui.activity.MineChangePasswordActivity" />
+        <activity android:name=".ui.activity.MineChangePhoneActivity" />
+        <activity
+            android:name=".ui.activity.WebActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.AboutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.TaskHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MyBalanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MyRightsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.activity.MineUserInfoActivity"
+            android:exported="false" />
+    </application>
+</manifest>

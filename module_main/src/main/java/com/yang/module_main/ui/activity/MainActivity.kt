@@ -1,5 +1,9 @@
 package com.yang.module_main.ui.activity
 
+import android.view.LayoutInflater
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
@@ -13,6 +17,7 @@ import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.px2dip
 import com.yang.lib_common.util.showShort
 import com.yang.lib_common.*
+import com.yang.lib_common.databinding.ViewCustomTabBinding
 import com.yang.module_main.databinding.ActMainBinding
 import com.yang.module_main.viewmodel.MainViewModel
 @Route(path = AppConstant.RoutePath.MAIN_ACTIVITY)
@@ -23,7 +28,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
 
     private lateinit var mFragments: MutableList<Fragment>
 
-    private var mTitles = arrayListOf("首页", "工作台","我的")
+    private var mTitles = arrayListOf("静态壁纸", "动态壁纸","我的")
 
     private var mImages = arrayListOf(R.drawable.iv_home, R.drawable.iv_task, R.drawable.iv_mine)
 
@@ -40,7 +45,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
         mFragments = mutableListOf<Fragment>().apply {
             add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
             add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
-            add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.MINE_FRAGMENT).navigation() as Fragment)
         }
     }
 
@@ -65,14 +70,19 @@ class MainActivity : BaseActivity<ActMainBinding>() {
         TabLayoutMediator(
             mViewBinding.tabLayout, mViewBinding.viewPager, true, false
         ) { tab, position ->
-            tab.text = mTitles[position]
-            tab.setIcon(mImages[position])
+            val tabView = ViewCustomTabBinding.inflate(LayoutInflater.from(this))
+
+            tabView.tvTitle.text = mTitles[position]
+            tabView.ivImage.setImageResource(mImages[position])
+            tab.customView = tabView.root
+
             if (position == 0) {
-                tab.setIcon(mSelectImages[position])
+                tabView.ivImage.setImageResource(mSelectImages[position])
+                tabView.tvTitle.setTextColor(ActivityCompat.getColor(this@MainActivity,R.color.textColor))
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
 //                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
             } else {
-                tab.setIcon(mImages[position])
+                tabView.ivImage.setImageResource(mImages[position])
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
 //                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.grey))
             }
@@ -89,13 +99,30 @@ class MainActivity : BaseActivity<ActMainBinding>() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.setIcon(mImages[tab.position])
+                val customView = tab.customView
+                customView?.apply {
+                    val tvTitle = findViewById<TextView>(R.id.tv_title)
+                    val ivImage = findViewById<ImageView>(R.id.iv_image)
+                    tvTitle.setTextColor(ActivityCompat.getColor(this@MainActivity,R.color.textColor_666666))
+                    ivImage.setImageResource(mImages[tab.position])
+                }
+
+
+
+//                tab.setIcon(mImages[tab.position])
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
 //                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.grey))
             }
 
             override fun onTabSelected(tab: TabLayout.Tab) {
-                tab.setIcon(mSelectImages[tab.position])
+                val customView = tab.customView
+                customView?.apply {
+                    val tvTitle = findViewById<TextView>(R.id.tv_title)
+                    val ivImage = findViewById<ImageView>(R.id.iv_image)
+                    tvTitle.setTextColor(ActivityCompat.getColor(this@MainActivity,R.color.textColor))
+                    ivImage.setImageResource(mSelectImages[tab.position])
+                }
+//                tab.setIcon(mSelectImages[tab.position])
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
 //                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
 

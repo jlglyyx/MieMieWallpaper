@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SHelp</string>
+    <string name="string_more_function">更多功能</string>
+    <string name="string_login_out">退出登陆</string>
+</resources>
