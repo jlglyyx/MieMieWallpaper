@@ -7,6 +7,7 @@ import android.content.Context.INPUT_METHOD_SERVICE
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -21,8 +22,11 @@ import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
 import com.yang.lib_common.room.entity.UserInfoData
 import io.reactivex.rxjava3.core.Observable
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
@@ -404,3 +408,39 @@ fun hideSoftInput(context: Context,view: View){
     val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
 }
+
+
+fun createAppId(updateAppId:String = "",path:String = "/storage/emulated/0/Android/"):String{
+    val file = File(path, "._MieMieAppId.txt")
+    var appId = "MieMie_${System.currentTimeMillis()}_${UUID.randomUUID().toString().replace("-","")}"
+    if (!TextUtils.isEmpty(updateAppId)){
+        appId = updateAppId
+    }
+    if (!file.exists()){
+        file.createNewFile()
+        val fileInputStream = FileOutputStream(file)
+        fileInputStream.write(appId.toByteArray())
+    }else{
+        if (!TextUtils.isEmpty(updateAppId)){
+            val fileInputStream = FileOutputStream(file)
+            fileInputStream.write(appId.toByteArray())
+        }
+    }
+    return appId
+}
+
+fun getAppId(path:String = "/storage/emulated/0/Android/"):String{
+    val file = File(path, "._MieMieAppId.txt")
+    if (file.exists()){
+        val fileInputStream = FileInputStream(file)
+        val byteArrayOf = ByteArray(fileInputStream.available())
+        fileInputStream.read(byteArrayOf)
+        return String(byteArrayOf)
+    }
+
+    return createAppId()
+}
+
+
+
+

@@ -26,6 +26,8 @@ import com.yang.lib_common.helper.getRemoteComponent
 import com.yang.lib_common.service.DaemonRemoteService
 import com.yang.lib_common.service.DaemonService
 import com.yang.lib_common.util.NetworkUtil
+import com.yang.lib_common.util.createAppId
+import io.dcloud.ads.core.DCloudAdManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -54,6 +56,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         initNetworkStatusListener(baseApplication)
         initVideo()
         initWebView()
+        initAd()
     }
 
     companion object {
@@ -169,6 +172,12 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         }
         Log.i(TAG, "initWebView: ==>${measureTimeMillis}")
 
+    }
+
+    private fun initAd(){
+        val config = DCloudAdManager.InitConfig()
+        config.setAppId("__UNI__HelloUNIAD").adId = createAppId(path = obbDir.absolutePath)
+        DCloudAdManager.init(this, config)
     }
 
 

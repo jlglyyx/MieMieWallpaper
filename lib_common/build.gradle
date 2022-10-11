@@ -55,7 +55,7 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: "libs", include: ["*.jar"])
+    api fileTree(dir: "libs", include: ["*.jar","*.aar"])
     rootProject.ext.androidx.each { k, v -> api v }
     rootProject.ext.apiDependencies.each { k, v -> api v }
     rootProject.ext.kaptDependencies.each { k, v -> kapt v }
