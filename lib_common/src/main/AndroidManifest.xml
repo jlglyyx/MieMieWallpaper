@@ -60,6 +60,9 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+
+
 
 
     <application
@@ -103,6 +106,17 @@
             android:name=".service.DaemonService"
             android:enabled="true"
             android:exported="false" />
+
+        <service android:name=".service.CustomWallpaperService"
+            android:permission="android.permission.BIND_WALLPAPER"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService"/>
+            </intent-filter>
+            <meta-data android:name="android.service.wallpaper"
+                android:resource="@xml/custom_wallpaper"
+                />
+        </service>
     </application>
 
 </manifest>

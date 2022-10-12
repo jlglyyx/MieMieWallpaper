@@ -2,17 +2,23 @@
 
 package com.yang.lib_common.util
 
+import android.app.WallpaperManager
+import android.content.ComponentName
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.FileProvider
+import com.blankj.utilcode.util.RomUtils
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.tencent.mmkv.MMKV
@@ -442,5 +448,17 @@ fun getAppId(path:String = "/storage/emulated/0/Android/"):String{
 }
 
 
+fun getUriWithPath(context: Context, filePath: String): Uri {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        //7.0以上的读取文件uri要用这种方式了
+        FileProvider.getUriForFile(
+            context.applicationContext,
+            "com.yang.miemie.wallpaper.fileProvider",
+            File(filePath)
+        )
+    } else {
+        Uri.fromFile(File(filePath))
+    }
+}
 
 

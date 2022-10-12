@@ -26,13 +26,13 @@ class MBannerAdapter(mData: MutableList<BannerBean>) : BannerAdapter<BannerBean,
 
     inner class BannerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var shapeAbleImageView: ShapeableImageView = itemView as ShapeableImageView
+        var shapeAbleImageView: ImageView = itemView as ImageView
 
     }
 
     override fun onCreateHolder(parent: ViewGroup, viewType: Int): BannerViewHolder {
 
-        val shapeAbleImageView = ShapeableImageView(parent.context)
+        val shapeAbleImageView = ImageView(parent.context)
         shapeAbleImageView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
         shapeAbleImageView.scaleType = ImageView.ScaleType.CENTER_CROP

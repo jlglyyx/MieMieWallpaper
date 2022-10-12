@@ -11,6 +11,7 @@ import androidx.core.content.FileProvider
 import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.showShort
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -55,6 +56,9 @@ class MultiMoreThreadDownload(
 
     interface DownListener {
         fun downSuccess(fileUrl: String)
+        fun downStart()
+        fun downError(message: String)
+        fun downPercent(percent: Int)
     }
 
     companion object {
@@ -134,6 +138,10 @@ class MultiMoreThreadDownload(
 
     override fun run() {
         try {
+            CoroutineScope(Dispatchers.Main).launch {
+                downListener?.downStart()
+            }
+
             val parentFile = File(parentFilePath)
             if (!parentFile.exists()) {
                 parentFile.mkdirs()
@@ -149,7 +157,7 @@ class MultiMoreThreadDownload(
                 }
 //
                 if (fileSize == fileHasLength) {
-                    GlobalScope.launch(Dispatchers.Main) {
+                    CoroutineScope(Dispatchers.Main).launch {
                         downListener?.downSuccess(file.absolutePath)
                     }
                     return
@@ -226,6 +234,8 @@ class MultiMoreThreadDownload(
                             "run:  下载进度：$downloadPercent%  用时：$usedTimeMillis/s  下载速度：$downloadSpeed Kb/s"
                         )
                         currentPercent = downloadPercent
+
+                        downListener?.downPercent(downloadPercent)
                         if (showNotice) {
                             showDownLoadNotification(downloadPercent, usedTimeMillis, downloadSpeed)
                         }
@@ -233,7 +243,7 @@ class MultiMoreThreadDownload(
 
                 }
 
-                GlobalScope.launch(Dispatchers.Main) {
+                CoroutineScope(Dispatchers.Main).launch {
                     if (showNotice) {
                         showShort("下载完成：${file.absolutePath}")
                         showCompleteNotification(file)
@@ -244,10 +254,11 @@ class MultiMoreThreadDownload(
             }
 
         } catch (e: Exception) {
-            GlobalScope.launch(Dispatchers.Main) {
+            CoroutineScope(Dispatchers.Main).launch {
                 if (showNotice) {
                     showShort("下载失败：${e.message}")
                 }
+                downListener?.downError(e.message.toString())
             }
             Log.i(TAG, "run: ${e.message}")
         }
@@ -292,7 +303,7 @@ class MultiMoreThreadDownload(
                         .setData(
                             FileProvider.getUriForFile(
                                 mContext,
-                                "com.yang.taobao.help.fileProvider",
+                                "com.yang.miemie.wallpaper.fileProvider",
                                 file
                             )
                         ),

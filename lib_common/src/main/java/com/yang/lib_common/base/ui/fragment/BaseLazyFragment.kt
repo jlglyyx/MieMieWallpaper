@@ -170,22 +170,31 @@ abstract class BaseLazyFragment<VB : ViewBinding> : Fragment() {
     private fun registerListener() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
-                if (loadingPopupView == null) {
-                    loadingPopupView = XPopup.Builder(requireContext()).dismissOnTouchOutside(false).asLoading(it)
-                } else {
-                    loadingPopupView?.setTitle(it)
-                }
-                if (!loadingPopupView?.isShow!!) {
-                    loadingPopupView?.show()
-                }
+                showDialog(it,false)
             })
 
             uC.dismissDialogEvent.observe(this, Observer {
-                loadingPopupView?.dismiss()
+                dismissDialog()
             })
         }
 
     }
+
+    fun showDialog(title:String = "加载中",dismissOnTouchOutside:Boolean = false){
+        if (loadingPopupView == null) {
+            loadingPopupView = XPopup.Builder(requireContext()).dismissOnTouchOutside(dismissOnTouchOutside).asLoading(title)
+        } else {
+            loadingPopupView?.setTitle(title)
+        }
+        if (!loadingPopupView?.isShow!!) {
+            loadingPopupView?.show()
+        }
+    }
+
+    fun dismissDialog(){
+        loadingPopupView?.dismiss()
+    }
+
 
     private fun unRegisterListener() {
         uC?.let { uC ->
@@ -245,7 +254,7 @@ abstract class BaseLazyFragment<VB : ViewBinding> : Fragment() {
         uC = null
         _mViewBinding = null
         loadingPopupView?.dismiss()
-        loadingPopupView = null
+//        loadingPopupView = null
     }
 
 }
