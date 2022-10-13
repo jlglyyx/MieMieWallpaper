@@ -22,7 +22,9 @@ import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.service.CustomWallpaperService
 import com.yang.lib_common.util.WallpaperUtil
+import com.yang.lib_common.util.buildARouter
 import com.yang.module_main.R
+import com.yang.module_main.data.WallpaperData
 import com.yang.module_main.databinding.FraMainItemBinding
 import com.yang.module_main.ui.activity.MainActivity
 import com.youth.banner.config.IndicatorConfig
@@ -38,7 +40,7 @@ import com.youth.banner.indicator.CircleIndicator
 @Route(path = AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
 class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
 
-    private lateinit var mAdapter: BaseQuickAdapter<String, BaseViewHolder>
+    private lateinit var mAdapter: BaseQuickAdapter<WallpaperData, BaseViewHolder>
     private lateinit var mTopAdapter: BaseQuickAdapter<String, BaseViewHolder>
     private var type = 0
 
@@ -72,9 +74,9 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
     }
 
     private fun initRecyclerView() {
-        mAdapter = object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_image) {
-            override fun convert(helper: BaseViewHolder, item: String) {
-                Glide.with(mContext).load(item).into(helper.getView(R.id.iv_image))
+        mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
+            override fun convert(helper: BaseViewHolder, item: WallpaperData) {
+                Glide.with(mContext).load(item.imageUrl).into(helper.getView(R.id.iv_image))
             }
         }
         mViewBinding.recyclerView.adapter = mAdapter
@@ -86,51 +88,39 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
             }
         }
         mViewBinding.topRecyclerView.adapter = mTopAdapter
-        mAdapter.setNewData(mutableListOf<String>().apply {
-            add("https://img1.baidu.com/it/u=3622442929,3246643478&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=32fc8f0a742874ae750f14f937b6cb6a")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
+        mAdapter.setNewData(mutableListOf<WallpaperData>().apply {
+            add(WallpaperData().apply {
+                imageUrl = "https://img1.baidu.com/it/u=3622442929,3246643478&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=32fc8f0a742874ae750f14f937b6cb6a"
+            })
+            add(WallpaperData().apply {
+                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
+            })
+            add(WallpaperData().apply {
+                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
+            })
+            add(WallpaperData().apply {
+                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
+            })
+            add(WallpaperData().apply {
+                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
+            })
+            add(WallpaperData().apply {
+                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
+            })
+            add(WallpaperData().apply {
+                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
+            })
+            add(WallpaperData().apply {
+                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
+            })
 
         })
 
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mAdapter.getItem(position)
             item?.let {
-                MultiMoreThreadDownload.Builder(requireContext()).parentFilePath(requireContext().obbDir.absolutePath).filePath("${System.currentTimeMillis()}.jpg").fileUrl(item).downListener(object :MultiMoreThreadDownload.DownListener{
-                    override fun downSuccess(fileUrl: String) {
+                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY).withString(AppConstant.Constant.ID,it.id).navigation()
 
-
-
-                        WallpaperUtil.setDynamicWallpaper(requireContext(),"${requireContext().obbDir.absolutePath}/2.mp4")
-//                        try {
-//                            WallpaperUtil.setDynamicWallpaper(requireContext(),"${requireContext().obbDir.absolutePath}/2.mp4")
-//                        }catch (e:Exception){
-//                            WallpaperUtil.setDynamicWallpaper(requireContext(),"")
-//                        }
-
-//                        WallpaperUtil.setDynamicWallpaper(requireContext(),"${requireContext().obbDir.absolutePath}/2.mp4")
-
-                        dismissDialog()
-                    }
-
-                    override fun downStart() {
-                        showDialog()
-                    }
-
-                    override fun downError(message: String) {
-                        showDialog("下载失败:$message")
-                        Log.i(TAG, "downError: $message")
-                    }
-
-                    override fun downPercent(percent: Int) {
-
-                    }
-                }).showNotice(false).build().start()
             }
         }
 

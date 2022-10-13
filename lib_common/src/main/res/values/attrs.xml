@@ -21,6 +21,11 @@
         <attr name="itemRightContentVisible" format="boolean"/>
         <attr name="itemBg" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="ItemImageView">
+        <attr name="itemTipImgSrc" format="reference"/>
+        <attr name="itemTitle" format="string"/>
+        <attr name="itemImgSrc" format="reference"/>
+    </declare-styleable>
     <declare-styleable name="ItemInputView">
         <attr name="leftTitle" format="string"/>
         <attr name="itv_minLines" format="integer"/>

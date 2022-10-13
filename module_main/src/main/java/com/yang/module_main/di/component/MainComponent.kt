@@ -5,6 +5,7 @@ import com.yang.lib_common.scope.ActivityScope
 import com.yang.module_main.ui.activity.MainActivity
 import com.yang.module_main.di.factory.MainViewModelFactory
 import com.yang.module_main.di.module.MainModule
+import com.yang.module_main.ui.activity.WallpaperDetailActivity
 import com.yang.module_main.ui.fragment.MainFragment
 import com.yang.module_main.ui.fragment.MainItemFragment
 import dagger.Component
@@ -33,4 +34,6 @@ interface MainComponent {
     fun inject(inject: MainFragment)
 
     fun inject(inject: MainItemFragment)
+
+    fun inject(inject: WallpaperDetailActivity)
 }

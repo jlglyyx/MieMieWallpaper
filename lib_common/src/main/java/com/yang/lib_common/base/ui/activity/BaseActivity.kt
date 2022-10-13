@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
@@ -139,19 +140,11 @@ abstract class BaseActivity<VB:ViewBinding> : AppCompatActivity() {
     private fun registerListener() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
-                if (loadingPopupView == null) {
-                    loadingPopupView =
-                        XPopup.Builder(this).dismissOnTouchOutside(false).asLoading(it)
-                } else {
-                    loadingPopupView?.setTitle(it)
-                }
-                if (!loadingPopupView?.isShow!!) {
-                    loadingPopupView?.show()
-                }
+                showDialog(it,false)
             })
 
             uC.dismissDialogEvent.observe(this, Observer {
-                loadingPopupView?.dismiss()
+                dismissDialog()
             })
             uC.finishActivityEvent.observe(this, Observer {
                 finish()
@@ -162,6 +155,24 @@ abstract class BaseActivity<VB:ViewBinding> : AppCompatActivity() {
         }
 
     }
+
+
+
+    fun showDialog(title:String = "加载中",dismissOnTouchOutside:Boolean = false){
+        if (loadingPopupView == null) {
+            loadingPopupView = XPopup.Builder(this).dismissOnTouchOutside(dismissOnTouchOutside).asLoading(title)
+        } else {
+            loadingPopupView?.setTitle(title)
+        }
+        if (!loadingPopupView?.isShow!!) {
+            loadingPopupView?.show()
+        }
+    }
+
+    fun dismissDialog(){
+        loadingPopupView?.dismiss()
+    }
+
 
     private fun unRegisterListener() {
         uC?.let { uC ->

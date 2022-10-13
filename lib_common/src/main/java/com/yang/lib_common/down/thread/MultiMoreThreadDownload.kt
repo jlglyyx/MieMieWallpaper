@@ -55,7 +55,7 @@ class MultiMoreThreadDownload(
     private var finishDown = false
 
     interface DownListener {
-        fun downSuccess(fileUrl: String)
+        fun downSuccess(file: File)
         fun downStart()
         fun downError(message: String)
         fun downPercent(percent: Int)
@@ -158,7 +158,7 @@ class MultiMoreThreadDownload(
 //
                 if (fileSize == fileHasLength) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        downListener?.downSuccess(file.absolutePath)
+                        downListener?.downSuccess(file)
                     }
                     return
                 }
@@ -248,7 +248,7 @@ class MultiMoreThreadDownload(
                         showShort("下载完成：${file.absolutePath}")
                         showCompleteNotification(file)
                     }
-                    downListener?.downSuccess(file.absolutePath)
+                    downListener?.downSuccess(file)
                 }
 
             }
@@ -313,7 +313,7 @@ class MultiMoreThreadDownload(
             .build()
         notificationManager.cancel(1)
         notificationManager.notify(2, build)
-        downListener?.downSuccess(file.absolutePath)
+        downListener?.downSuccess(file)
     }
 
 

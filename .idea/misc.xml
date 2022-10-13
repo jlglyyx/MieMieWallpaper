@@ -6,6 +6,7 @@
         <entry key="..\:/AndroidStudio/.gradle/caches/transforms-3/0ae4c7d95428d0f2ad10de742d484797/transformed/jetified-uniad-hw-release/res/drawable/dcloud_ads_hw_button_select.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/.gradle/caches/transforms-3/0ae4c7d95428d0f2ad10de742d484797/transformed/jetified-uniad-hw-release/res/drawable/dcloud_ads_hw_close_btn_background.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/.gradle/caches/transforms-3/0ae4c7d95428d0f2ad10de742d484797/transformed/jetified-uniad-hw-release/res/layout/dcloud_ads_hw_native_ad_with_app_download_btn_template.xml" value="0.14166666666666666" />
+        <entry key="..\:/AndroidStudio/.gradle/caches/transforms-3/37677cdd28a7dfacc4321bdf56b17e7a/transformed/material-1.6.0/res/layout/mtrl_picker_text_input_date.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/.gradle/caches/transforms-3/37677cdd28a7dfacc4321bdf56b17e7a/transformed/material-1.6.0/res/layout/test_exposed_dropdown_menu.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/.gradle/caches/transforms-3/55a0fc9918223fb3860e36c366cb0521/transformed/jetified-uniad-hw-release/res/drawable/dcloud_ads_hw_close_btn_background.xml" value="0.166" />
         <entry key="..\:/AndroidStudio/.gradle/caches/transforms-3/55a0fc9918223fb3860e36c366cb0521/transformed/jetified-uniad-hw-release/res/layout/dcloud_ads_hw_native_ad_with_app_download_btn_template.xml" value="0.14166666666666666" />
@@ -22,12 +23,15 @@
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/drawable/shape_task_status_bg.xml" value="0.178" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/view_common_search_toolbar.xml" value="0.109375" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/view_custom_tab.xml" value="0.2" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/view_item_image.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/xml/custom_wallpaper.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_main.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_splash.xml" value="0.24947916666666667" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_wallpaper_detail.xml" value="0.1" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/fra_main.xml" value="0.2" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/fra_main_item.xml" value="0.264" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/item_top_image.xml" value="0.24947916666666667" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/view_wallpaper_detail.xml" value="0.1" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/fra_mine.xml" value="0.24947916666666667" />
       </map>
     </option>

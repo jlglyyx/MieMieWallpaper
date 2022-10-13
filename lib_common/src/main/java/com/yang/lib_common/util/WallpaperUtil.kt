@@ -1,23 +1,30 @@
 package com.yang.lib_common.util
 
+import android.Manifest
 import android.app.WallpaperManager
 import android.app.WallpaperManager.FLAG_LOCK
 import android.app.WallpaperManager.FLAG_SYSTEM
 import android.content.ComponentName
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat
 import android.net.Uri
 import android.os.Build
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.FileProvider
+import android.os.Environment
+import android.provider.MediaStore
+import android.text.TextUtils
+import android.util.Log
 import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.RomUtils
+import com.blankj.utilcode.util.Utils
 import com.lxj.xpopup.XPopup
-import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.service.CustomWallpaperService
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.io.OutputStream
 
 
 /**
@@ -29,9 +36,25 @@ import java.io.IOException
 class WallpaperUtil {
 
     companion object {
+        private const val TAG = "WallpaperUtil"
+
+
+
+
 
 
         fun setWallpaper(context: Context, path: String) {
+
+            if (path.endsWith(".mp4",true)){
+                setDynamicWallpaper(context,path)
+            }else{
+                setStaticWallpaper(context,path)
+
+            }
+        }
+
+
+        fun setStaticWallpaper(context: Context, path: String) {
             try {
                 val uri = getUriWithPath(context, path)
                 val intent: Intent

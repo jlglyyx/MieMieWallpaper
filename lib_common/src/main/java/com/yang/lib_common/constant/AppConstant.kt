@@ -63,6 +63,8 @@ interface AppConstant {
         const val ABOUT_AND_HELP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AboutAndHelpActivity"
         const val WEB_VIEW_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/WebViewActivity"
 
+        const val WALLPAPER_DETAIL_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/WallpaperDetailActivity"
+
 
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"

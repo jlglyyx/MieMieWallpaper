@@ -6,6 +6,8 @@
     <color name="colorMainTab">#afffffff</color>
     <color name="colorBar">@color/cornflowerblue</color>
 
+    <color name="appColor">@color/colorBar</color>
+
     <color name="textColor">#333333</color><!--黑色 -->
     <color name="textColor_999999">#999999</color><!--黑色 -->
     <color name="textColor_666666">#666666</color><!--黑色 -->
