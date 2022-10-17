@@ -15,7 +15,6 @@ import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
-import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.QbSdk.PreInitCallback
@@ -56,7 +55,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         initNetworkStatusListener(baseApplication)
         initVideo()
         initWebView()
-        initAd()
+//        initAd()
     }
 
     companion object {
@@ -66,8 +65,14 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
     }
 
     private fun initService() {
-        startService(Intent(this, DaemonRemoteService::class.java))
-        startService(Intent(this, DaemonService::class.java))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            startForegroundService(Intent(this, DaemonRemoteService::class.java))
+//            startForegroundService(Intent(this, DaemonService::class.java))
+        }else{
+            startService(Intent(this, DaemonRemoteService::class.java))
+            startService(Intent(this, DaemonService::class.java))
+        }
+
     }
 
     private fun initARouter(application: BaseApplication) {
@@ -85,15 +90,15 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
     }
 
     private fun initCrashReport(application: BaseApplication) {
-        val measureTimeMillis = measureTimeMillis {
-            CoroutineScope(Dispatchers.IO).launch {
-                delay(3000)
-                CrashReport.initCrashReport(application, "4f807733a2", BuildConfig.DEBUG)
-                createNotificationChannel()
-            }
-            Thread.setDefaultUncaughtExceptionHandler(CrashHandle.instance)
-        }
-        Log.i(TAG, "initCrashReport: ==>${measureTimeMillis}")
+//        val measureTimeMillis = measureTimeMillis {
+//            CoroutineScope(Dispatchers.IO).launch {
+//                delay(3000)
+//                CrashReport.initCrashReport(application, "4f807733a2", BuildConfig.DEBUG)
+//                createNotificationChannel()
+//            }
+//            Thread.setDefaultUncaughtExceptionHandler(CrashHandle.instance)
+//        }
+//        Log.i(TAG, "initCrashReport: ==>${measureTimeMillis}")
     }
 
     private fun createNotificationChannel() {

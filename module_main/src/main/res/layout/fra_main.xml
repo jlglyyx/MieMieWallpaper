@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.yang.lib_common.widget.CommonToolBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:centerContent="首页"
-        app:leftImgVisible="false" />
 
     <com.yang.lib_common.widget.CommonSearchToolBar
         android:layout_width="match_parent"

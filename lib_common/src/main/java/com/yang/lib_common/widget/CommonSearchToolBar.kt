@@ -22,7 +22,7 @@ class CommonSearchToolBar : ConstraintLayout {
 
 
 
-    lateinit var ivBack: ShapeableImageView
+    lateinit var ivBack: ImageView
 
 
     lateinit var ivAdd: ImageView
@@ -51,6 +51,7 @@ class CommonSearchToolBar : ConstraintLayout {
 
     private fun init(context: Context, attrs: AttributeSet) {
         val inflate = LayoutInflater.from(context).inflate(R.layout.view_common_search_toolbar, this)
+
         val llToolbar = inflate.findViewById<LinearLayout>(R.id.ll_container)
         llToolbar.setPadding(0, getStatusBarHeight(context), 0, 0)
         ivBack = inflate.findViewById(R.id.iv_back)

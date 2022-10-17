@@ -31,7 +31,7 @@ class CommonToolBar : ConstraintLayout {
 
     lateinit var tvCenterContent: TextView
 
-    lateinit var ivBack: ShapeableImageView
+    lateinit var ivBack: ImageView
 
     lateinit var ivSearch: ImageView
 

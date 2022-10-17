@@ -27,6 +27,8 @@
 -keepattributes SourceFile,LineNumberTable
 -keep class com.hianalytics.android.**{*;}
 -keep class com.huawei.**{*;}
+-keep class io.dcloud.ads.**{*;}
+-keep interface io.dcloud.ads.**{*;}
 
 -dontwarn dalvik.**
 -dontwarn com.tencent.smtt.**

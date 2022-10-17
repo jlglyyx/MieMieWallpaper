@@ -62,7 +62,7 @@ ext {
             "room-runtime"                 : "androidx.room:room-runtime:$version.room_version",
             "room-ktx"                     : "androidx.room:room-ktx:$version.room_version",
             "huawei-scanplus"              : "com.huawei.hms:scan:1.1.1.301",
-            "bugly"                        : "com.tencent.bugly:crashreport:3.4.4",
+//            "bugly"                        : "com.tencent.bugly:crashreport:3.4.4",
             "refresh-layout-kernel"        : "io.github.scwang90:refresh-layout-kernel:2.0.5",
             "refresh-header-classics"      : "io.github.scwang90:refresh-header-classics:2.0.5",
             "refresh-header-material"      : "io.github.scwang90:refresh-header-material:2.0.5",

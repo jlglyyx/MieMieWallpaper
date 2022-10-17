@@ -5,7 +5,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import com.yang.lib_common.R
@@ -269,50 +271,56 @@ class MultiMoreThreadDownload(
     /**
      * 下载进度通知
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDownLoadNotification(progress: Int, usedTimeMillis: Int, downloadSpeed: Int) {
-        val notificationManager =
-            mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val build = NotificationCompat.Builder(mContext, AppConstant.NoticeChannel.DOWNLOAD)
-            .setContentTitle("下载速度：$downloadSpeed Kb/s $progress% 用时：$usedTimeMillis/s")
-            .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setProgress(100, progress, true)
-            .setAutoCancel(true)
-            .build()
-        notificationManager.notify(1, build)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val notificationManager =
+                mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val build = NotificationCompat.Builder(mContext, AppConstant.NoticeChannel.DOWNLOAD)
+                .setContentTitle("下载速度：$downloadSpeed Kb/s $progress% 用时：$usedTimeMillis/s")
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setProgress(100, progress, true)
+                .setAutoCancel(true)
+                .build()
+            notificationManager.notify(1, build)
+        }
     }
 
     /**
      * 下载完成通知
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showCompleteNotification(file: File) {
-        val notificationManager =
-            mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val build = NotificationCompat.Builder(mContext, AppConstant.NoticeChannel.DOWNLOAD)
-            .setContentText("下载完成：${file.absolutePath}")
-            .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setAutoCancel(true)
-            .setContentIntent(
-                PendingIntent.getActivity(
-                    mContext,
-                    0,
-                    Intent(Intent.ACTION_OPEN_DOCUMENT)
-                        .setType("*/*")
-                        .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                        .setData(
-                            FileProvider.getUriForFile(
-                                mContext,
-                                "com.yang.miemie.wallpaper.fileProvider",
-                                file
-                            )
-                        ),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val notificationManager =
+                mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val build = NotificationCompat.Builder(mContext, AppConstant.NoticeChannel.DOWNLOAD)
+                .setContentText("下载完成：${file.absolutePath}")
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setAutoCancel(true)
+                .setContentIntent(
+                    PendingIntent.getActivity(
+                        mContext,
+                        0,
+                        Intent(Intent.ACTION_OPEN_DOCUMENT)
+                            .setType("*/*")
+                            .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                            .setData(
+                                FileProvider.getUriForFile(
+                                    mContext,
+                                    "com.yang.miemie.wallpaper.fileProvider",
+                                    file
+                                )
+                            ),
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
                 )
-            )
-            .build()
-        notificationManager.cancel(1)
-        notificationManager.notify(2, build)
+                .build()
+            notificationManager.cancel(1)
+            notificationManager.notify(2, build)
+        }
         downListener?.downSuccess(file)
     }
 

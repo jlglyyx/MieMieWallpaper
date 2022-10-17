@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.huawei.hms.mlsdk.common.MLApplicationSetting.BundleKeyConstants.AppInfo.packageName
-import com.tencent.bugly.Bugly.applicationContext
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
@@ -21,12 +21,12 @@ import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.service.CustomWallpaperService
-import com.yang.lib_common.util.WallpaperUtil
-import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.*
 import com.yang.module_main.R
 import com.yang.module_main.data.WallpaperData
 import com.yang.module_main.databinding.FraMainItemBinding
 import com.yang.module_main.ui.activity.MainActivity
+import com.yang.module_main.viewmodel.MainViewModel
 import com.youth.banner.config.IndicatorConfig
 import com.youth.banner.indicator.CircleIndicator
 
@@ -39,6 +39,9 @@ import com.youth.banner.indicator.CircleIndicator
  */
 @Route(path = AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
 class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
+
+    @InjectViewModel
+    lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: BaseQuickAdapter<WallpaperData, BaseViewHolder>
     private lateinit var mTopAdapter: BaseQuickAdapter<String, BaseViewHolder>
@@ -76,7 +79,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
     private fun initRecyclerView() {
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
-                Glide.with(mContext).load(item.imageUrl).into(helper.getView(R.id.iv_image))
+                loadRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image))
             }
         }
         mViewBinding.recyclerView.adapter = mAdapter
@@ -84,7 +87,11 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
         mTopAdapter = object :
             BaseQuickAdapter<String, BaseViewHolder>(if (type == 0) R.layout.item_top_image else R.layout.item_top_type_image) {
             override fun convert(helper: BaseViewHolder, item: String) {
-                Glide.with(mContext).load(item).into(helper.getView(R.id.iv_image))
+                if (type == 0){
+                    loadCircle(mContext,item,helper.getView(R.id.iv_image))
+                }else{
+                    loadRadius(mContext,item,5f,helper.getView(R.id.iv_image))
+                }
             }
         }
         mViewBinding.topRecyclerView.adapter = mTopAdapter

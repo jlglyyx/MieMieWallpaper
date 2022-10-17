@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:gravity="bottom"
@@ -9,7 +10,7 @@
     android:paddingBottom="@dimen/dp_10"
     android:layout_height="@dimen/dp_80">
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
         android:padding="@dimen/dp_10"
@@ -31,7 +32,7 @@
         app:shape_solidColor="@color/grey_1f"
         android:layout_height="40dp"/>
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
         android:padding="@dimen/dp_10"

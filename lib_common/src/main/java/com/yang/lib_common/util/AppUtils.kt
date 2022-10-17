@@ -5,6 +5,7 @@ package com.yang.lib_common.util
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -17,8 +18,10 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import com.blankj.utilcode.util.*
+import com.blankj.utilcode.util.ImageUtils.getImageType
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
+import com.lxj.xpopup.util.XPopupUtils
 import com.tencent.mmkv.MMKV
 import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
@@ -463,83 +466,114 @@ fun getUriWithPath(context: Context, filePath: String): Uri {
     }
 }
 
+fun save2Album(source: File?, dirName: String?,context: Context){
 
-fun save2Album(
-    src: Bitmap,
-    dirName: String?,
-    format: Bitmap.CompressFormat,
-    quality: Int,
-    recycle: Boolean,
-    mFileName:String = ""
-): File? {
-    val safeDirName =
-        if (TextUtils.isEmpty(dirName)) Utils.getApp().packageName else dirName!!
-    val suffix = if (Bitmap.CompressFormat.JPEG == format) "JPG" else format.name
-    var fileName = System.currentTimeMillis().toString() + "_" + quality + "." + suffix
-    if (mFileName.isNotEmpty()){
-        fileName = mFileName
+    if (source == null) {
+        showShort("保存失败")
+        return
     }
-    return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-        if (!PermissionUtils.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Log.e("ImageUtils", "save to album need storage permission")
-            return null
-        }
-        val picDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-        val destFile = File(picDir, "$safeDirName/$fileName")
-        if (destFile.exists()){
-            return destFile
-        }
-        if (!ImageUtils.save(src, destFile, format, quality, recycle)) {
-            return null
-        }
-        FileUtils.notifySystemToScan(destFile)
-        destFile
-    } else {
-
-        val file = File("/storage/emulated/0/${Environment.DIRECTORY_DCIM}/$safeDirName/$fileName")
-        if (file.exists()){
-            return file
+    try {
+        val safeDirName =
+            if (TextUtils.isEmpty(dirName)) context.packageName else dirName!!
+        val dir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),safeDirName)
+        if (!dir.exists()) dir.mkdirs()
+        val destFile :File = if(source.name.endsWith(".mp4")){
+            File(dir, System.currentTimeMillis().toString() + "." + "mp4")
+        }else{
+            File(dir, System.currentTimeMillis().toString() + "." +  getImageType(source).value )
         }
 
-        val contentValues = ContentValues()
-        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/*")
-        val contentUri: Uri = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        if (Build.VERSION.SDK_INT < 29) {
+            if (destFile.exists()) destFile.delete()
+            destFile.createNewFile()
+            FileOutputStream(destFile).use { out ->
+                writeFileFromIS(out, FileInputStream(source))
+            }
+            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            intent.data = Uri.parse("file://" + destFile.absolutePath)
+            context.sendBroadcast(intent)
         } else {
-            MediaStore.Images.Media.INTERNAL_CONTENT_URI
-        }
-        contentValues.put(
-            MediaStore.Images.Media.RELATIVE_PATH,
-            Environment.DIRECTORY_DCIM + "/" + safeDirName
-        )
-        contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1)
-        val uri = Utils.getApp().contentResolver.insert(contentUri, contentValues)
-            ?: return null
-        var os: OutputStream? = null
-        try {
-            os = Utils.getApp().contentResolver.openOutputStream(uri)
-            src.compress(format, quality, os)
-            os?.flush()
+            //android10以上，增加了新字段，自己insert，因为RELATIVE_PATH，DATE_EXPIRES，IS_PENDING是29新增字段
+            val contentValues = ContentValues()
+
+            val contentUri: Uri
+            if (source.name.endsWith(".mp4")){
+                contentValues.put(MediaStore.Video.Media.DISPLAY_NAME, destFile.name)
+                contentValues.put(MediaStore.Video.Media.MIME_TYPE, "video/*")
+                contentUri = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                } else {
+                    MediaStore.Video.Media.INTERNAL_CONTENT_URI
+                }
+                contentValues.put(
+                    MediaStore.Video.Media.RELATIVE_PATH,
+                    Environment.DIRECTORY_DCIM + "/" + context.packageName
+                )
+            }else{
+                contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, destFile.name)
+                contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/*")
+                contentUri = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                } else {
+                    MediaStore.Images.Media.INTERNAL_CONTENT_URI
+                }
+                contentValues.put(
+                    MediaStore.Images.Media.RELATIVE_PATH,
+                    Environment.DIRECTORY_DCIM + "/" + context.packageName
+                )
+            }
+
+
+            contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1)
+            val uri = context.contentResolver.insert(contentUri, contentValues)
+            if (uri == null) {
+                showShort("保存失败")
+                return
+            }
+            val resolver = context.contentResolver
+            resolver.openOutputStream(uri).use { out ->
+                writeFileFromIS(out!!, FileInputStream(source))
+            }
+            // Everything went well above, publish it!
             contentValues.clear()
             contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0)
-            Utils.getApp().contentResolver.update(uri, contentValues, null, null)
-            UriUtils.uri2File(uri)
-        } catch (e: java.lang.Exception) {
-            Utils.getApp().contentResolver.delete(uri, null, null)
-            e.printStackTrace()
-            null
-        } finally {
-            try {
-                os?.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+            //contentValues.putNull(MediaStore.MediaColumns.DATE_EXPIRES);
+            resolver.update(uri, contentValues, null, null)
         }
+        showShort("已保存到系统相册")
+    } catch (e: java.lang.Exception) {
+        e.printStackTrace()
+        showShort("保存失败")
     }
+
 }
 
 
+private fun writeFileFromIS(fos: OutputStream, `is`: InputStream): Boolean {
+    var os: OutputStream? = null
+    return try {
+        os = BufferedOutputStream(fos)
+        val data = ByteArray(8192)
+        var len: Int
+        while (`is`.read(data, 0, 8192).also { len = it } != -1) {
+            os.write(data, 0, len)
+        }
+        true
+    } catch (e: IOException) {
+        e.printStackTrace()
+        false
+    } finally {
+        try {
+            `is`.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        try {
+            os?.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+}
 
 

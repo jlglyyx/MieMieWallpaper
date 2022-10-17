@@ -6,14 +6,13 @@
     android:layout_marginStart="@dimen/dp_5"
     android:layout_marginEnd="@dimen/dp_5">
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_50"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/iv_image"
-        app:shapeAppearanceOverlay="@style/circleShapeImage"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         />

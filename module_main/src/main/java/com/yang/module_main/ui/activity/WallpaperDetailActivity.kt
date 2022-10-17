@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.AppUtils
 import com.bumptech.glide.Glide
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
@@ -20,6 +21,7 @@ import com.yang.lib_common.util.*
 import com.yang.module_main.data.WallpaperData
 import com.yang.module_main.databinding.ActWallpaperDetailBinding
 import com.yang.module_main.databinding.ViewWallpaperDetailBinding
+import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.coroutines.*
 import java.io.File
 
@@ -32,6 +34,11 @@ import java.io.File
 @Route(path = AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
 class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
 
+    @InjectViewModel
+    lateinit var mainViewModel: MainViewModel
+
+    private lateinit var mWallpaperViewPagerAdapter:WallpaperViewPagerAdapter
+
     override fun initViewBinding(): ActWallpaperDetailBinding {
         return bind(ActWallpaperDetailBinding::inflate)
     }
@@ -42,17 +49,15 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
     override fun initView() {
         initSmartRefreshLayout()
         initViewPager()
-        val externalStoragePublicDirectory =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
 
-        Log.i(TAG, "initView: $externalStoragePublicDirectory  \n  $")
 
     }
 
     private fun initSmartRefreshLayout() {
         mViewBinding.smartRefreshLayout.setEnableRefresh(false)
         mViewBinding.smartRefreshLayout.setOnLoadMoreListener {
-
+            mWallpaperViewPagerAdapter.addData(mWallpaperViewPagerAdapter.data)
+            mViewBinding.smartRefreshLayout.finishLoadMore()
         }
     }
 
@@ -72,6 +77,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             add(WallpaperData().apply {
                 imageUrl =
                     "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
+                imageName="1.jpg"
             })
             add(WallpaperData().apply {
                 imageUrl =
@@ -94,7 +100,8 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                     "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
             })
         }
-        mViewBinding.viewPager.adapter = WallpaperViewPagerAdapter(data)
+        mWallpaperViewPagerAdapter =  WallpaperViewPagerAdapter(data)
+        mViewBinding.viewPager.adapter = mWallpaperViewPagerAdapter
     }
 
     override fun initViewModel() {
@@ -143,6 +150,12 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         }
 
 
+        fun addData(addData: MutableList<WallpaperData>){
+            data.addAll(addData)
+            notifyDataSetChanged()
+        }
+
+
         inner class ImageViewPagerViewHolder(itemView: ViewWallpaperDetailBinding) :
             RecyclerView.ViewHolder(itemView.root) {
             var ivImage = itemView.ivImage
@@ -155,10 +168,8 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
     }
 
     private fun downAndSetWallpaper(imageUrl: String,imageName:String, justDown: Boolean = false) {
-
-
         MultiMoreThreadDownload.Builder(this)
-            .parentFilePath(obbDir.absolutePath)
+            .parentFilePath(cacheDir.absolutePath)
             .filePath(imageName).fileUrl(imageUrl)
             .downListener(object : MultiMoreThreadDownload.DownListener {
                 override fun downSuccess(file: File) {
@@ -169,22 +180,8 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                             this@WallpaperDetailActivity,
                             file.absolutePath
                         )
-                    } else {
-                        showShort("下载成功")
                     }
-//                    lifecycleScope.launch(Dispatchers.IO) {
-//                        val async = async(Dispatchers.IO) {
-//                            save2Album(
-//                                BitmapFactory.decodeFile(file.absolutePath),
-//                                getString(R.string.app_name),
-//                                Bitmap.CompressFormat.JPEG, 100, true,"_"+file.name
-//                            )
-//                            true
-//                        }
-//                        if (async.await()) {
-//                            toDeleteFile(file,this@WallpaperDetailActivity)
-//                        }
-//                    }
+                    save2Album(file,getString(R.string.app_name),this@WallpaperDetailActivity)
                 }
 
                 override fun downStart() {

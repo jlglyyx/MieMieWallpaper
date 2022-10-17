@@ -218,7 +218,7 @@ class MineFragment : BaseFragment<FraMineBinding>() {
         InjectViewModelProxy.inject(this)
         mineViewModel.userInfoData.observe(this, Observer {
             getDefaultMMKV().putString(AppConstant.Constant.USER_INFO, it.toJson())
-            Glide.with(this).load(it.userImage).into(mViewBinding.sivHead)
+            loadCircle(requireContext(),it.userImage,mViewBinding.sivHead)
             if (null == buildBitmap) {
                 buildBitmap = ScanUtil.buildBitmap("sssssssssss", 500, 500)
                 mViewBinding.ivErCode.setImageBitmap(buildBitmap)

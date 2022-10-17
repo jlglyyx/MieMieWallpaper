@@ -75,14 +75,13 @@
                     android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.imageview.ShapeableImageView
+                    <ImageView
                         android:id="@+id/siv_head"
                         android:layout_width="@dimen/dp_100"
                         android:layout_height="@dimen/dp_100"
                         android:textStyle="bold"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:shapeAppearanceOverlay="@style/circleShapeImage" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_name"

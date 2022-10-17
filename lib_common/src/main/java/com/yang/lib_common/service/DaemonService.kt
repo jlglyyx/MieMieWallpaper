@@ -5,8 +5,13 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.yang.lib_common.R
+import com.yang.lib_common.constant.AppConstant
+import org.osgi.framework.Constants.SERVICE_ID
 
 /**
  * @Author Administrator
@@ -36,6 +41,11 @@ class DaemonService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val build = NotificationCompat.Builder(applicationContext, AppConstant.NoticeChannel.DOWNLOAD)
+            startForeground(1,build.build())
+        }
         bindService(Intent(this@DaemonService,DaemonRemoteService::class.java),daemonRemoteConnection,BIND_AUTO_CREATE)
     }
 
