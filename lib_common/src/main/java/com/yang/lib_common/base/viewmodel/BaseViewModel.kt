@@ -16,6 +16,13 @@ import kotlinx.coroutines.launch
 
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
+    var params = mutableMapOf<String,Any>()
+    get() {
+        field.clear()
+        return field
+    }
+
+
     /**
      * ui状态控制器
      */

@@ -9,5 +9,9 @@ package com.yang.module_main.data
 class WallpaperData {
     var id:String? = null
     var imageUrl:String = ""
-    var imageName:String = ""
+    var imageName:String = "${System.currentTimeMillis()}.jpg"
 }
+
+data class WallpaperTabData(
+    var title:String
+)

@@ -2,10 +2,14 @@ package com.yang.module_main.ui.activity
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsetsController
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -44,69 +48,41 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
     }
 
     override fun initData() {
+        mainViewModel.getWallpaper()
     }
 
     override fun initView() {
         initSmartRefreshLayout()
         initViewPager()
-
-
     }
 
     private fun initSmartRefreshLayout() {
         mViewBinding.smartRefreshLayout.setEnableRefresh(false)
         mViewBinding.smartRefreshLayout.setOnLoadMoreListener {
-            mWallpaperViewPagerAdapter.addData(mWallpaperViewPagerAdapter.data)
-            mViewBinding.smartRefreshLayout.finishLoadMore()
+            mainViewModel.pageNum++
+            mainViewModel.getWallpaper()
         }
     }
 
     private fun initViewPager() {
 
-        val data = mutableListOf<WallpaperData>().apply {
-            add(WallpaperData().apply {
-                imageUrl =
-                    "https://img1.baidu.com/it/u=3622442929,3246643478&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=32fc8f0a742874ae750f14f937b6cb6a"
-                imageName="1.jpg"
-            })
-            add(WallpaperData().apply {
-                imageUrl =
-                    "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
-                imageName="1.mp4"
-            })
-            add(WallpaperData().apply {
-                imageUrl =
-                    "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-                imageName="1.jpg"
-            })
-            add(WallpaperData().apply {
-                imageUrl =
-                    "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl =
-                    "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl =
-                    "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl =
-                    "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl =
-                    "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-        }
-        mWallpaperViewPagerAdapter =  WallpaperViewPagerAdapter(data)
+        mWallpaperViewPagerAdapter =  WallpaperViewPagerAdapter(mutableListOf())
         mViewBinding.viewPager.adapter = mWallpaperViewPagerAdapter
     }
 
     override fun initViewModel() {
 
         InjectViewModelProxy.inject(this)
+        mainViewModel.mWallpaperData.observe(this){
+            mViewBinding.smartRefreshLayout.finishLoadMore()
+            if (it.isNullOrEmpty()){
+                mViewBinding.smartRefreshLayout.setNoMoreData(true)
+            }else{
+                mViewBinding.smartRefreshLayout.setNoMoreData(false)
+                mWallpaperViewPagerAdapter.addData(it)
+            }
+
+        }
     }
 
     inner class WallpaperViewPagerAdapter(var data: MutableList<WallpaperData>) :
@@ -127,8 +103,11 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             holder: WallpaperViewPagerAdapter.ImageViewPagerViewHolder,
             position: Int
         ) {
+            holder.clControl.clicks().subscribe {
+                    holder.clControl.visibility = View.GONE
+            }
             holder.ivImage.clicks().subscribe {
-
+                holder.clControl.visibility = View.VISIBLE
             }
             holder.stvSetWallpaper.clicks().subscribe {
                 downAndSetWallpaper(data[position].imageUrl,data[position].imageName)
@@ -145,7 +124,6 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         }
 
         override fun getItemCount(): Int {
-
             return data.size
         }
 
@@ -161,6 +139,8 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             var ivImage = itemView.ivImage
             var stvSetWallpaper = itemView.stvSetWallpaper
             var iivDown = itemView.iivDown
+            var clContainer = itemView.clContainer
+            var clControl = itemView.clControl
 
         }
 

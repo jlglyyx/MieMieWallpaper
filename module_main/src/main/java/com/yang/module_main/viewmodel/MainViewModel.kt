@@ -12,6 +12,7 @@ import com.yang.lib_common.util.getDefaultMMKV
 import com.yang.lib_common.util.showShort
 import com.yang.lib_common.util.toJson
 import com.yang.module_main.R
+import com.yang.module_main.data.WallpaperData
 import com.yang.module_main.repository.MainRepository
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -31,23 +32,25 @@ class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository
 ) : BaseViewModel(application) {
 
-//    var loginType = 0
-//
-//    var phoneText = ""
-//
-//    var passwordText = ""
-//
-//    var verificationText = ""
-//
-//    var checkStatus = true
-//
-//    var pageNum = 1
-//
-//    var loginUserType = 0
-//
+    var loginType = 0
+
+    var phoneText = ""
+
+    var passwordText = ""
+
+    var verificationText = ""
+
+    var checkStatus = true
+
+    var pageNum = 1
+
+    var loginUserType = 0
+
 //    val taskLiveData = MutableLiveData<MutableList<TaskData>>()
-//
-//    val pictureListLiveData = MutableLiveData<MutableList<String>>()
+
+    val pictureListLiveData = MutableLiveData<MutableList<String>>()
+
+    val mWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
 //
 //    fun getA() {
 //        launch({
@@ -58,43 +61,101 @@ class MainViewModel @Inject constructor(
 //    }
 //
 //
-//    fun login() {
-//        if (TextUtils.isEmpty(phoneText)) {
-//            showShort("请输入手机号")
-//            return
-//        }
-//        if (loginType == 1) {
-//            if (TextUtils.isEmpty(passwordText)) {
-//                showShort("请输入密码")
-//                return
-//            }
-//        } else {
-//            if (TextUtils.isEmpty(verificationText)) {
-//                showShort("请输入验证码")
-//                return
-//            }
-//        }
-//        if (!checkStatus) {
-//            showShort("请勾选协议")
-//            return
-//        }
+    fun login() {
+        if (TextUtils.isEmpty(phoneText)) {
+            showShort("请输入手机号")
+            return
+        }
+        if (loginType == 1) {
+            if (TextUtils.isEmpty(passwordText)) {
+                showShort("请输入密码")
+                return
+            }
+        } else {
+            if (TextUtils.isEmpty(verificationText)) {
+                showShort("请输入验证码")
+                return
+            }
+        }
+        if (!checkStatus) {
+            showShort("请勾选协议")
+            return
+        }
 //        MobSDK.submitPolicyGrantResult(checkStatus)
-//        launch({
-//            val params = mutableMapOf<String,Any>()
-//            params[AppConstant.Constant.PHONE] = phoneText
-//            params[AppConstant.Constant.PASSWORD] = passwordText
-//            params[AppConstant.Constant.VERIFICATION] = verificationText
-//           mainRepository.login(params)
-//        }, {
-//            finishActivity()
-//        },{
-//            getDefaultMMKV().putString(AppConstant.Constant.LOGIN_INFO, LoginData("token","id").toJson())
-//            getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_USER_TYPE, loginUserType)
-//            getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
-//            LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_SUCCESS)
-//            finishActivity()
-//        },messages = arrayOf("登录中...","登录成功!"))
-//    }
+        launch({
+            val params = mutableMapOf<String,Any>()
+            params[AppConstant.Constant.PHONE] = phoneText
+            params[AppConstant.Constant.PASSWORD] = passwordText
+            params[AppConstant.Constant.VERIFICATION] = verificationText
+           mainRepository.login(params)
+        }, {
+            finishActivity()
+        },{
+            getDefaultMMKV().putString(AppConstant.Constant.LOGIN_INFO, LoginData("token","id").toJson())
+            getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_USER_TYPE, loginUserType)
+            getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
+            LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_SUCCESS)
+            finishActivity()
+        },messages = arrayOf("登录中...","登录成功!"))
+    }
+
+
+
+
+    fun getWallpaper(){
+        launch({
+            params[AppConstant.Constant.PAGE_NUMBER] = pageNum
+            params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
+            mainRepository.getWallpaper(params)
+        },{
+            mWallpaperData.postValue(it.data)
+        },{
+
+
+            mWallpaperData.postValue(mutableListOf<WallpaperData>().apply {
+                add(WallpaperData().apply {
+                    imageUrl = "https://pic1.zhimg.com/v2-c8abae935169a75f5efce1c9230554d9_r.jpg?source=1940ef5c"
+                })
+                add(WallpaperData().apply {
+                    imageUrl = "http://bizihu.com/data/12031020.jpg"
+                })
+                add(WallpaperData().apply {
+                    imageUrl = "https://pic2.zhimg.com/v2-f783660f6bd3e2875dda9ad7874cd834_r.jpg?source=1940ef5c"
+                })
+                add(WallpaperData().apply {
+                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
+                })
+
+                add(WallpaperData().apply {
+                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
+                })
+
+                add(WallpaperData().apply {
+                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
+                })
+
+                add(WallpaperData().apply {
+                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
+                })
+
+                add(WallpaperData().apply {
+                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
+                })
+
+                add(WallpaperData().apply {
+                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
+                })
+
+
+            })
+
+//            cancelRefreshLoadMore()
+//            showRecyclerViewErrorEvent()
+        },errorDialog = false)
+    }
+
+
+
 //
 //
 //    fun getUserInfo(id:String){

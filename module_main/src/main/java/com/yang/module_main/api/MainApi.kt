@@ -4,6 +4,8 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.LoginData
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
+import com.yang.module_main.data.WallpaperData
+import com.yang.module_main.data.WallpaperTabData
 import okhttp3.RequestBody
 import retrofit2.http.*
 
@@ -37,4 +39,12 @@ interface MainApi {
     @Multipart
     @POST("/uploadFile")
     suspend fun uploadFileAndParam(@Body file: MutableList<RequestBody>): MResult<MutableList<String>>
+
+
+    @GET("/")
+    suspend fun getTabs(@Query(AppConstant.Constant.ID) id:String):MResult<MutableList<WallpaperTabData>>
+
+    @GET("/")
+    suspend fun getWallpaper(@QueryMap params:MutableMap<String,Any>):MResult<MutableList<WallpaperData>>
+
 }

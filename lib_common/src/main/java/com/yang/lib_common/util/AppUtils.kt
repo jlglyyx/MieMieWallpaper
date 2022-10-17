@@ -19,11 +19,15 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import com.blankj.utilcode.util.*
 import com.blankj.utilcode.util.ImageUtils.getImageType
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.lxj.xpopup.util.XPopupUtils
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.tencent.mmkv.MMKV
 import com.yang.lib_common.R
+import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
 import com.yang.lib_common.room.entity.UserInfoData
@@ -574,6 +578,38 @@ private fun writeFileFromIS(fos: OutputStream, `is`: InputStream): Boolean {
             e.printStackTrace()
         }
     }
+}
+
+
+
+fun <T> SmartRefreshLayout.smartRefreshLayoutData(data:MutableList<T>?, adapter: BaseQuickAdapter<T, BaseViewHolder>,mViewModel:BaseViewModel, emptyView:Int = R.layout.view_empty_data){
+    when {
+        this.isRefreshing -> {
+            mViewModel.uC.refreshEvent.call()
+            if (data.isNullOrEmpty()) {
+                mViewModel.showRecyclerViewEmptyEvent()
+            } else {
+                adapter.replaceData(data)
+            }
+        }
+        this.isLoading -> {
+            mViewModel.uC.loadMoreEvent.call()
+            if (data.isNullOrEmpty()) {
+                this.setNoMoreData(true)
+            } else {
+                this.setNoMoreData(false)
+                adapter.addData(data)
+            }
+        }
+        else -> {
+            if (data.isNullOrEmpty()) {
+                mViewModel.showRecyclerViewEmptyEvent()
+            } else {
+                adapter.replaceData(data)
+            }
+        }
+    }
+
 }
 
 

@@ -428,4 +428,6 @@
     <dimen name="sp_40">40sp</dimen>
     <dimen name="sp_42">42sp</dimen>
     <dimen name="sp_48">48sp</dimen>
+    <dimen name="sp_55">55sp</dimen>
+    <dimen name="sp_65">65sp</dimen>
 </resources>

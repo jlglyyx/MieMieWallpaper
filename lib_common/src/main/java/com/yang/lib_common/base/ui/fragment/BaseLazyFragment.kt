@@ -20,6 +20,7 @@ import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.getStatusBarHeight
+import com.yang.lib_common.util.smartRefreshLayoutData
 
 
 /**
@@ -161,6 +162,7 @@ abstract class BaseLazyFragment<VB : ViewBinding> : Fragment() {
                         .inflate(R.layout.view_empty_data, null, false)
                 }
                 adapter.setNewData(null)
+                smartRefreshLayout.setNoMoreData(true)
                 adapter.emptyView = emptyView
             })
         }

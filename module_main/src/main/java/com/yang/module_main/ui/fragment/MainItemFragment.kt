@@ -5,20 +5,37 @@ import android.app.WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER
 import android.app.WallpaperManager.ACTION_CROP_AND_SET_WALLPAPER
 import android.content.ComponentName
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.util.Log
+import android.widget.ImageView
 import androidx.core.content.ContentProviderCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.*
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.huawei.hms.mlsdk.common.MLApplicationSetting.BundleKeyConstants.AppInfo.packageName
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.enums.PopupPosition
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
+import com.yang.lib_common.interceptor.UrlInterceptor.Companion.url
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.service.CustomWallpaperService
 import com.yang.lib_common.util.*
@@ -26,9 +43,12 @@ import com.yang.module_main.R
 import com.yang.module_main.data.WallpaperData
 import com.yang.module_main.databinding.FraMainItemBinding
 import com.yang.module_main.ui.activity.MainActivity
+import com.yang.module_main.ui.dialog.FilterDialog
 import com.yang.module_main.viewmodel.MainViewModel
 import com.youth.banner.config.IndicatorConfig
 import com.youth.banner.indicator.CircleIndicator
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
@@ -38,7 +58,7 @@ import com.youth.banner.indicator.CircleIndicator
  * @Date: 2022/9/30 16:31
  */
 @Route(path = AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
-class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
+class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMoreListener{
 
     @InjectViewModel
     lateinit var mainViewModel: MainViewModel
@@ -53,13 +73,38 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
 
     override fun initView() {
         type = arguments?.getInt(AppConstant.Constant.TYPE) ?: 0
-        initBanner()
+//        initBanner()
         initRecyclerView()
+        mViewBinding.smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+        registerRefreshAndRecyclerView(mViewBinding.smartRefreshLayout,mAdapter)
+
+        mViewBinding.llSort.setOnClickListener {
+            XPopup.Builder(requireContext())
+                .atView(mViewBinding.llSort)
+                .hasShadowBg(false) // 去掉半透明背景
+                .popupPosition(PopupPosition.Bottom)
+                .asCustom(FilterDialog(requireContext()).apply {
+                    block = {
+                        it.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                        val mAdapter = object :
+                            BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_filter_sort) {
+                            override fun convert(helper: BaseViewHolder, item: String) {
+
+                            }
+                        }
+                        it.recyclerView.adapter = mAdapter
+                        mAdapter.setNewData(mutableListOf<String>().apply {
+                            add("")
+                            add("")
+                            add("")
+                        })
+                    }
+                }).show()
+        }
     }
 
     override fun initData() {
-
-
+        mViewBinding.smartRefreshLayout.autoRefresh()
     }
 
     private fun initBanner() {
@@ -82,6 +127,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
                 loadRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image))
             }
         }
+
         mViewBinding.recyclerView.adapter = mAdapter
 
         mTopAdapter = object :
@@ -95,33 +141,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
             }
         }
         mViewBinding.topRecyclerView.adapter = mTopAdapter
-        mAdapter.setNewData(mutableListOf<WallpaperData>().apply {
-            add(WallpaperData().apply {
-                imageUrl = "https://img1.baidu.com/it/u=3622442929,3246643478&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=32fc8f0a742874ae750f14f937b6cb6a"
-            })
-            add(WallpaperData().apply {
-                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
-            add(WallpaperData().apply {
-                imageUrl = "https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1"
-            })
 
-        })
 
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mAdapter.getItem(position)
@@ -132,15 +152,9 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
         }
 
         mTopAdapter.setNewData(mutableListOf<String>().apply {
-            add("https://img1.baidu.com/it/u=3622442929,3246643478&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=32fc8f0a742874ae750f14f937b6cb6a")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-            add("https://img1.baidu.com/it/u=3009731526,373851691&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1665334800&t=100657a3bd66774828ea8d66ba8ddae1")
-
+            add("https://pic1.zhimg.com/v2-c8abae935169a75f5efce1c9230554d9_r.jpg?source=1940ef5c")
+            add("http://bizihu.com/data/12031020.jpg")
+            add("https://pic2.zhimg.com/v2-f783660f6bd3e2875dda9ad7874cd834_r.jpg?source=1940ef5c")
         })
     }
 
@@ -148,6 +162,55 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() {
     override fun initViewModel() {
 
         InjectViewModelProxy.inject(this)
+
+        mainViewModel.mWallpaperData.observe(this){
+            when {
+                mViewBinding.smartRefreshLayout.isRefreshing -> {
+                    mainViewModel.uC.refreshEvent.call()
+                    if (it.isNullOrEmpty()) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
+                }
+                mViewBinding.smartRefreshLayout.isLoading -> {
+                    mainViewModel.uC.loadMoreEvent.call()
+                    if (it.isNullOrEmpty()) {
+                        mViewBinding.smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        mViewBinding.smartRefreshLayout.setNoMoreData(false)
+                        lifecycleScope.launch {
+                            delay(500)
+                            mAdapter.addData(it)
+                        }
+                    }
+                }
+                else -> {
+                    if (it.isNullOrEmpty()) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
+                }
+            }
+        }
+
+    }
+
+    override fun initUIChangeLiveData(): UIChangeLiveData {
+        return mainViewModel.uC
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+
+        mainViewModel.pageNum = 1
+        mainViewModel.getWallpaper()
+    }
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+
+        mainViewModel.pageNum++
+        mainViewModel.getWallpaper()
 
     }
 }

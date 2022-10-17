@@ -5,6 +5,8 @@ import com.yang.lib_common.data.LoginData
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.module_main.api.MainApi
+import com.yang.module_main.data.WallpaperData
+import com.yang.module_main.data.WallpaperTabData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.RequestBody
@@ -32,6 +34,18 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) :BaseRepo
     suspend fun getUserInfo(id:String): MResult<UserInfoData> {
         return withContextIO {
             mainApi.getUserInfo(id)
+        }
+    }
+
+
+    suspend fun getTabs(id:String): MResult<MutableList<WallpaperTabData>> {
+        return withContextIO {
+            mainApi.getTabs(id)
+        }
+    }
+    suspend fun getWallpaper(params:MutableMap<String,Any>): MResult<MutableList<WallpaperData>> {
+        return withContextIO {
+            mainApi.getWallpaper(params)
         }
     }
 

@@ -5,57 +5,71 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@dimen/dp_2">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
     <com.yang.lib_common.widget.CommonSearchToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:leftImgVisible="false"
-        app:rightImgVisible="true" />
+        app:rightImgVisible="false" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.tabs.TabLayout
-            android:id="@id/tabLayout"
-            style="@style/mainTopTabTabLayout"
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            android:layout_marginEnd="@dimen/dp_30"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tabIndicator="@drawable/layer_list_tab_indicator" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="@dimen/dp_50"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tabLayout"
-            app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
-            android:background="@color/colorMainTab" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@id/tabLayout"
+                style="@style/mainTopTabTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_30"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabIndicator="@drawable/layer_list_tab_indicator" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:background="@color/white"
-            android:paddingStart="@dimen/dp_5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tabLayout"
-            app:layout_constraintBottom_toBottomOf="@+id/tabLayout">
-            <ImageView
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="match_parent"
-                android:src="@drawable/iv_list"
-                android:padding="2dp"
-                android:layout_marginEnd="@dimen/dp_3"
+            <TextView
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="0dp"
+                android:background="@color/colorMainTab"
+                app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tabLayout"
-                app:layout_constraintBottom_toBottomOf="@+id/tabLayout"/>
+                app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+
+            <LinearLayout
+                android:id="@+id/ll_more"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/dp_5"
+                app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tabLayout">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/dp_3"
+                    android:padding="2dp"
+                    android:src="@drawable/iv_list"
+                    app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.cardview.widget.CardView>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@id/viewPager"
