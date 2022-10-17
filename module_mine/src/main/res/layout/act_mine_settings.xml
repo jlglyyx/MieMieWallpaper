@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.yang.lib_common.widget.CommonToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:centerContent="设置" />
+
+    <com.yang.lib_common.widget.DampScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.yang.lib_common.widget.ItemContentView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemLeftContent="换绑手机"
+                app:itemLeftImgVisible="false"
+                android:layout_marginTop="@dimen/dp_10"
+                app:itemRightContent="133****9654"
+                android:id="@+id/icv_change_phone"
+                app:itemRightImgVisible="true" />
+            <com.yang.lib_common.widget.ItemContentView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemLeftContent="修改密码"
+                app:itemLeftImgVisible="false"
+                android:id="@+id/icv_change_password"
+                app:itemRightImgVisible="true" />
+            <com.yang.lib_common.widget.ItemContentView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemLeftContent="注销账号"
+                app:itemLeftImgVisible="false"
+                android:layout_marginTop="@dimen/dp_10"
+                android:id="@+id/icv_login_out_account"
+                app:itemRightImgVisible="true" />
+            <TextView
+                android:text="@string/string_login_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="13dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:id="@+id/tv_login_out"
+                android:background="@color/white"
+                android:layout_marginTop="@dimen/dp_30"
+                android:textSize="@dimen/sp_16"
+                android:textColor="@color/red"/>
+        </LinearLayout>
+    </com.yang.lib_common.widget.DampScrollView>
+</LinearLayout>

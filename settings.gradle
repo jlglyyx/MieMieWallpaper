@@ -1,0 +1,41 @@
+pluginManagement {
+    repositories {
+
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven {url 'https://artifact.bytedance.com/repository/pangle'}
+        maven { url 'https://developer.huawei.com/repo/'}
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        // 配置HMS Core SDK的Maven仓地址。
+        maven {url 'https://developer.huawei.com/repo/'}
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+
+        google()
+        mavenCentral()
+        maven {url 'https://artifact.bytedance.com/repository/pangle'}
+        maven { url 'https://developer.huawei.com/repo/'}
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        // 配置HMS Core SDK的Maven仓地址。
+        maven {url 'https://developer.huawei.com/repo/'}
+    }
+}
+rootProject.name = "MieMieWallpaper"
+include ':app'
+include ':lib_common'
+include ':apt-processor'
+include ':apt-annotation'
+include ':module_main'
+include ':module_mine'
