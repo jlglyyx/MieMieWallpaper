@@ -60,9 +60,10 @@
                         android:textColor="@color/textColor"
                         android:layout_height="match_parent"
                         android:textStyle="bold"
+                        android:id="@+id/tv_title"
                         android:layout_marginHorizontal="@dimen/dp_6"
                         android:gravity="center_vertical"
-                        android:text="按热度"/>
+                        android:text="最新上传"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -1,48 +1,30 @@
 package com.yang.module_main.ui.fragment
 
-import android.app.WallpaperManager
-import android.app.WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER
-import android.app.WallpaperManager.ACTION_CROP_AND_SET_WALLPAPER
-import android.content.ComponentName
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.util.Log
-import android.widget.ImageView
-import androidx.core.content.ContentProviderCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.huawei.hms.mlsdk.common.MLApplicationSetting.BundleKeyConstants.AppInfo.packageName
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.enums.PopupPosition
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
-import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.MBannerAdapter
-import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
-import com.yang.lib_common.down.thread.MultiMoreThreadDownload
-import com.yang.lib_common.interceptor.UrlInterceptor.Companion.url
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.service.CustomWallpaperService
-import com.yang.lib_common.util.*
+import com.yang.lib_common.*
+import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.loadCircle
+import com.yang.lib_common.util.loadRadius
+import com.yang.lib_common.util.toJson
 import com.yang.module_main.R
 import com.yang.module_main.data.WallpaperData
 import com.yang.module_main.databinding.FraMainItemBinding
-import com.yang.module_main.ui.activity.MainActivity
 import com.yang.module_main.ui.dialog.FilterDialog
 import com.yang.module_main.viewmodel.MainViewModel
 import com.youth.banner.config.IndicatorConfig
@@ -81,7 +63,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
         mViewBinding.llSort.setOnClickListener {
             XPopup.Builder(requireContext())
                 .atView(mViewBinding.llSort)
-                .hasShadowBg(false) // 去掉半透明背景
+                .hasShadowBg(true) // 去掉半透明背景
                 .popupPosition(PopupPosition.Bottom)
                 .asCustom(FilterDialog(requireContext()).apply {
                     block = {
@@ -89,15 +71,20 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
                         val mAdapter = object :
                             BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_filter_sort) {
                             override fun convert(helper: BaseViewHolder, item: String) {
+                                helper.setText(R.id.tv_title,item)
 
                             }
                         }
                         it.recyclerView.adapter = mAdapter
                         mAdapter.setNewData(mutableListOf<String>().apply {
-                            add("")
-                            add("")
-                            add("")
+                            add("最新上传")
+                            add("最多下载")
                         })
+                        mAdapter.setOnItemClickListener { _, _, position ->
+                            val item = mAdapter.getItem(position)
+                            mViewBinding.tvTitle.text = item
+                            dismiss()
+                        }
                     }
                 }).show()
         }
@@ -146,7 +133,15 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mAdapter.getItem(position)
             item?.let {
-                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY).withString(AppConstant.Constant.ID,it.id).navigation()
+                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
+                    .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(requireContext(), com.yang.lib_common.R.anim.fade_in, com.yang.lib_common.R.anim.fade_out))
+                    .withString(AppConstant.Constant.DATA,it.toJson())
+                    .navigation()
+            }
+        }
+        mTopAdapter.setOnItemClickListener { adapter, view, position ->
+            val item = mAdapter.getItem(position)
+            item?.let {
 
             }
         }

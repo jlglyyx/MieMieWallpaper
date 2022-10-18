@@ -120,6 +120,10 @@ class MainViewModel @Inject constructor(
                     imageUrl = "http://bizihu.com/data/12031020.jpg"
                 })
                 add(WallpaperData().apply {
+                    imageUrl = "https://media.w3.org/2010/05/sintel/trailer.mp4"
+                    imageName = "1.mp4"
+                })
+                add(WallpaperData().apply {
                     imageUrl = "https://pic2.zhimg.com/v2-f783660f6bd3e2875dda9ad7874cd834_r.jpg?source=1940ef5c"
                 })
                 add(WallpaperData().apply {

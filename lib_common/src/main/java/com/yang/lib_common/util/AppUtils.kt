@@ -48,6 +48,8 @@ val formatDate_YYYYMMMDDHHMMSS = SimpleDateFormat("yyyyMMddHHmmss")
 
 val formatDate_YYYY_MMM_DD_HHMMSS = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
+val  gson = Gson()
+
 /**
  * @return 宽高集合
  */
@@ -107,15 +109,16 @@ fun View.clicks(): Observable<Unit> {
  * @return toJson
  */
 fun Any.toJson(): String {
-    return Gson().toJson(this)
+    return gson.toJson(this)
 }
 
 
 /**
  * @return 解析Json
  */
-fun <T> String.fromJson(t: Class<T>): T {
-    return Gson().fromJson<T>(this, t)
+inline fun <reified T> String.fromJson(): T {
+
+    return gson.fromJson(this, T::class.java)
 }
 
 /**
@@ -578,6 +581,22 @@ private fun writeFileFromIS(fos: OutputStream, `is`: InputStream): Boolean {
             e.printStackTrace()
         }
     }
+}
+
+fun String.isVideo():Boolean{
+
+    return this.endsWith(".mp4",true)
+
+}
+fun String.isImage():Boolean{
+
+    return this.endsWith(".jpg",true) || this.endsWith(".png",true)
+            || this.endsWith(".gif",true)
+            || this.endsWith(".tiff",true)
+            || this.endsWith(".bmp",true)
+            || this.endsWith(".webp",true)
+            || this.endsWith(".ico",true)
+
 }
 
 

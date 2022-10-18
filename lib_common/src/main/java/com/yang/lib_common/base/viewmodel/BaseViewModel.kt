@@ -177,6 +177,8 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                 onError(t)
                 if (errorDialog) {
                     handleException(t, if (messages.size >= 3) { messages[2] } else { "" })
+                }else{
+                    dismissDialog()
                 }
             }
         }

@@ -70,6 +70,9 @@ class MineFragment : BaseFragment<FraMineBinding>() {
         mViewBinding.icvTaskHistory.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_TASK_HISTORY_ACTIVITY).navigation()
         }
+        mViewBinding.llSign.clicks().subscribe {
+            showShort("签到成功")
+        }
         mViewBinding.ivErCode.clicks().subscribe {
 
 
@@ -116,7 +119,7 @@ class MineFragment : BaseFragment<FraMineBinding>() {
             mViewBinding.clHead.visibility = View.GONE
             mViewBinding.lottieAnimationView.visibility = View.GONE
             mViewBinding.clHeadLogin.visibility = View.VISIBLE
-            mViewBinding.tvLoginUserType.text = if (loginUserType == 0) "买家版" else "卖家版"
+//            mViewBinding.tvSign.text = if (loginUserType == 0) "买家版" else "卖家版"
         }
 
 
@@ -129,7 +132,7 @@ class MineFragment : BaseFragment<FraMineBinding>() {
                 mViewBinding.lottieAnimationView.visibility = View.GONE
                 mViewBinding.clHeadLogin.visibility = View.VISIBLE
                 val loginUserType = getDefaultMMKV().getInt(AppConstant.Constant.LOGIN_USER_TYPE, 0)
-                mViewBinding.tvLoginUserType.text = if (loginUserType == 0) "买家版" else "卖家版"
+//                mViewBinding.tvLoginUserType.text = if (loginUserType == 0) "买家版" else "卖家版"
             } else {
                 mViewBinding.clHead.visibility = View.VISIBLE
                 mViewBinding.lottieAnimationView.visibility = View.VISIBLE
@@ -142,7 +145,7 @@ class MineFragment : BaseFragment<FraMineBinding>() {
     override fun onResume() {
         super.onResume()
         getDefaultMMKV().getString(AppConstant.Constant.LOGIN_INFO, "")
-            ?.fromJson(LoginData::class.java)?.let {
+            ?.fromJson<LoginData>()?.let {
                 mineViewModel.getUserInfo(it.id)
             }
     }

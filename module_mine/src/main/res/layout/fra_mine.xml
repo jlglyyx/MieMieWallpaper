@@ -96,17 +96,37 @@
                         app:layout_constraintLeft_toRightOf="@+id/siv_head"
                         app:layout_constraintTop_toTopOf="@+id/siv_head" />
 
-                    <TextView
-                        android:id="@+id/tv_login_user_type"
+
+                    <com.hjq.shape.layout.ShapeLinearLayout
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/siv_head"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         android:layout_marginTop="@dimen/dp_10"
                         android:layout_marginEnd="@dimen/dp_10"
-                        android:text="卖家版"
-                        android:textColor="@color/textColor"
-                        android:textSize="@dimen/sp_16"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/siv_head" />
+                        app:shape_radius="@dimen/dp_10"
+                        android:gravity="center"
+                        android:id="@+id/ll_sign"
+                        android:paddingHorizontal="@dimen/dp_5"
+                        android:paddingVertical="@dimen/dp_1"
+                        app:shape_solidColor="@color/grey_1f"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="@dimen/dp_10"
+                            android:layout_height="@dimen/dp_10"
+                            android:src="@drawable/iv_setting"/>
+                        <com.hjq.shape.view.ShapeTextView
+                            android:id="@+id/tv_sign"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="签到"
+                            android:layout_marginStart="@dimen/dp_2"
+                            android:textColor="@color/textColor"
+                            android:textSize="@dimen/sp_12"
+                            />
+                    </com.hjq.shape.layout.ShapeLinearLayout>
+
 
 
                     <TextView
@@ -155,6 +175,7 @@
                     android:id="@id/banner"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_100" />
+
 
                 <com.yang.lib_common.widget.ItemContentView
                     android:layout_width="match_parent"

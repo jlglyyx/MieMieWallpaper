@@ -8,7 +8,7 @@
     <com.hjq.shape.view.ShapeTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="按热度"
+        android:id="@+id/tv_title"
         android:textColor="@color/textColor"
         android:textSize="@dimen/sp_16"
         android:gravity="center"

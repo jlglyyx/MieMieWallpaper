@@ -54,8 +54,7 @@ class MainFragment : BaseFragment<FraMainBinding>() {
         mViewBinding.llMore.setOnClickListener {
                  XPopup.Builder(requireContext())
                     .atView(mViewBinding.tabLayout)
-                    .hasShadowBg(false) // 去掉半透明背景
-                     .enableDrag(true)
+                    .hasShadowBg(true) // 去掉半透明背景
                     .asCustom(FilterDialog(requireContext()).apply {
                         block = {
                             it.recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
@@ -63,6 +62,7 @@ class MainFragment : BaseFragment<FraMainBinding>() {
                                 BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_filter_tab) {
                                 override fun convert(helper: BaseViewHolder, item: String) {
                                     helper.setText(R.id.tv_title,item)
+
                                 }
                             }
                             mAdapter.setOnItemClickListener { _, _, position ->
