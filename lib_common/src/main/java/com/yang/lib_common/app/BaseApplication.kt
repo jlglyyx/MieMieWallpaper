@@ -54,7 +54,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         initMMKV(baseApplication)
         initNetworkStatusListener(baseApplication)
         initVideo()
-        initWebView()
+//        initWebView()
 //        initAd()
     }
 
@@ -181,7 +181,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
 
     private fun initAd(){
         val config = DCloudAdManager.InitConfig()
-        config.setAppId("__UNI__HelloUNIAD").adId = createAppId(path = obbDir.absolutePath)
+        config.setAppId("__UNI__D955F27").adId = createAppId(path = obbDir.absolutePath)
         DCloudAdManager.init(this, config)
     }
 

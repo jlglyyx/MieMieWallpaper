@@ -16,11 +16,13 @@ import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.adapter.TabAndViewPagerFragmentAdapter
 import com.yang.lib_common.base.ui.fragment.BaseFragment
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.showShort
 import com.yang.module_main.R
 import com.yang.module_main.databinding.FraMainBinding
 import com.yang.module_main.ui.dialog.FilterDialog
@@ -37,11 +39,11 @@ import com.youth.banner.indicator.CircleIndicator
 @Route(path = AppConstant.RoutePath.MAIN_FRAGMENT)
 class MainFragment : BaseFragment<FraMainBinding>() {
 
-    @InjectViewModel
+    @InjectViewModel(true)
     lateinit var mainViewModel: MainViewModel
 
 
-    private var mTitles = arrayListOf("首页", "工作台", "工作台", "工作台", "工作台", "工作台", "工作台", "我的")
+    private lateinit var mTitles : MutableList<String>
 
     private lateinit var mFragments: MutableList<Fragment>
 
@@ -50,6 +52,11 @@ class MainFragment : BaseFragment<FraMainBinding>() {
     }
 
     override fun initView() {
+
+
+        mViewBinding.commonToolBar.etSearch.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.SEARCH_WALLPAPER_ACTIVITY).navigation()
+        }
 
         mViewBinding.llMore.setOnClickListener {
                  XPopup.Builder(requireContext())
@@ -78,6 +85,7 @@ class MainFragment : BaseFragment<FraMainBinding>() {
     }
 
     override fun initData() {
+        mainViewModel.getTabs(0)
     }
 
 
@@ -120,19 +128,27 @@ class MainFragment : BaseFragment<FraMainBinding>() {
     }
 
     override fun initViewModel() {
-
         InjectViewModelProxy.inject(this)
-        mFragments = mutableListOf()
-        for (i in 0 until mTitles.size) {
-            mFragments.add(
-                buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT).withInt(
-                    AppConstant.Constant.TYPE,
-                    i
-                ).navigation() as Fragment
-            )
+        mainViewModel.mWallpaperTabData.observe(this){
+            mFragments = mutableListOf()
+            mTitles = mutableListOf()
+            it.mapIndexed { index, wallpaperTabData ->
+                mFragments.add( buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
+                    .withInt(AppConstant.Constant.TYPE, index)
+                    .withString(AppConstant.Constant.ID, wallpaperTabData.id)
+                    .navigation() as Fragment)
+                wallpaperTabData.name
+            }.apply {
+                mTitles.addAll(this as MutableList<String>)
+            }
+            initViewPager()
+            initTabLayout()
         }
 
-        initViewPager()
-        initTabLayout()
+
+    }
+
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return mainViewModel.uC
     }
 }

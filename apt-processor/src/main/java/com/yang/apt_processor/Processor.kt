@@ -49,9 +49,9 @@ class Processor : AbstractProcessor() {
                 /*注解注解类 类型*/
                 val elementQualifiedName = element.asType()
                 /*注解*/
-//                val annotation = element.getAnnotation(InjectViewModel::class.java)
+                val annotation = element.getAnnotation(InjectViewModel::class.java)
 //                /*注解值*/
-//                proxyInfo.elementValue = annotation.value
+                proxyInfo.elementValue = annotation.injectParent
                 /*注解所在简单类名*/
                 proxyInfo.className = enclosingElement.simpleName.toString()
                 /*注解名集合*/

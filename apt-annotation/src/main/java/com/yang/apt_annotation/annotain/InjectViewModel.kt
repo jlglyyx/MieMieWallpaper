@@ -8,4 +8,4 @@ package com.yang.apt_annotation.annotain
  */
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class InjectViewModel()
+annotation class InjectViewModel(val injectParent:Boolean = false)

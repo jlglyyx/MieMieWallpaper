@@ -13,6 +13,7 @@ import com.yang.lib_common.util.showShort
 import com.yang.lib_common.util.toJson
 import com.yang.module_main.R
 import com.yang.module_main.data.WallpaperData
+import com.yang.module_main.data.WallpaperTabData
 import com.yang.module_main.repository.MainRepository
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -46,11 +47,15 @@ class MainViewModel @Inject constructor(
 
     var loginUserType = 0
 
+    var order = 0
+
 //    val taskLiveData = MutableLiveData<MutableList<TaskData>>()
 
     val pictureListLiveData = MutableLiveData<MutableList<String>>()
 
     val mWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
+
+    val mWallpaperTabData = MutableLiveData<MutableList<WallpaperTabData>>()
 //
 //    fun getA() {
 //        launch({
@@ -100,61 +105,30 @@ class MainViewModel @Inject constructor(
     }
 
 
-
-
-    fun getWallpaper(){
+    fun getTabs(wallType:Int){
         launch({
+            mainRepository.getTabs(wallType)
+        },{
+            mWallpaperTabData.postValue(it.data)
+        },{
+
+        },messages = arrayOf("加载中...","加载成功!"))
+    }
+
+
+
+    fun getWallpaper(tabId:String?){
+        launch({
+            params[AppConstant.Constant.ORDER] = order
+            params["tabId"] = tabId
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
             params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
             mainRepository.getWallpaper(params)
         },{
-            mWallpaperData.postValue(it.data)
+            mWallpaperData.postValue(it.data.list)
         },{
-
-
-            mWallpaperData.postValue(mutableListOf<WallpaperData>().apply {
-                add(WallpaperData().apply {
-                    imageUrl = "https://pic1.zhimg.com/v2-c8abae935169a75f5efce1c9230554d9_r.jpg?source=1940ef5c"
-                })
-                add(WallpaperData().apply {
-                    imageUrl = "http://bizihu.com/data/12031020.jpg"
-                })
-                add(WallpaperData().apply {
-                    imageUrl = "https://media.w3.org/2010/05/sintel/trailer.mp4"
-                    imageName = "1.mp4"
-                })
-                add(WallpaperData().apply {
-                    imageUrl = "https://pic2.zhimg.com/v2-f783660f6bd3e2875dda9ad7874cd834_r.jpg?source=1940ef5c"
-                })
-                add(WallpaperData().apply {
-                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
-                })
-
-                add(WallpaperData().apply {
-                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
-                })
-
-                add(WallpaperData().apply {
-                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
-                })
-
-                add(WallpaperData().apply {
-                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
-                })
-
-                add(WallpaperData().apply {
-                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
-                })
-
-                add(WallpaperData().apply {
-                    imageUrl = "https://pic1.zhimg.com/v2-a7416c9d338d3e5ec07cf1c2998ccc31_r.jpg?source=1940ef5c"
-                })
-
-
-            })
-
-//            cancelRefreshLoadMore()
-//            showRecyclerViewErrorEvent()
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
         },errorDialog = false)
     }
 

@@ -26,6 +26,6 @@ class ProxyInfoData {
     /**
      * 注解传值
      */
-    var elementValue:String = ""
+    var elementValue:Boolean = false
 
 }

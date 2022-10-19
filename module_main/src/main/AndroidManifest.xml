@@ -26,5 +26,9 @@
         <activity
             android:name=".ui.activity.LoginActivity"
             android:exported="false"/>
+        <activity
+            android:name=".ui.activity.SearchWallpaperActivity"
+            android:exported="false"
+            android:theme="@style/WhiteActivity"/>
     </application>
 </manifest>

@@ -16,11 +16,8 @@ import kotlinx.coroutines.launch
 
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
-    var params = mutableMapOf<String,Any>()
-    get() {
-        field.clear()
-        return field
-    }
+    var params = mutableMapOf<String,Any?>()
+
 
 
     /**
@@ -167,6 +164,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         errorDialog: Boolean = true,
         vararg messages: String = arrayOf()
     ) {
+        params.clear()
         viewModelScope.launch {
             try {
                 requestDialogMessage(0, *messages)
@@ -175,6 +173,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                 dismissDialog()
             } catch (t: Throwable) {
                 onError(t)
+                t.printStackTrace()
                 if (errorDialog) {
                     handleException(t, if (messages.size >= 3) { messages[2] } else { "" })
                 }else{

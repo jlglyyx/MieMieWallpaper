@@ -1,17 +1,37 @@
 package com.yang.module_main.data
 
+import android.os.Parcel
+import android.os.Parcelable
+
 /**
  * @ClassName: WallpaperData
  * @Description:
  * @Author: yxy
  * @Date: 2022/10/13 9:44
  */
-class WallpaperData {
+class WallpaperData(){
     var id:String? = null
-    var imageUrl:String = ""
-    var imageName:String = "${System.currentTimeMillis()}.jpg"
+    var imageUrl:String? = ""
+    var imageName:String? = "${System.currentTimeMillis()}.jpg"
+    var tabId: String? = null
+    var headType: Int? = null
+    var isVip: Boolean? = null
+    var wallType: Int? = null
+    var title: String? = null
+    var likeNum: Int? = null
+    var extra: String? = null
+    var createTime: String? = null
+    var updateTime: String? = null
+
 }
 
 data class WallpaperTabData(
-    var title:String
+    var id:String?,
+    var name:String?,
+    var type:String?,//类型
+    var wallType:String?,//动态 静态
+    var extra:String?,
+    var createTime:String?,
+    var updateTime:String?
 )
+

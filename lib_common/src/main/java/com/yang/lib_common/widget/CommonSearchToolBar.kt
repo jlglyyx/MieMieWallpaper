@@ -5,12 +5,16 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.doOnTextChanged
 import com.google.android.material.imageview.ShapeableImageView
 import com.yang.lib_common.R
+import com.yang.lib_common.databinding.ViewCommonSearchToolbarBinding
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getStatusBarHeight
 
@@ -18,8 +22,9 @@ class CommonSearchToolBar : ConstraintLayout {
 
     var imageBackCallBack: ImageBackCallBack? = null
 
-    var imageAddCallBack: ImageAddCallBack? = null
+    var rightContentCallBack: RightContentCallBack? = null
 
+    var imageAddCallBack: ImageAddCallBack? = null
 
 
     lateinit var ivBack: ImageView
@@ -27,11 +32,22 @@ class CommonSearchToolBar : ConstraintLayout {
 
     lateinit var ivAdd: ImageView
 
+    lateinit var etSearch: EditText
 
+    lateinit var tvRight: TextView
+
+    var searchListener: OnSearchListener? = null
+
+    interface OnSearchListener {
+        fun onSearch(text: String)
+    }
 
 
     interface ImageBackCallBack {
         fun imageBackClickListener()
+    }
+    interface RightContentCallBack {
+        fun rightContentClickListener()
     }
 
     interface ImageAddCallBack {
@@ -49,13 +65,19 @@ class CommonSearchToolBar : ConstraintLayout {
         init(context, attrs!!)
     }
 
-    private fun init(context: Context, attrs: AttributeSet) {
-        val inflate = LayoutInflater.from(context).inflate(R.layout.view_common_search_toolbar, this)
 
+    private fun init(context: Context, attrs: AttributeSet) {
+        val inflate =
+            LayoutInflater.from(context).inflate(R.layout.view_common_search_toolbar, this)
         val llToolbar = inflate.findViewById<LinearLayout>(R.id.ll_container)
         llToolbar.setPadding(0, getStatusBarHeight(context), 0, 0)
         ivBack = inflate.findViewById(R.id.iv_back)
         ivAdd = inflate.findViewById(R.id.iv_add)
+        etSearch = inflate.findViewById(R.id.et_search)
+        tvRight = inflate.findViewById(R.id.tv_right)
+        var sivClear = inflate.findViewById<ImageView>(R.id.siv_clear)
+
+
         val obtainStyledAttributes =
             context.obtainStyledAttributes(attrs, R.styleable.CommonToolBar)
         val leftImgVisible =
@@ -70,6 +92,11 @@ class CommonSearchToolBar : ConstraintLayout {
         val toolbarBg = obtainStyledAttributes.getResourceId(
             R.styleable.CommonToolBar_toolbarBg, 0
         )
+        val rightContent = obtainStyledAttributes.getString(
+            R.styleable.CommonToolBar_rightContent
+        )
+
+
         if (toolbarBg != 0) {
             llToolbar.setBackgroundResource(toolbarBg)
         }
@@ -91,7 +118,11 @@ class CommonSearchToolBar : ConstraintLayout {
             ivAdd.setImageResource(rightImgSrc)
         }
 
-
+        if (!rightContent.isNullOrEmpty()){
+            tvRight.text = rightContent
+            tvRight.visibility = View.VISIBLE
+            ivAdd.visibility = View.GONE
+        }
         ivBack.clicks().subscribe {
             if (null != imageBackCallBack) {
                 imageBackCallBack?.imageBackClickListener()
@@ -99,12 +130,51 @@ class CommonSearchToolBar : ConstraintLayout {
                 (context as Activity).finish()
             }
         }
+        tvRight.clicks().subscribe {
+            if (null != rightContentCallBack) {
+                rightContentCallBack?.rightContentClickListener()
+            } else {
+                (context as Activity).finish()
+            }
+        }
+
+        etSearch.doOnTextChanged { text, start, before, count ->
+            if (text.isNullOrEmpty()){
+                sivClear.visibility = View.GONE
+            }else{
+                sivClear.visibility = View.VISIBLE
+            }
+        }
+
+        sivClear.setOnClickListener {
+            etSearch.setText("")
+        }
 
         ivAdd.clicks().subscribe {
             imageAddCallBack?.imageAddClickListener()
         }
 
         obtainStyledAttributes.recycle()
+
+        etSearch.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+                val trim = etSearch.text.toString().trim()
+//                if (TextUtils.isEmpty(trim)) {
+//                    showToast("请输入搜索内容")
+//                    return@setOnEditorActionListener false
+//                }
+                searchListener?.onSearch(trim)
+                return@setOnEditorActionListener true
+            }
+
+            return@setOnEditorActionListener false
+        }
+    }
+
+    fun canEdit(can: Boolean) {
+        etSearch.isFocusable = can
+        etSearch.isCursorVisible = can
+        etSearch.isFocusableInTouchMode = can
     }
 
 }

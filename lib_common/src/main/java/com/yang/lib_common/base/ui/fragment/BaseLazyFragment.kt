@@ -214,7 +214,7 @@ abstract class BaseLazyFragment<VB : ViewBinding> : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.i("TAG", "onResume: $isFirstLoad")
+        Log.i(TAG, "onResume: $isFirstLoad")
         if (isFirstLoad) {
             isFirstLoad = false
             initData()

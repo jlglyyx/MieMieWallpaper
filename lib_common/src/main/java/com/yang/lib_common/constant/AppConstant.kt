@@ -8,23 +8,26 @@ interface AppConstant {
 
         const val BASE_PORT = "20000"
 
-        const val BASE_URL = "https://www.baidu.com/"
+        const val BASE_URL = "http://www.yyxjlgl.tk/"
+//        const val BASE_URL = "https://www.baidu.com/"
 //        const val BASE_URL = "https://www.wanandroid.com/"
 //        const val BASE_URL = "http://jlgl.free.idcfengye.com/"
 //        const val BASE_URL = "http://10.16.242.28:20000/"
 
         const val BASE_WEB_URL = "http://192.168.174.197:8080/#"
 
+        const val IMAGE_MODULE = "http://www.yyxjlgl.tk/module-main/"
+
 
         const val TAG = "RemoteModule"
 
         const val TAG_LOG = "httpLog"
 
-        const val CONNECT_TIMEOUT = 1000L
+        const val CONNECT_TIMEOUT = 60*1000L
 
-        const val READ_TIMEOUT = 1000L
+        const val READ_TIMEOUT = 60*1000L
 
-        const val WRITE_TIMEOUT = 1000L
+        const val WRITE_TIMEOUT = 60*1000L
 
         const val CONTENT_TYPE = "multipart/form-data"
 
@@ -64,6 +67,7 @@ interface AppConstant {
         const val WEB_VIEW_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/WebViewActivity"
 
         const val WALLPAPER_DETAIL_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/WallpaperDetailActivity"
+        const val SEARCH_WALLPAPER_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/SearchWallpaperActivity"
 
 
 
@@ -218,9 +222,13 @@ interface AppConstant {
 
         const val NUM = "num"
 
+        const val ORDER = "order"
+
+        const val INDEX = "index"
+
         const val CONTENT = "content"
 
-        const val PAGE_SIZE_COUNT = 10
+        const val PAGE_SIZE_COUNT = 20
 
         const val TAB_HEIGHT = "TAB_HEIGHT"
 
@@ -245,6 +253,8 @@ interface AppConstant {
         const val PASSWORD = "password"
 
         const val VERIFICATION = "verification"
+
+        const val WALL_TYPE = "wallType"
 
         const val NUM_MINUS_ONE = -1
 

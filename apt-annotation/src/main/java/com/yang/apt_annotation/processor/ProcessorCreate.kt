@@ -45,6 +45,7 @@ class ProcessorCreate(
     ) {
         val injectManagerClassName = ClassName.get("", InjectManager::class.java.canonicalName)
         val genericsClassName = ClassName.get("", mClassName)
+
         val genericsInterface = ParameterizedTypeName.get(injectManagerClassName,
             TypeVariableName.get(genericsClassName.canonicalName()))
         mProcessingEnv.messager.printMessage(
@@ -142,9 +143,15 @@ class ProcessorCreate(
             /**
              * 生成viewModel
              */
-            methodSpecBuild.addStatement("viewModelStoreOwner.$t = \$T.getViewModel(viewModelStoreOwner, factory, \$N)",
-                daggerUtilClassName,
-                forName)
+            if (mProxyInfoData.elementValue){
+                methodSpecBuild.addStatement("viewModelStoreOwner.$t = \$T.getViewModel(viewModelStoreOwner.requireActivity(), factory, \$N)",
+                    daggerUtilClassName,
+                    forName)
+            }else{
+                methodSpecBuild.addStatement("viewModelStoreOwner.$t = \$T.getViewModel(viewModelStoreOwner, factory, \$N)",
+                    daggerUtilClassName,
+                    forName)
+            }
         }
         methodSpecBuild.addCode("} catch (Exception e) {\n")
             .addStatement("e.printStackTrace()")

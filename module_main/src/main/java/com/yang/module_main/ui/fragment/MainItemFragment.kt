@@ -17,11 +17,7 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.*
-import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.loadCircle
-import com.yang.lib_common.util.loadRadius
-import com.yang.lib_common.util.toJson
+import com.yang.lib_common.util.*
 import com.yang.module_main.R
 import com.yang.module_main.data.WallpaperData
 import com.yang.module_main.databinding.FraMainItemBinding
@@ -47,14 +43,16 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
 
     private lateinit var mAdapter: BaseQuickAdapter<WallpaperData, BaseViewHolder>
     private lateinit var mTopAdapter: BaseQuickAdapter<String, BaseViewHolder>
-    private var type = 0
+    private var tabIndex = 0
+    private var tabId = ""
 
     override fun initViewBinding(): FraMainItemBinding {
         return bind(FraMainItemBinding::inflate)
     }
 
     override fun initView() {
-        type = arguments?.getInt(AppConstant.Constant.TYPE) ?: 0
+        tabIndex = arguments?.getInt(AppConstant.Constant.TYPE)?:0
+        tabId = arguments?.getString(AppConstant.Constant.ID,"")?:""
 //        initBanner()
         initRecyclerView()
         mViewBinding.smartRefreshLayout.setOnRefreshLoadMoreListener(this)
@@ -83,6 +81,9 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
                         mAdapter.setOnItemClickListener { _, _, position ->
                             val item = mAdapter.getItem(position)
                             mViewBinding.tvTitle.text = item
+                            mainViewModel.pageNum = 1
+                            mainViewModel.order = position
+                            mainViewModel.getWallpaper(tabId)
                             dismiss()
                         }
                     }
@@ -109,18 +110,19 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
     }
 
     private fun initRecyclerView() {
+
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
-                loadRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image))
+                loadRadius(mContext,AppConstant.ClientInfo.IMAGE_MODULE+item.imageUrl,20f,helper.getView(R.id.iv_image))
             }
         }
 
         mViewBinding.recyclerView.adapter = mAdapter
 
         mTopAdapter = object :
-            BaseQuickAdapter<String, BaseViewHolder>(if (type == 0) R.layout.item_top_image else R.layout.item_top_type_image) {
+            BaseQuickAdapter<String, BaseViewHolder>(if (tabIndex == 0) R.layout.item_top_image else R.layout.item_top_type_image) {
             override fun convert(helper: BaseViewHolder, item: String) {
-                if (type == 0){
+                if (tabIndex == 0){
                     loadCircle(mContext,item,helper.getView(R.id.iv_image))
                 }else{
                     loadRadius(mContext,item,5f,helper.getView(R.id.iv_image))
@@ -135,7 +137,10 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
             item?.let {
                 buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
                     .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(requireContext(), com.yang.lib_common.R.anim.fade_in, com.yang.lib_common.R.anim.fade_out))
-                    .withString(AppConstant.Constant.DATA,it.toJson())
+                    .withString(AppConstant.Constant.DATA,mAdapter.data.toJson())
+                    .withInt(AppConstant.Constant.ORDER,mainViewModel.order)
+                    .withInt(AppConstant.Constant.INDEX,position)
+                    .withInt(AppConstant.Constant.PAGE_NUMBER,mainViewModel.pageNum)
                     .navigation()
             }
         }
@@ -199,13 +204,13 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
     override fun onRefresh(refreshLayout: RefreshLayout) {
 
         mainViewModel.pageNum = 1
-        mainViewModel.getWallpaper()
+        mainViewModel.getWallpaper(tabId)
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
 
         mainViewModel.pageNum++
-        mainViewModel.getWallpaper()
+        mainViewModel.getWallpaper(tabId)
 
     }
 }

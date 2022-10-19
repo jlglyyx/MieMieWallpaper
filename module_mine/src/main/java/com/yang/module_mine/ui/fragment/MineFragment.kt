@@ -117,7 +117,6 @@ class MineFragment : BaseFragment<FraMineBinding>() {
         val loginUserType = getDefaultMMKV().getInt(AppConstant.Constant.LOGIN_USER_TYPE, 0)
         if (loginStatus == AppConstant.Constant.LOGIN_SUCCESS) {
             mViewBinding.clHead.visibility = View.GONE
-            mViewBinding.lottieAnimationView.visibility = View.GONE
             mViewBinding.clHeadLogin.visibility = View.VISIBLE
 //            mViewBinding.tvSign.text = if (loginUserType == 0) "买家版" else "卖家版"
         }
@@ -129,13 +128,11 @@ class MineFragment : BaseFragment<FraMineBinding>() {
         LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).observe(this, Observer {
             if (it == AppConstant.Constant.LOGIN_SUCCESS) {
                 mViewBinding.clHead.visibility = View.GONE
-                mViewBinding.lottieAnimationView.visibility = View.GONE
                 mViewBinding.clHeadLogin.visibility = View.VISIBLE
                 val loginUserType = getDefaultMMKV().getInt(AppConstant.Constant.LOGIN_USER_TYPE, 0)
 //                mViewBinding.tvLoginUserType.text = if (loginUserType == 0) "买家版" else "卖家版"
             } else {
                 mViewBinding.clHead.visibility = View.VISIBLE
-                mViewBinding.lottieAnimationView.visibility = View.VISIBLE
                 mViewBinding.clHeadLogin.visibility = View.GONE
             }
         })

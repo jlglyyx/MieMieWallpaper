@@ -7,6 +7,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -33,6 +34,7 @@ import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
 import com.yang.lib_common.room.entity.UserInfoData
 import io.reactivex.rxjava3.core.Observable
 import java.io.*
+import java.lang.reflect.Type
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,6 +49,8 @@ val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
 val formatDate_YYYYMMMDDHHMMSS = SimpleDateFormat("yyyyMMddHHmmss")
 
 val formatDate_YYYY_MMM_DD_HHMMSS = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+private val arr = arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f")
 
 val  gson = Gson()
 
@@ -116,9 +120,9 @@ fun Any.toJson(): String {
 /**
  * @return 解析Json
  */
-inline fun <reified T> String.fromJson(): T {
+inline fun <reified T> String.fromJson(typeOfT: Type = T::class.java): T {
 
-    return gson.fromJson(this, T::class.java)
+    return gson.fromJson(this, typeOfT)
 }
 
 /**
@@ -598,6 +602,16 @@ fun String.isImage():Boolean{
             || this.endsWith(".ico",true)
 
 }
+
+fun getRandomColor(): Int {
+    val buffer = StringBuffer()
+    for (i in 0..5) {
+        buffer.append(arr[(Math.random() * arr.size).toInt()])
+    }
+    return Color.parseColor("#$buffer")
+}
+
+
 
 
 

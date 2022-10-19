@@ -2,6 +2,7 @@ package com.yang.module_main.repository
 
 import com.yang.lib_common.base.repository.BaseRepository
 import com.yang.lib_common.data.LoginData
+import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.module_main.api.MainApi
@@ -38,12 +39,12 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) :BaseRepo
     }
 
 
-    suspend fun getTabs(id:String): MResult<MutableList<WallpaperTabData>> {
+    suspend fun getTabs(wallType:Int): MResult<MutableList<WallpaperTabData>> {
         return withContextIO {
-            mainApi.getTabs(id)
+            mainApi.getTabs(wallType)
         }
     }
-    suspend fun getWallpaper(params:MutableMap<String,Any>): MResult<MutableList<WallpaperData>> {
+    suspend fun getWallpaper(params:MutableMap<String,Any?>): MResult<MListResult<WallpaperData>> {
         return withContextIO {
             mainApi.getWallpaper(params)
         }

@@ -2,6 +2,7 @@ package com.yang.module_main.api
 
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.LoginData
+import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.module_main.data.WallpaperData
@@ -41,10 +42,10 @@ interface MainApi {
     suspend fun uploadFileAndParam(@Body file: MutableList<RequestBody>): MResult<MutableList<String>>
 
 
-    @GET("/")
-    suspend fun getTabs(@Query(AppConstant.Constant.ID) id:String):MResult<MutableList<WallpaperTabData>>
+    @GET("main/queryTabs")
+    suspend fun getTabs(@Query(AppConstant.Constant.WALL_TYPE) wallType:Int):MResult<MutableList<WallpaperTabData>>
 
-    @GET("/")
-    suspend fun getWallpaper(@QueryMap params:MutableMap<String,Any>):MResult<MutableList<WallpaperData>>
+    @POST("main/queryAllByTab")
+    suspend fun getWallpaper(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperData>>
 
 }

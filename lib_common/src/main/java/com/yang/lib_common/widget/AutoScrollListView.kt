@@ -27,7 +27,7 @@ class AutoScrollListView : LinearLayout, LifecycleObserver {
     private var showPosition = 0
     private var viewObjectAnimator: ObjectAnimator? = null
     private var currentPosition = 0
-    var list = mutableListOf<String>("133****4568任务进行中","139****4358接受任务","136****4568任务进行中","133****4521任务已完成","127****4568任务已完成",)
+    var list = mutableListOf<String>("推荐","139****4358接受任务","136****4568任务进行中","133****4521任务已完成","127****4568任务已完成",)
     var firstBinding: ItemTaskAutoPalyBinding =
         ItemTaskAutoPalyBinding.inflate(LayoutInflater.from(context), this, false)
     var secondBinding: ItemTaskAutoPalyBinding =
