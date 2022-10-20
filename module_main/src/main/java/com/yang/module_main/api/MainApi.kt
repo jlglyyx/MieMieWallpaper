@@ -21,11 +21,15 @@ interface MainApi {
     @GET("/")
     suspend fun getA():String
 
-    @POST("api/user/login")
-    suspend fun login(@Body params:MutableMap<String,Any>):MResult<LoginData>
+    // TODO:  替换 @Body
+    @POST("user/login")
+    suspend fun login(@QueryMap params:MutableMap<String,Any>):MResult<LoginData>
 
     @POST("api/user/query/userInfo")
     suspend fun getUserInfo(@Query(AppConstant.Constant.ID) id:String):MResult<UserInfoData>
+
+    @POST("user/register")
+    suspend fun register(@Query(AppConstant.Constant.ID) id:String):MResult<UserInfoData>
 
 //    @POST("api/user/insert/task")
 //    suspend fun insertTask(@Body taskData: TaskData): MResult<String>

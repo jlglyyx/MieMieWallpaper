@@ -2,6 +2,7 @@ package com.yang.module_main.ui.fragment
 
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -64,6 +65,8 @@ class MainFragment : BaseFragment<FraMainBinding>() {
                     .hasShadowBg(true) // 去掉半透明背景
                     .asCustom(FilterDialog(requireContext()).apply {
                         block = {
+                            it.sllContainer.shapeDrawableBuilder.setSolidColor(ContextCompat.getColor(requireContext(),
+                                com.yang.lib_common.R.color.color_F3F4F6)).intoBackground()
                             it.recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
                             val mAdapter = object :
                                 BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_filter_tab) {

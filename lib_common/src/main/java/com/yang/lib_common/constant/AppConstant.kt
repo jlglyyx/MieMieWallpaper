@@ -78,6 +78,7 @@ interface AppConstant {
         const val LEFT_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/LeftFragment"
         const val MY_COLLECTION_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionFragment"
         const val MY_DOWNLOAD_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyDownLoadFragment"
+        const val SEARCH_WALLPAPER_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/SearchWallpaperFragment"
 
         /**
          * task
@@ -249,6 +250,8 @@ interface AppConstant {
         const val LOCATION = "location"
 
         const val PHONE = "phone"
+
+        const val USER_ACCOUNT = "userAccount"
 
         const val PASSWORD = "password"
 

@@ -34,4 +34,8 @@ data class WallpaperTabData(
     var createTime:String?,
     var updateTime:String?
 )
+data class WallpaperTopData(
+    var title:String?,
+    var url:String?,//类型
+)
 

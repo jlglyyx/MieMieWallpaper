@@ -20,6 +20,7 @@ import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.module_main.R
 import com.yang.module_main.data.WallpaperData
+import com.yang.module_main.data.WallpaperTopData
 import com.yang.module_main.databinding.FraMainItemBinding
 import com.yang.module_main.ui.dialog.FilterDialog
 import com.yang.module_main.viewmodel.MainViewModel
@@ -42,7 +43,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: BaseQuickAdapter<WallpaperData, BaseViewHolder>
-    private lateinit var mTopAdapter: BaseQuickAdapter<String, BaseViewHolder>
+    private lateinit var mTopAdapter: BaseQuickAdapter<WallpaperTopData, BaseViewHolder>
     private var tabIndex = 0
     private var tabId = ""
 
@@ -92,7 +93,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
     }
 
     override fun initData() {
-        mViewBinding.smartRefreshLayout.autoRefresh()
+        onRefresh(mViewBinding.smartRefreshLayout)
     }
 
     private fun initBanner() {
@@ -120,12 +121,12 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
         mViewBinding.recyclerView.adapter = mAdapter
 
         mTopAdapter = object :
-            BaseQuickAdapter<String, BaseViewHolder>(if (tabIndex == 0) R.layout.item_top_image else R.layout.item_top_type_image) {
-            override fun convert(helper: BaseViewHolder, item: String) {
+            BaseQuickAdapter<WallpaperTopData, BaseViewHolder>(if (tabIndex == 0) R.layout.item_top_image else R.layout.item_top_type_image) {
+            override fun convert(helper: BaseViewHolder, item: WallpaperTopData) {
                 if (tabIndex == 0){
-                    loadCircle(mContext,item,helper.getView(R.id.iv_image))
+                    loadCircle(mContext,item.url,helper.getView(R.id.iv_image))
                 }else{
-                    loadRadius(mContext,item,5f,helper.getView(R.id.iv_image))
+                    loadRadius(mContext,item.url,5f,helper.getView(R.id.iv_image))
                 }
             }
         }
@@ -147,14 +148,14 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
         mTopAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mAdapter.getItem(position)
             item?.let {
-
+                WallpaperUtil.setWallpaper(requireContext(), "")
             }
         }
 
-        mTopAdapter.setNewData(mutableListOf<String>().apply {
-            add("https://pic1.zhimg.com/v2-c8abae935169a75f5efce1c9230554d9_r.jpg?source=1940ef5c")
-            add("http://bizihu.com/data/12031020.jpg")
-            add("https://pic2.zhimg.com/v2-f783660f6bd3e2875dda9ad7874cd834_r.jpg?source=1940ef5c")
+        mTopAdapter.setNewData(mutableListOf<WallpaperTopData>().apply {
+            add(WallpaperTopData("AR壁纸","https://pic1.zhimg.com/v2-c8abae935169a75f5efce1c9230554d9_r.jpg?source=1940ef5c"))
+            add(WallpaperTopData("AR壁纸","http://bizihu.com/data/12031020.jpg"))
+            add(WallpaperTopData("AR壁纸","https://pic2.zhimg.com/v2-f783660f6bd3e2875dda9ad7874cd834_r.jpg?source=1940ef5c"))
         })
     }
 
@@ -171,6 +172,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
                         mainViewModel.showRecyclerViewEmptyEvent()
                     } else {
                         mAdapter.replaceData(it)
+                        mViewBinding.smartRefreshLayout.setNoMoreData(false)
                     }
                 }
                 mViewBinding.smartRefreshLayout.isLoading -> {
@@ -190,6 +192,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
                         mainViewModel.showRecyclerViewEmptyEvent()
                     } else {
                         mAdapter.replaceData(it)
+                        mViewBinding.smartRefreshLayout.setNoMoreData(false)
                     }
                 }
             }

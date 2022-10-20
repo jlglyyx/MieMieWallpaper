@@ -4,7 +4,9 @@ package com.yang.lib_common.util
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.ImageView
 import android.widget.Toast
+import com.blankj.utilcode.util.ToastUtils
 import com.yang.lib_common.app.BaseApplication
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -24,28 +26,30 @@ private val context: Context = BaseApplication.baseApplication
 
 @SuppressLint("ShowToast")
 fun showShort(msg: Any) {
-    MainScope().launch {
-        if (toast == null) {
-            toast = Toast.makeText(context, "", Toast.LENGTH_SHORT)
-            toast?.setText(msg.toString())
-        } else {
-            toast!!.setText(msg.toString())
-            toast!!.duration = Toast.LENGTH_SHORT
-        }
-        toast?.show()
-    }
+    ToastUtils.showShort(msg.toString())
+//    MainScope().launch {
+//        if (toast == null) {
+//            toast = Toast.makeText(context, "", Toast.LENGTH_SHORT)
+//            toast?.setText(msg.toString())
+//        } else {
+//            toast!!.setText(msg.toString())
+//            toast!!.duration = Toast.LENGTH_SHORT
+//        }
+//        toast?.show()
+//    }
 }
 
 @SuppressLint("ShowToast")
 fun showLong(msg: Any) {
-    MainScope().launch {
-        if (toast == null) {
-            toast = Toast.makeText(context, "", Toast.LENGTH_LONG)
-            toast?.setText(msg.toString())
-        } else {
-            toast!!.setText(msg.toString())
-            toast!!.duration = Toast.LENGTH_LONG
-        }
-        toast?.show()
-    }
+    ToastUtils.showLong(msg.toString())
+//    MainScope().launch {
+//        if (toast == null) {
+//            toast = Toast.makeText(context, "", Toast.LENGTH_LONG)
+//            toast?.setText(msg.toString())
+//        } else {
+//            toast!!.setText(msg.toString())
+//            toast!!.duration = Toast.LENGTH_LONG
+//        }
+//        toast?.show()
+//    }
 }

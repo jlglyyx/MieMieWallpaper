@@ -6,9 +6,11 @@ import com.yang.module_main.ui.activity.MainActivity
 import com.yang.module_main.di.factory.MainViewModelFactory
 import com.yang.module_main.di.module.MainModule
 import com.yang.module_main.ui.activity.LoginActivity
+import com.yang.module_main.ui.activity.SearchWallpaperActivity
 import com.yang.module_main.ui.activity.WallpaperDetailActivity
 import com.yang.module_main.ui.fragment.MainFragment
 import com.yang.module_main.ui.fragment.MainItemFragment
+import com.yang.module_main.ui.fragment.SearchWallpaperFragment
 import dagger.Component
 
 /**
@@ -39,4 +41,9 @@ interface MainComponent {
     fun inject(inject: WallpaperDetailActivity)
 
     fun inject(inject: LoginActivity)
+
+    fun inject(inject: SearchWallpaperFragment)
+
+    fun inject(inject: SearchWallpaperActivity)
+
 }

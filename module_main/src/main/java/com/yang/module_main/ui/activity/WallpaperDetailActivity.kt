@@ -61,7 +61,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         index =
             intent.getIntExtra(AppConstant.Constant.INDEX, index)
         mainViewModel.pageNum =
-            intent.getIntExtra(AppConstant.Constant.PAGE_NUMBER, mainViewModel.pageNum)
+            intent.getIntExtra(AppConstant.Constant.PAGE_NUMBER, 0)+1
         mWallpaperDataList?.apply {
             if (index != -1) {
                 mWallpaperData = this[index]
@@ -217,6 +217,9 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             } else {
                 holder.gsyVideoPlayer.visibility = View.GONE
                 holder.ivImage.setOnPhotoTapListener { view, x, y ->
+                    holder.clControl.visibility = View.VISIBLE
+                }
+                holder.ivImage.setOnClickListener {
                     holder.clControl.visibility = View.VISIBLE
                 }
 

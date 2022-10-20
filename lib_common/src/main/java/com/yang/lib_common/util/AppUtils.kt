@@ -623,6 +623,7 @@ fun <T> SmartRefreshLayout.smartRefreshLayoutData(data:MutableList<T>?, adapter:
                 mViewModel.showRecyclerViewEmptyEvent()
             } else {
                 adapter.replaceData(data)
+                this.setNoMoreData(false)
             }
         }
         this.isLoading -> {
@@ -639,6 +640,7 @@ fun <T> SmartRefreshLayout.smartRefreshLayoutData(data:MutableList<T>?, adapter:
                 mViewModel.showRecyclerViewEmptyEvent()
             } else {
                 adapter.replaceData(data)
+                this.setNoMoreData(false)
             }
         }
     }

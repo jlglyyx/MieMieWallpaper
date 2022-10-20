@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.hjq.shape.layout.ShapeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/shape_top_dialog_bg"
     android:layout_width="match_parent"
+    android:id="@+id/sll_container"
+    app:shape_solidColor="@color/color_F3F4F6"
     android:layout_height="wrap_content">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -13,4 +15,4 @@
         android:paddingEnd="@dimen/dp_10"
         android:layout_height="wrap_content"/>
 
-</LinearLayout>
+</com.hjq.shape.layout.ShapeLinearLayout>

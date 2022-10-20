@@ -89,18 +89,23 @@ class MainViewModel @Inject constructor(
 //        MobSDK.submitPolicyGrantResult(checkStatus)
         launch({
             val params = mutableMapOf<String,Any>()
-            params[AppConstant.Constant.PHONE] = phoneText
-            params[AppConstant.Constant.PASSWORD] = passwordText
-            params[AppConstant.Constant.VERIFICATION] = verificationText
+            params[AppConstant.Constant.USER_ACCOUNT] = phoneText
+            if (loginType == 1) {
+                params[AppConstant.Constant.PASSWORD] = passwordText
+
+            }else{
+                params[AppConstant.Constant.VERIFICATION] = verificationText
+            }
+
            mainRepository.login(params)
         }, {
-            finishActivity()
-        },{
-            getDefaultMMKV().putString(AppConstant.Constant.LOGIN_INFO, LoginData("token","id").toJson())
+            getDefaultMMKV().putString(AppConstant.Constant.LOGIN_INFO, it.toJson())
             getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_USER_TYPE, loginUserType)
             getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
             LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_SUCCESS)
             finishActivity()
+        },{
+
         },messages = arrayOf("登录中...","登录成功!"))
     }
 
@@ -117,10 +122,14 @@ class MainViewModel @Inject constructor(
 
 
 
-    fun getWallpaper(tabId:String?){
+    fun getWallpaper(tabId:String?,keyword:String = ""){
         launch({
-            params[AppConstant.Constant.ORDER] = order
-            params["tabId"] = tabId
+            if (TextUtils.isEmpty(keyword)){
+                params[AppConstant.Constant.ORDER] = order
+                params["tabId"] = tabId
+            }else{
+                params[AppConstant.Constant.KEYWORD] = keyword
+            }
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
             params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
             mainRepository.getWallpaper(params)

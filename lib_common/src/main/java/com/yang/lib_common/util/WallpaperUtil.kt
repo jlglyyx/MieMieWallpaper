@@ -45,7 +45,7 @@ class WallpaperUtil {
 
         fun setWallpaper(context: Context, path: String) {
 
-            if (path.endsWith(".mp4",true)){
+            if (path.endsWith(".mp4",true)||TextUtils.isEmpty(path)){
                 setDynamicWallpaper(context,path)
             }else{
                 setStaticWallpaper(context,path)
