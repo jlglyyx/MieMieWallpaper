@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -145,6 +146,7 @@ class MineFragment : BaseFragment<FraMineBinding>() {
             ?.fromJson<LoginData>()?.let {
                 mineViewModel.getUserInfo(it.id)
             }
+//        Log.i(TAG, "onResume====: "+getDefaultMMKV().getString(AppConstant.Constant.LOGIN_INFO, ""))
     }
 
     private fun initRecyclerView() {

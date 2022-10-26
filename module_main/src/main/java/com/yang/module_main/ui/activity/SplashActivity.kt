@@ -85,7 +85,7 @@ class SplashActivity:BaseActivity<ActSplashBinding>() {
     private fun initPermission(){
 
         registerForActivityResult.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA))
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.READ_PHONE_STATE ))
     }
 
     private fun initDialog(){

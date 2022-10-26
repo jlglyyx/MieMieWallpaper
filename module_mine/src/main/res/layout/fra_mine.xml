@@ -251,15 +251,20 @@
 
             </FrameLayout>
 
+            <com.hjq.shape.layout.ShapeLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/fl_head"
+                android:orientation="vertical">
+
+
             <LinearLayout
                 android:id="@+id/ll_center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/white"
                 android:orientation="vertical"
-                android:padding="@dimen/dp_10"
-                app:layout_constraintTop_toBottomOf="@+id/fl_head">
+                android:padding="@dimen/dp_10">
 
                 <com.youth.banner.Banner
                     android:id="@id/banner"
@@ -297,7 +302,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/white"
                 android:orientation="vertical"
                 android:padding="@dimen/dp_10"
                 app:layout_constraintTop_toBottomOf="@+id/ll_center">
@@ -316,7 +320,7 @@
                     android:layout_marginTop="@dimen/dp_15"
                     android:overScrollMode="never" />
             </LinearLayout>
-
+            </com.hjq.shape.layout.ShapeLinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

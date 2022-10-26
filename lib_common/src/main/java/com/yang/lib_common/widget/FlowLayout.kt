@@ -62,7 +62,7 @@ class FlowLayout : ViewGroup {
                 maxItemHeight = max(maxItemHeight, childHeight)
             }
         }
-        setMeasuredDimension(widthMeasureSpec, resultHeight)
+        setMeasuredDimension(widthMeasureSpec, resultHeight+maxItemHeight)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {

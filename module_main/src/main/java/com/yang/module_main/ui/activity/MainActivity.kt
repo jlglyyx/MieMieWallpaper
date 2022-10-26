@@ -33,6 +33,8 @@ import io.dcloud.ads.core.v2.interstitial.DCInterstitialAdLoadListener
 import io.dcloud.ads.core.v2.reward.DCRewardAd
 import io.dcloud.ads.core.v2.reward.DCRewardAdListener
 import io.dcloud.ads.core.v2.reward.DCRewardAdLoadListener
+
+import org.json.JSONArray
 import org.json.JSONObject
 
 
@@ -46,9 +48,9 @@ class MainActivity : BaseActivity<ActMainBinding>() {
 
     private var mTitles = arrayListOf("静态壁纸","我的")
 
-    private var mImages = arrayListOf(R.drawable.iv_home, R.drawable.iv_task, R.drawable.iv_mine)
+    private var mImages = arrayListOf(R.drawable.iv_picture, R.drawable.iv_mine)
 
-    private var mSelectImages = arrayListOf(R.drawable.iv_home_select, R.drawable.iv_task_select,R.drawable.iv_mine_select)
+    private var mSelectImages = arrayListOf(R.drawable.iv_picture_select, R.drawable.iv_mine_select)
 
     private var lastTime = 0L
 
@@ -205,8 +207,8 @@ class MainActivity : BaseActivity<ActMainBinding>() {
                 interstitialAd!!.show(this@MainActivity)
             }
 
-            override fun onError(i: Int, s: String) {
-                Log.e("打印日志", i.toString() + s)
+            override fun onError(i: Int, s: String?, p2: JSONArray?) {
+                Log.e("打印日志", i.toString() + s+" "+p2)
             }
         })
     }
@@ -229,8 +231,8 @@ class MainActivity : BaseActivity<ActMainBinding>() {
                 fullScreenAd!!.show(this@MainActivity)
             }
 
-            override fun onError(i: Int, s: String) {
-                Log.e("打印日志", i.toString() + s)
+            override fun onError(i: Int, s: String?, p2: JSONArray?) {
+                Log.e("打印日志", i.toString() + s+" "+p2)
             }
         })
     }
@@ -254,8 +256,8 @@ class MainActivity : BaseActivity<ActMainBinding>() {
                 rewardAd!!.show(this@MainActivity)
             }
 
-            override fun onError(i: Int, s: String) {
-                Log.e("打印日志", i.toString() + s)
+            override fun onError(i: Int, s: String?, p2: JSONArray?) {
+                Log.e("打印日志", i.toString() + s+" "+p2)
             }
         })
     }

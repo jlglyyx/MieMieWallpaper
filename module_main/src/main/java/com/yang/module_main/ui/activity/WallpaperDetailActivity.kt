@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.blankj.utilcode.util.BarUtils
 import com.google.gson.reflect.TypeToken
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.yang.apt_annotation.annotain.InjectViewModel
@@ -80,6 +82,9 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
     }
 
     override fun initView() {
+
+
+
 
 
     }
@@ -171,6 +176,8 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             position: Int
         ) {
 
+            holder.clControl.setPadding(0,0,0,BarUtils.getNavBarHeight())
+
             holder.ivHead.loadCircle(this@WallpaperDetailActivity,data[position].imageUrl)
 
             holder.ivHead.clicks().subscribe {
@@ -179,8 +186,10 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             holder.stvAttention.clicks().subscribe {
                 holder.stvAttention.visibility = View.INVISIBLE
             }
-            holder.iivLikeNum.clicks().subscribe {
 
+
+            holder.iivLikeNum.setOnClickListener {
+                holder.iivLikeNum.mViewItemImageBinding.ivImage.tintClick = !holder.iivLikeNum.mViewItemImageBinding.ivImage.tintClick
             }
             holder.iivShare.clicks().subscribe {
 

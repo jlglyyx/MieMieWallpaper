@@ -255,6 +255,8 @@ interface AppConstant {
 
         const val PASSWORD = "password"
 
+        const val USER_PASSWORD = "userPassword"
+
         const val VERIFICATION = "verification"
 
         const val WALL_TYPE = "wallType"

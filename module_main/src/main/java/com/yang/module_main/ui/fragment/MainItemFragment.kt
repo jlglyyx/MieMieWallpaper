@@ -1,9 +1,11 @@
 package com.yang.module_main.ui.fragment
 
+import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.lxj.xpopup.XPopup
@@ -114,9 +116,19 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
 
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
-                loadRadius(mContext,AppConstant.ClientInfo.IMAGE_MODULE+item.imageUrl,20f,helper.getView(R.id.iv_image))
+                loadSpaceRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image),2,10f)
             }
         }
+        mViewBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Glide.with(mContext).resumeRequests();
+                }else {
+                    Glide.with(mContext).pauseRequests();
+                }
+            }
+        })
 
         mViewBinding.recyclerView.adapter = mAdapter
 

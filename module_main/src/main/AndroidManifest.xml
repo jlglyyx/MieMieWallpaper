@@ -19,9 +19,10 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="false"
-            android:theme="@style/WhiteActivity" />
+            />
         <activity
             android:name=".ui.activity.WallpaperDetailActivity"
+            android:theme="@style/FullActivity"
             android:exported="false"/>
         <activity
             android:name=".ui.activity.LoginActivity"

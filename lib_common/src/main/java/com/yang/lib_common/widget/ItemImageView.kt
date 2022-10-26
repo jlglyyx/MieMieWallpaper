@@ -28,9 +28,11 @@ class ItemImageView:LinearLayout {
             init(context,attrs)
         }
     }
+    lateinit var mViewItemImageBinding:ViewItemImageBinding
+
 
     private fun init(context:Context,attrs: AttributeSet){
-        val mViewItemImageBinding = ViewItemImageBinding.inflate(LayoutInflater.from(context),this,true)
+        mViewItemImageBinding = ViewItemImageBinding.inflate(LayoutInflater.from(context),this,true)
 
         val obtainStyledAttributes = context.obtainStyledAttributes(attrs, R.styleable.ItemImageView)
         val itemTitle = obtainStyledAttributes.getString(R.styleable.ItemImageView_itemTitle)

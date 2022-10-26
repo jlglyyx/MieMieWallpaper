@@ -21,9 +21,8 @@ interface MainApi {
     @GET("/")
     suspend fun getA():String
 
-    // TODO:  替换 @Body
     @POST("user/login")
-    suspend fun login(@QueryMap params:MutableMap<String,Any>):MResult<LoginData>
+    suspend fun login(@Body params:MutableMap<String,Any>):MResult<LoginData>
 
     @POST("api/user/query/userInfo")
     suspend fun getUserInfo(@Query(AppConstant.Constant.ID) id:String):MResult<UserInfoData>

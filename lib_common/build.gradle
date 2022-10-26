@@ -67,5 +67,7 @@ dependencies {
     rootProject.ext.apiProjectDependencies.each { k, v -> api project(path: v) }
 
 
+    api 'com.huawei.hms:ads-lite:13.4.47.302'
+
 }
 

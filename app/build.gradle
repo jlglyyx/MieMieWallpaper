@@ -37,7 +37,6 @@ android {
 }
 
 dependencies {
-
     implementation project(":lib_common")
     if (!isModule.toBoolean()) {
         implementation project(path: ':module_main')

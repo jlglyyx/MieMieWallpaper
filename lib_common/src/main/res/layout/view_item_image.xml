@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <com.yang.lib_common.widget.ImageTintView
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
         android:padding="@dimen/dp_5"

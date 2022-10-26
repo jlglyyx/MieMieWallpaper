@@ -91,7 +91,7 @@ class MainViewModel @Inject constructor(
             val params = mutableMapOf<String,Any>()
             params[AppConstant.Constant.USER_ACCOUNT] = phoneText
             if (loginType == 1) {
-                params[AppConstant.Constant.PASSWORD] = passwordText
+                params[AppConstant.Constant.USER_PASSWORD] = passwordText
 
             }else{
                 params[AppConstant.Constant.VERIFICATION] = verificationText
@@ -99,7 +99,7 @@ class MainViewModel @Inject constructor(
 
            mainRepository.login(params)
         }, {
-            getDefaultMMKV().putString(AppConstant.Constant.LOGIN_INFO, it.toJson())
+            getDefaultMMKV().putString(AppConstant.Constant.LOGIN_INFO, it.data.toJson())
             getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_USER_TYPE, loginUserType)
             getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
             LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_SUCCESS)

@@ -59,7 +59,7 @@ class SearchWallpaperFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,O
 
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
-                loadRadius(mContext,AppConstant.ClientInfo.IMAGE_MODULE+item.imageUrl,20f,helper.getView(R.id.iv_image))
+                loadSpaceRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image),3,30f)
             }
         }
         mViewBinding.recyclerView.adapter = mAdapter

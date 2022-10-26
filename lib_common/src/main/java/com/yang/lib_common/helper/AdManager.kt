@@ -1,16 +1,17 @@
 package com.yang.lib_common.helper
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import androidx.annotation.Nullable
 import com.yang.lib_common.util.getScreenPx
 import io.dcloud.ads.core.entry.SplashConfig
 import io.dcloud.ads.core.v2.splash.DCSplashAd
 import io.dcloud.ads.core.v2.splash.DCSplashAdListener
 import io.dcloud.ads.core.v2.splash.DCSplashAdLoadListener
+import org.json.JSONArray
 import org.json.JSONObject
 
 
@@ -62,10 +63,17 @@ class AdManager {
                 finish()
             }
         })
+
         splashAd.load(config, object : DCSplashAdLoadListener {
+
+
+            override fun onError(p0: Int, p1: String?, p2: JSONArray?) {
+                finish()
+                Log.i(TAG, "onError: $p0   $p1  ${p2.toString()}")
+            }
+
             override fun onSplashAdLoad() {
                 splashAd.showIn(container)
-                Log.i(TAG, "onSplashAdLoad: ")
             }
 
             override fun redBag(p0: View?, p1: FrameLayout.LayoutParams?) {
@@ -73,13 +81,7 @@ class AdManager {
             }
 
             override fun pushAd(p0: JSONObject?) {
-
                 Log.i(TAG, "pushAd: ")
-            }
-
-            override fun onError(i: Int, s: String) {
-                finish()
-                Log.i(TAG, "onError: $s   $i")
             }
         })
     }

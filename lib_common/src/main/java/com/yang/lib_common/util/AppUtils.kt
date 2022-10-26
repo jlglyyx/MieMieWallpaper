@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.blankj.utilcode.util.*
 import com.blankj.utilcode.util.ImageUtils.getImageType
@@ -612,6 +613,9 @@ fun getRandomColor(): Int {
 }
 
 
+fun Context.getColor(color:Int){
+    ContextCompat.getColor(this,color)
+}
 
 
 
