@@ -11,6 +11,7 @@ import android.os.Parcelable
  */
 class WallpaperData(){
     var id:String? = null
+    var userId:String? = null
     var imageUrl:String? = ""
     var imageName:String? = "${System.currentTimeMillis()}.jpg"
     var tabId: String? = null

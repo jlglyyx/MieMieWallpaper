@@ -11,6 +11,7 @@ import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.util.getDefaultMMKV
 import com.yang.lib_common.util.showShort
 import com.yang.lib_common.util.toJson
+import com.yang.lib_common.util.updateUserInfo
 import com.yang.module_main.R
 import com.yang.module_main.data.WallpaperData
 import com.yang.module_main.data.WallpaperTabData
@@ -99,8 +100,7 @@ class MainViewModel @Inject constructor(
 
            mainRepository.login(params)
         }, {
-            getDefaultMMKV().putString(AppConstant.Constant.LOGIN_INFO, it.data.toJson())
-            getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_USER_TYPE, loginUserType)
+            updateUserInfo(it.data)
             getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
             LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_SUCCESS)
             finishActivity()

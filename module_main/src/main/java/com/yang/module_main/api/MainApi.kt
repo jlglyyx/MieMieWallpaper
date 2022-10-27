@@ -22,7 +22,7 @@ interface MainApi {
     suspend fun getA():String
 
     @POST("user/login")
-    suspend fun login(@Body params:MutableMap<String,Any>):MResult<LoginData>
+    suspend fun login(@Body params:MutableMap<String,Any>):MResult<UserInfoData>
 
     @POST("api/user/query/userInfo")
     suspend fun getUserInfo(@Query(AppConstant.Constant.ID) id:String):MResult<UserInfoData>

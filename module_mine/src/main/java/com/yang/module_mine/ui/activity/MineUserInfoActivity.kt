@@ -15,6 +15,7 @@ import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
 import com.yang.lib_common.*
+import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.databinding.ActMineUserInfoBinding
 import com.yang.module_mine.viewmodel.MineViewModel
@@ -39,8 +40,7 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
 
     override fun initData() {
         val id = intent.getStringExtra(AppConstant.Constant.ID)
-        val userInfo = getUserInfo()
-        userInfo.let {
+        UserInfoHold.userInfo.let {
             Glide.with(this).load(
                 it?.userImage
                     ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e"

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e95638e4ecd12a3562d5dbb13719cec2",
+    "identityHash": "efcf5b8fb8d47a15a210f5c4fc0f866a",
     "entities": [
       {
         "tableName": "user_info",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `token` TEXT, `userName` TEXT, `userSex` INTEGER, `userAge` INTEGER, `userBirthDay` TEXT, `userDescribe` TEXT, `userAccount` TEXT NOT NULL, `userPassword` TEXT NOT NULL, `userAddress` TEXT, `userLocationAddress` TEXT, `userLeftBackgroundImage` TEXT, `userInfoBackgroundImage` TEXT, `userMineBackgroundImage` TEXT, `userPhone` TEXT, `userImage` TEXT, `userVipLevel` INTEGER NOT NULL, `userCredit` INTEGER NOT NULL, `userVipExpired` INTEGER NOT NULL, `userType` INTEGER NOT NULL, `userObtain` TEXT, `userSign` TEXT, `userExtension` TEXT, `updateTime` TEXT, `createTime` TEXT, `userExtraInfo` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `token` TEXT, `userName` TEXT, `userSex` INTEGER, `userAge` INTEGER, `userBirthDay` TEXT, `userDescribe` TEXT, `userAccount` TEXT NOT NULL, `userPassword` TEXT NOT NULL, `userAddress` TEXT, `userIntegral` INTEGER NOT NULL, `userAttention` INTEGER NOT NULL, `userFan` INTEGER NOT NULL, `userLocationAddress` TEXT, `userLeftBackgroundImage` TEXT, `userInfoBackgroundImage` TEXT, `userMineBackgroundImage` TEXT, `userPhone` TEXT, `userImage` TEXT, `userVipLevel` INTEGER NOT NULL, `userCredit` INTEGER NOT NULL, `userVipExpired` INTEGER NOT NULL, `userType` INTEGER NOT NULL, `userObtain` TEXT, `userSign` INTEGER, `userIsSign` INTEGER NOT NULL, `userExtension` TEXT, `updateTime` TEXT, `createTime` TEXT, `userExtraInfo` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -67,6 +67,24 @@
             "columnName": "userAddress",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "userIntegral",
+            "columnName": "userIntegral",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userAttention",
+            "columnName": "userAttention",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userFan",
+            "columnName": "userFan",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "userLocationAddress",
@@ -137,8 +155,14 @@
           {
             "fieldPath": "userSign",
             "columnName": "userSign",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "userIsSign",
+            "columnName": "userIsSign",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "userExtension",
@@ -522,7 +546,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e95638e4ecd12a3562d5dbb13719cec2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'efcf5b8fb8d47a15a210f5c4fc0f866a')"
     ]
   }
 }

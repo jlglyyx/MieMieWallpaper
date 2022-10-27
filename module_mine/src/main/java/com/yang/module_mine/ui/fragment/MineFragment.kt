@@ -1,27 +1,28 @@
 package com.yang.module_mine.ui.fragment
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.View
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.bumptech.glide.Glide
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.lxj.xpopup.XPopup
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.base.ui.fragment.BaseFragment
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
-import com.yang.lib_common.data.LoginData
 import com.yang.lib_common.dialog.ShareDialog
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.*
+import com.yang.lib_common.bus.event.UIChangeLiveData
+import com.yang.lib_common.data.UserInfoHold
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.*
 import com.yang.module_mine.adapter.MoreFunctionAdapter
 import com.yang.module_mine.data.MoreFunctionData
@@ -37,7 +38,7 @@ import com.youth.banner.indicator.CircleIndicator
  * @Date: 2022/7/21 15:38
  */
 @Route(path = AppConstant.RoutePath.MINE_FRAGMENT)
-class MineFragment : BaseFragment<FraMineBinding>() {
+class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
 
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
@@ -51,11 +52,17 @@ class MineFragment : BaseFragment<FraMineBinding>() {
         return bind(FraMineBinding::inflate)
     }
 
-    override fun setStatusPadding(): Boolean {
-        return true
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return mineViewModel.uC
     }
 
+
     override fun initView() {
+        mViewBinding.root.get(1).setPadding(0, getStatusBarHeight(requireActivity()), 0, 0)
+
+        mViewBinding.smartRefreshLayout.setOnRefreshListener(this)
+        finishRefreshLoadMore(mViewBinding.smartRefreshLayout)
+
         mViewBinding.tvLogin.clicks().subscribe {
             buildARouterLogin(requireContext())
         }
@@ -78,7 +85,7 @@ class MineFragment : BaseFragment<FraMineBinding>() {
 
 
             XPopup.Builder(requireContext()).asCustom(ShareDialog(requireContext()).apply {
-                onItemClickListener = object : ShareDialog.OnItemClickListener{
+                onItemClickListener = object : ShareDialog.OnItemClickListener {
                     override fun onCancelClickListener() {
                     }
 
@@ -114,40 +121,53 @@ class MineFragment : BaseFragment<FraMineBinding>() {
         initBanner()
         initRecyclerView()
 
-        val loginStatus = getDefaultMMKV().getInt(AppConstant.Constant.LOGIN_STATUS, -1)
-        val loginUserType = getDefaultMMKV().getInt(AppConstant.Constant.LOGIN_USER_TYPE, 0)
-        if (loginStatus == AppConstant.Constant.LOGIN_SUCCESS) {
-            mViewBinding.clHead.visibility = View.GONE
-            mViewBinding.clHeadLogin.visibility = View.VISIBLE
-//            mViewBinding.tvSign.text = if (loginUserType == 0) "买家版" else "卖家版"
-        }
-
-
+        initUserInfo(UserInfoHold.userInfo)
     }
+
 
     override fun initData() {
-        LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).observe(this, Observer {
-            if (it == AppConstant.Constant.LOGIN_SUCCESS) {
-                mViewBinding.clHead.visibility = View.GONE
-                mViewBinding.clHeadLogin.visibility = View.VISIBLE
-                val loginUserType = getDefaultMMKV().getInt(AppConstant.Constant.LOGIN_USER_TYPE, 0)
-//                mViewBinding.tvLoginUserType.text = if (loginUserType == 0) "买家版" else "卖家版"
-            } else {
-                mViewBinding.clHead.visibility = View.VISIBLE
-                mViewBinding.clHeadLogin.visibility = View.GONE
-            }
-        })
-
+        LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).observe(this) {
+            initUserInfo(UserInfoHold.userInfo)
+        }
+        LiveDataBus.instance.with(AppConstant.Constant.REFRESH).observe(this) {
+            onRefresh(mViewBinding.smartRefreshLayout)
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        getDefaultMMKV().getString(AppConstant.Constant.LOGIN_INFO, "")
-            ?.fromJson<LoginData>()?.let {
-                mineViewModel.getUserInfo(it.id)
+
+    private fun initUserInfo(userInfoData: UserInfoData?) {
+
+        if (null == userInfoData) {
+            mViewBinding.clHead.visibility = View.VISIBLE
+            mViewBinding.clHeadLogin.visibility = View.GONE
+        } else {
+            mViewBinding.clHead.visibility = View.GONE
+            mViewBinding.clHeadLogin.visibility = View.VISIBLE
+        }
+
+        userInfoData?.let {
+            updateUserInfo(it)
+            mViewBinding.apply {
+                tvName.text = it.userName
+                tvAccount.text = it.userAccount
+                tvDesc.text = it.userDescribe
+                tvIntegral.text = it.userIntegral.toString()
+                tvAttention.text = it.userAttention.toString()
+                tvFan.text = it.userFan.toString()
+                if (it.userIsSign) {
+                    tvSign.text = "已签到${it.userSign}天"
+                }
+                loadCircle(requireContext(), it.userImage, sivHead)
+                if (null == buildBitmap) {
+                    buildBitmap = ScanUtil.buildBitmap("sssssssssss${it.id}", 500, 500)
+                    ivErCode.setImageBitmap(buildBitmap)
+                }
             }
-//        Log.i(TAG, "onResume====: "+getDefaultMMKV().getString(AppConstant.Constant.LOGIN_INFO, ""))
+        }
     }
+
+
+
 
     private fun initRecyclerView() {
         moreFunctionAdapter = MoreFunctionAdapter(mutableListOf<MoreFunctionData>().apply {
@@ -219,12 +239,12 @@ class MineFragment : BaseFragment<FraMineBinding>() {
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
         mineViewModel.userInfoData.observe(this, Observer {
-            getDefaultMMKV().putString(AppConstant.Constant.USER_INFO, it.toJson())
-            loadCircle(requireContext(),it.userImage,mViewBinding.sivHead)
-            if (null == buildBitmap) {
-                buildBitmap = ScanUtil.buildBitmap("sssssssssss", 500, 500)
-                mViewBinding.ivErCode.setImageBitmap(buildBitmap)
-            }
+            initUserInfo(it)
         })
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+
+        mineViewModel.getUserInfo(UserInfoHold.userId ?: "")
     }
 }

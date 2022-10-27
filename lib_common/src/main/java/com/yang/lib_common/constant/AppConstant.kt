@@ -297,6 +297,8 @@ interface AppConstant {
 
         const val BUNDLE = "bundle"
 
+        const val REFRESH = "refresh"
+
         const val ITEM_CONTENT = 0
         const val ITEM_AD = 1
 

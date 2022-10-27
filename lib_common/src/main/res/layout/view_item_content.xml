@@ -32,12 +32,12 @@
         android:singleLine="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/textColor"
+        android:textColor="@color/textColor_666666"
         android:textSize="@dimen/sp_15" />
     <ImageView
         android:id="@+id/iv_right"
         android:layout_width="@dimen/dp_30"
         android:layout_height="match_parent"
-        android:padding="@dimen/dp_10"
+        android:padding="@dimen/dp_7"
         android:src="@drawable/iv_into"/>
 </LinearLayout>

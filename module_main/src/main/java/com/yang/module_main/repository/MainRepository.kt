@@ -27,7 +27,7 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) :BaseRepo
             mainApi.getA()
         }
     }
-    suspend fun login(params:MutableMap<String,Any>): MResult<LoginData> {
+    suspend fun login(params:MutableMap<String,Any>): MResult<UserInfoData> {
         return withContextIO {
             mainApi.login(params)
         }

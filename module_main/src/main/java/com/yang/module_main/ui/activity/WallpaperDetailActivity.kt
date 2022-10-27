@@ -16,6 +16,7 @@ import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.UserInfoHold.userId
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
@@ -181,7 +182,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             holder.ivHead.loadCircle(this@WallpaperDetailActivity,data[position].imageUrl)
 
             holder.ivHead.clicks().subscribe {
-                buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).navigation()
+                buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(AppConstant.Constant.ID,data[position].userId).navigation()
             }
             holder.stvAttention.clicks().subscribe {
                 holder.stvAttention.visibility = View.INVISIBLE
