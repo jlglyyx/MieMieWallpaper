@@ -67,7 +67,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             buildARouterLogin(requireContext())
         }
         mViewBinding.clHeadLogin.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(AppConstant.Constant.ID,UserInfoHold.userId).navigation()
         }
         mViewBinding.icvMyBalance.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_MY_BALANCE_ACTIVITY).navigation()

@@ -1,4 +1,4 @@
-package com.yang.module_main.data
+package com.yang.lib_common.data
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -16,7 +16,7 @@ class WallpaperData(){
     var imageName:String? = "${System.currentTimeMillis()}.jpg"
     var tabId: String? = null
     var headType: Int? = null
-    var isVip: Boolean? = null
+    var isVip: Boolean = false
     var wallType: Int? = null
     var title: String? = null
     var likeNum: Int? = null

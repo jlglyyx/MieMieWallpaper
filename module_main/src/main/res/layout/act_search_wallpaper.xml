@@ -74,6 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="换一批"
+                    android:id="@+id/tv_change"
                     android:textColor="@color/textColor_999999"
                     android:textSize="@dimen/sp_14" />
 

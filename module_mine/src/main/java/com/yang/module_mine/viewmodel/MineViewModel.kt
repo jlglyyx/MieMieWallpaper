@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.getDefaultMMKV
 import com.yang.lib_common.util.showShort
@@ -21,6 +22,12 @@ import javax.inject.Inject
 class MineViewModel @Inject constructor(application: Application, private val mineRepository: MineRepository) :BaseViewModel(application) {
 
     val userInfoData = MutableLiveData<UserInfoData>()
+
+    var keyword = ""
+
+    var pageNum = 1
+
+    val mWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
 
     fun getA(){
         launch({
@@ -66,4 +73,21 @@ class MineViewModel @Inject constructor(application: Application, private val mi
         },messages = arrayOf("请求中","退出登陆成功"))
     }
 
+
+
+
+    fun getWallpaper() {
+        launch({
+            params["tabId"] = "1"
+            params[AppConstant.Constant.KEYWORD] = keyword
+            params[AppConstant.Constant.PAGE_NUMBER] = pageNum
+            params[AppConstant.Constant.PAGE_SIZE] = 3
+            mineRepository.getWallpaper(params)
+        }, {
+            mWallpaperData.postValue(it.data.list)
+        }, {
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
+        }, errorDialog = false)
+    }
 }

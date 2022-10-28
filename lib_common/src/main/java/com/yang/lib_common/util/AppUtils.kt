@@ -16,6 +16,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -25,6 +26,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
+import com.luck.picture.lib.basic.PictureSelector
+import com.luck.picture.lib.config.PictureMimeType
+import com.luck.picture.lib.config.SelectMimeType
+import com.luck.picture.lib.engine.ImageEngine
+import com.luck.picture.lib.entity.LocalMedia
+import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.lxj.xpopup.util.XPopupUtils
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.tencent.mmkv.MMKV
@@ -32,6 +39,7 @@ import com.yang.lib_common.R
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
+import com.yang.lib_common.helper.GlideEngine
 import com.yang.lib_common.room.entity.UserInfoData
 import io.reactivex.rxjava3.core.Observable
 import java.io.*
@@ -51,9 +59,10 @@ val formatDate_YYYYMMMDDHHMMSS = SimpleDateFormat("yyyyMMddHHmmss")
 
 val formatDate_YYYY_MMM_DD_HHMMSS = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
-private val arr = arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f")
+private val arr =
+    arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f")
 
-val  gson = Gson()
+val gson = Gson()
 
 /**
  * @return 宽高集合
@@ -155,7 +164,7 @@ fun getFilePath(
     return mutableListOf
 }
 
-fun MutableList<String>.filterEmptyFile():MutableList<String>{
+fun MutableList<String>.filterEmptyFile(): MutableList<String> {
     return this.filterNot {
         val file = File(it)
         !file.exists()
@@ -201,16 +210,17 @@ fun getUserInfo(): UserInfoData? {
     }
     return null
 }
+
 /**
  * @return 更新用户缓存
  */
-fun updateUserInfo(userInfoData:UserInfoData) {
+fun updateUserInfo(userInfoData: UserInfoData) {
     getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, userInfoData.toJson())
 }
 
-fun getCurrentUserId():String{
+fun getCurrentUserId(): String {
     val userInfo = getUserInfo()
-    return userInfo?.id?:""
+    return userInfo?.id ?: ""
 }
 
 /**
@@ -347,24 +357,24 @@ fun formatSize(size: Long): String {
 /**
  * @return 删除文件夹
  */
-fun deleteDirectory(file: File,context: Context) {
+fun deleteDirectory(file: File, context: Context) {
     try {
         if (file.isDirectory) {
             file.listFiles()?.let {
                 if (it.isNotEmpty()) {
                     for (mFile in it) {
                         if (mFile.isDirectory) {
-                            deleteDirectory(file,context)
+                            deleteDirectory(file, context)
                         } else {
-                            toDeleteFile(mFile,context)
+                            toDeleteFile(mFile, context)
                         }
                     }
                 }
             }
         } else {
-            toDeleteFile(file,context)
+            toDeleteFile(file, context)
         }
-    }catch (e:Exception){
+    } catch (e: Exception) {
         e.printStackTrace()
     }
 
@@ -378,7 +388,7 @@ fun toDeleteFile(file: File, context: Context) {
     val contentResolver = context.contentResolver
     val url = MediaStore.Images.Media.DATA + "=?"
     val delete = contentResolver.delete(uri, url, arrayOf(file.absolutePath))
-    if (delete == 0){
+    if (delete == 0) {
         if (file.exists()) {
             file.delete()
         }
@@ -389,17 +399,23 @@ fun toDeleteFile(file: File, context: Context) {
 /**
  * 跳转登录页
  */
-fun buildARouterLogin(mContext: Context){
+fun buildARouterLogin(mContext: Context) {
     buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-        .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(mContext, R.anim.bottom_in, R.anim.bottom_out))
-        .withInt(AppConstant.Constant.DATA,0)
+        .withOptionsCompat(
+            ActivityOptionsCompat.makeCustomAnimation(
+                mContext,
+                R.anim.bottom_in,
+                R.anim.bottom_out
+            )
+        )
+        .withInt(AppConstant.Constant.DATA, 0)
         .navigation(mContext)
 }
 
 /**
  * 是否是手机号
  */
-fun String.isPhone():Boolean{
+fun String.isPhone(): Boolean {
     val pattern = Pattern.compile("^1[0-9]{10}")
     val matcher = pattern.matcher(this)
     return matcher.matches()
@@ -408,14 +424,14 @@ fun String.isPhone():Boolean{
 /**
  *
  */
-fun toCloseAd(vipLevel:Int):Boolean{
+fun toCloseAd(vipLevel: Int): Boolean {
     val userInfo = getUserInfo()
     userInfo?.let {
         /*如果过期了返回*/
-        if (it.userVipExpired){
+        if (it.userVipExpired) {
             return false
         }
-        if (it.userVipLevel >= vipLevel){
+        if (it.userVipLevel >= vipLevel) {
             return true
         }
     }
@@ -427,24 +443,26 @@ fun toCloseAd(vipLevel:Int):Boolean{
  * @param context
  * @param window
  */
-fun hideSoftInput(context: Context,view: View){
-    val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
+fun hideSoftInput(context: Context, view: View) {
+    val inputMethodManager =
+        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
 
-fun createAppId(updateAppId:String = "",path:String = "/storage/emulated/0/Android/"):String{
+fun createAppId(updateAppId: String = "", path: String = "/storage/emulated/0/Android/"): String {
     val file = File(path, "._MieMieAppId.txt")
-    var appId = "MieMie_${System.currentTimeMillis()}_${UUID.randomUUID().toString().replace("-","")}"
-    if (!TextUtils.isEmpty(updateAppId)){
+    var appId =
+        "MieMie_${System.currentTimeMillis()}_${UUID.randomUUID().toString().replace("-", "")}"
+    if (!TextUtils.isEmpty(updateAppId)) {
         appId = updateAppId
     }
-    if (!file.exists()){
+    if (!file.exists()) {
         file.createNewFile()
         val fileInputStream = FileOutputStream(file)
         fileInputStream.write(appId.toByteArray())
-    }else{
-        if (!TextUtils.isEmpty(updateAppId)){
+    } else {
+        if (!TextUtils.isEmpty(updateAppId)) {
             val fileInputStream = FileOutputStream(file)
             fileInputStream.write(appId.toByteArray())
         }
@@ -452,9 +470,9 @@ fun createAppId(updateAppId:String = "",path:String = "/storage/emulated/0/Andro
     return appId
 }
 
-fun getAppId(path:String = "/storage/emulated/0/Android/"):String{
+fun getAppId(path: String = "/storage/emulated/0/Android/"): String {
     val file = File(path, "._MieMieAppId.txt")
-    if (file.exists()){
+    if (file.exists()) {
         val fileInputStream = FileInputStream(file)
         val byteArrayOf = ByteArray(fileInputStream.available())
         fileInputStream.read(byteArrayOf)
@@ -478,7 +496,7 @@ fun getUriWithPath(context: Context, filePath: String): Uri {
     }
 }
 
-fun save2Album(source: File?, dirName: String?,context: Context){
+fun save2Album(source: File?, dirName: String?, context: Context) {
 
     if (source == null) {
         showShort("保存失败")
@@ -487,12 +505,15 @@ fun save2Album(source: File?, dirName: String?,context: Context){
     try {
         val safeDirName =
             if (TextUtils.isEmpty(dirName)) context.packageName else dirName!!
-        val dir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),safeDirName)
+        val dir = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
+            safeDirName
+        )
         if (!dir.exists()) dir.mkdirs()
-        val destFile :File = if(source.name.endsWith(".mp4")){
+        val destFile: File = if (source.name.endsWith(".mp4")) {
             File(dir, System.currentTimeMillis().toString() + "." + "mp4")
-        }else{
-            File(dir, System.currentTimeMillis().toString() + "." +  getImageType(source).value )
+        } else {
+            File(dir, System.currentTimeMillis().toString() + "." + getImageType(source).value)
         }
 
         if (Build.VERSION.SDK_INT < 29) {
@@ -509,26 +530,28 @@ fun save2Album(source: File?, dirName: String?,context: Context){
             val contentValues = ContentValues()
 
             val contentUri: Uri
-            if (source.name.endsWith(".mp4")){
+            if (source.name.endsWith(".mp4")) {
                 contentValues.put(MediaStore.Video.Media.DISPLAY_NAME, destFile.name)
                 contentValues.put(MediaStore.Video.Media.MIME_TYPE, "video/*")
-                contentUri = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                } else {
-                    MediaStore.Video.Media.INTERNAL_CONTENT_URI
-                }
+                contentUri =
+                    if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                    } else {
+                        MediaStore.Video.Media.INTERNAL_CONTENT_URI
+                    }
                 contentValues.put(
                     MediaStore.Video.Media.RELATIVE_PATH,
                     Environment.DIRECTORY_DCIM + "/" + context.packageName
                 )
-            }else{
+            } else {
                 contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, destFile.name)
                 contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/*")
-                contentUri = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                } else {
-                    MediaStore.Images.Media.INTERNAL_CONTENT_URI
-                }
+                contentUri =
+                    if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    } else {
+                        MediaStore.Images.Media.INTERNAL_CONTENT_URI
+                    }
                 contentValues.put(
                     MediaStore.Images.Media.RELATIVE_PATH,
                     Environment.DIRECTORY_DCIM + "/" + context.packageName
@@ -588,19 +611,20 @@ private fun writeFileFromIS(fos: OutputStream, `is`: InputStream): Boolean {
     }
 }
 
-fun String.isVideo():Boolean{
+fun String.isVideo(): Boolean {
 
-    return this.endsWith(".mp4",true)
+    return this.endsWith(".mp4", true)
 
 }
-fun String.isImage():Boolean{
 
-    return this.endsWith(".jpg",true) || this.endsWith(".png",true)
-            || this.endsWith(".gif",true)
-            || this.endsWith(".tiff",true)
-            || this.endsWith(".bmp",true)
-            || this.endsWith(".webp",true)
-            || this.endsWith(".ico",true)
+fun String.isImage(): Boolean {
+
+    return this.endsWith(".jpg", true) || this.endsWith(".png", true)
+            || this.endsWith(".gif", true)
+            || this.endsWith(".tiff", true)
+            || this.endsWith(".bmp", true)
+            || this.endsWith(".webp", true)
+            || this.endsWith(".ico", true)
 
 }
 
@@ -613,13 +637,40 @@ fun getRandomColor(): Int {
 }
 
 
-fun Context.getColor(color:Int){
-    ContextCompat.getColor(this,color)
+fun Context.getColor(color: Int) {
+    ContextCompat.getColor(this, color)
 }
 
 
+fun Context.openGallery(
+    setMaxSelectNum: Int = 1,
+    onResult: (result: ArrayList<LocalMedia>?) -> Unit = {},
+    onCancel: () -> Unit = {}
+) {
 
-fun <T> SmartRefreshLayout.smartRefreshLayoutData(data:MutableList<T>?, adapter: BaseQuickAdapter<T, BaseViewHolder>,mViewModel:BaseViewModel, emptyView:Int = R.layout.view_empty_data){
+    PictureSelector.create(this)
+        .openGallery(SelectMimeType.TYPE_IMAGE)
+        .setImageEngine(GlideEngine.instance)
+        .setMaxSelectNum(setMaxSelectNum)
+        .forResult(object : OnResultCallbackListener<LocalMedia> {
+            override fun onResult(result: ArrayList<LocalMedia>?) {
+                onResult(result)
+            }
+
+            override fun onCancel() {
+                onCancel()
+            }
+
+        })
+}
+
+
+fun <T> SmartRefreshLayout.smartRefreshLayoutData(
+    data: MutableList<T>?,
+    adapter: BaseQuickAdapter<T, BaseViewHolder>,
+    mViewModel: BaseViewModel,
+    emptyView: Int = R.layout.view_empty_data
+) {
     when {
         this.isRefreshing -> {
             mViewModel.uC.refreshEvent.call()

@@ -32,6 +32,11 @@ dependencyResolutionManagement {
         maven {url 'https://developer.huawei.com/repo/'}
     }
 }
+
+
+
+
+
 rootProject.name = "MieMieWallpaper"
 include ':app'
 include ':lib_common'
@@ -39,3 +44,11 @@ include ':apt-processor'
 include ':apt-annotation'
 include ':module_main'
 include ':module_mine'
+
+
+
+
+
+
+
+

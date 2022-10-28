@@ -156,7 +156,11 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
             uC.showLoadingEvent.observe(this, Observer {
                 if (loadingPopupView == null) {
                     loadingPopupView =
-                        XPopup.Builder(requireContext()).dismissOnTouchOutside(false).asLoading(it)
+                        XPopup.Builder(requireContext())
+                            .isViewMode(true)
+                            .dismissOnTouchOutside(false)
+                            .hasShadowBg(false)
+                            .asLoading(it)
                 } else {
                     loadingPopupView?.setTitle(it)
                 }

@@ -6,21 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.LoginData
-import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.util.getDefaultMMKV
 import com.yang.lib_common.util.showShort
-import com.yang.lib_common.util.toJson
 import com.yang.lib_common.util.updateUserInfo
-import com.yang.module_main.R
-import com.yang.module_main.data.WallpaperData
-import com.yang.module_main.data.WallpaperTabData
+import com.yang.lib_common.data.WallpaperData
+import com.yang.lib_common.data.WallpaperTabData
 import com.yang.module_main.repository.MainRepository
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
-import java.net.URLEncoder
 import javax.inject.Inject
 
 /**

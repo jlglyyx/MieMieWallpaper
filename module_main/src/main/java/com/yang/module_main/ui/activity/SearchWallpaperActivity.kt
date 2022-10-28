@@ -11,7 +11,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.TabAndViewPagerAdapter
-import com.yang.lib_common.adapter.TabAndViewPagerFragmentAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
@@ -19,7 +18,7 @@ import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonSearchToolBar
 import com.yang.module_main.R
-import com.yang.module_main.data.WallpaperData
+import com.yang.module_main.data.SearchFindData
 import com.yang.module_main.databinding.ActSearchWallpaperBinding
 import com.yang.module_main.databinding.ItemSearchHistoryBinding
 import com.yang.module_main.viewmodel.WallpaperViewModel
@@ -36,7 +35,7 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
     @InjectViewModel
     lateinit var wallpaperViewModel: WallpaperViewModel
 
-    private lateinit var mAdapter: BaseQuickAdapter<String, BaseViewHolder>
+    private lateinit var mAdapter: BaseQuickAdapter<SearchFindData, BaseViewHolder>
 
     private var mTitles : MutableList<String> = arrayListOf("静态壁纸","动态壁纸")
 
@@ -46,7 +45,11 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
         return bind(ActSearchWallpaperBinding::inflate)
     }
 
+
     override fun initData() {
+
+        wallpaperViewModel.getSearchFind()
+
         mFragments = mutableListOf()
         mTitles.forEach { _ ->
             mFragments.add( buildARouter(AppConstant.RoutePath.SEARCH_WALLPAPER_FRAGMENT)
@@ -75,6 +78,10 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
                 }
             }
 
+            tvChange.clicks().subscribe {
+                wallpaperViewModel.getSearchFind()
+            }
+
             val mutableList = mutableListOf<String>().apply {
                 add("1111111111111张三222张三222张三222张三222张三222张三222张三222张三222张三222张三")
                 add("春")
@@ -95,6 +102,11 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
                 add("222")
                 add("4q1")
             }
+
+            val mapIndexed = mutableList.mapIndexed { index, s ->
+                SearchFindData("$index", s)
+            }
+
             flowLayout.addChildView(R.layout.item_search_history, mutableList){ view, position, item ->
                 view.setOnClickListener {
                     doSearch(item)
@@ -104,17 +116,17 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
                 bind.stvTv.text = item
             }
 
-            mAdapter = object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_search_find) {
-                override fun convert(helper: BaseViewHolder, item: String) {
-                    helper.setText(R.id.stv_tv,item)
+            mAdapter = object : BaseQuickAdapter<SearchFindData, BaseViewHolder>(R.layout.item_search_find) {
+                override fun convert(helper: BaseViewHolder, item: SearchFindData) {
+                    helper.setText(R.id.stv_tv,item.title)
                     .setText(R.id.stv_order,"${helper.bindingAdapterPosition+1}")
                 }
             }
 
             mViewBinding.recyclerView.adapter = mAdapter
-            mAdapter.setNewData(mutableList)
+            mAdapter.setNewData(mapIndexed)
             mAdapter.setOnItemClickListener { adapter, view, position ->
-                doSearch(mAdapter.getItem(position)?:"")
+                doSearch(mAdapter.getItem(position)?.title?:"")
             }
         }
 
@@ -135,6 +147,11 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
+        wallpaperViewModel.mSearchFindData.observe(this){
+            if (!it.isNullOrEmpty()){
+                mAdapter.replaceData(it)
+            }
+        }
     }
 
     private fun initViewPager() {

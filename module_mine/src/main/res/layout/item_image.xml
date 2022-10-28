@@ -39,6 +39,7 @@
         app:layout_constraintEnd_toEndOf="@+id/iv_image"
         />
 
+
     <ImageView
         android:id="@+id/iv_star"
         android:layout_width="@dimen/dp_15"

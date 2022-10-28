@@ -1,12 +1,12 @@
 package com.yang.module_main.api
 
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.LoginData
 import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
-import com.yang.module_main.data.WallpaperData
-import com.yang.module_main.data.WallpaperTabData
+import com.yang.lib_common.data.WallpaperData
+import com.yang.lib_common.data.WallpaperTabData
+import com.yang.module_main.data.SearchFindData
 import okhttp3.RequestBody
 import retrofit2.http.*
 
@@ -50,5 +50,8 @@ interface MainApi {
 
     @POST("main/queryAllByTab")
     suspend fun getWallpaper(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperData>>
+
+    @POST("api/main/querySearchFind")
+    suspend fun getSearchFind(@Body params:MutableMap<String,Any?>):MResult<MListResult<SearchFindData>>
 
 }

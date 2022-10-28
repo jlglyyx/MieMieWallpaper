@@ -160,7 +160,11 @@ abstract class BaseActivity<VB:ViewBinding> : AppCompatActivity() {
 
     fun showDialog(title:String = "加载中",dismissOnTouchOutside:Boolean = false){
         if (loadingPopupView == null) {
-            loadingPopupView = XPopup.Builder(this).dismissOnTouchOutside(dismissOnTouchOutside).asLoading(title)
+            loadingPopupView = XPopup.Builder(this)
+                .isViewMode(true)
+                .dismissOnTouchOutside(dismissOnTouchOutside)
+                .hasShadowBg(false)
+                .asLoading(title)
         } else {
             loadingPopupView?.setTitle(title)
         }

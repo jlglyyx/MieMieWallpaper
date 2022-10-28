@@ -96,7 +96,7 @@ fun loadSpaceRadius(mContext: Context, url: String?,radius:Float, imageView: Ima
     val options = RequestOptions.bitmapTransform(RoundedCorners(radius.toInt()))
     val shapeDrawable = ShapeDrawable()
     shapeDrawable.apply {
-        shape = RoundRectShape(FloatArray(8){radius.dip2px(mContext).toFloat()}, null, null)
+        shape = RoundRectShape(FloatArray(8){radius}, null, null)
         paint.color = getRandomColor()
     }
     var width = 0
@@ -117,7 +117,7 @@ fun loadSpaceRadius(mContext: Context, url: String?,radius:Float, imageView: Ima
 //                shapeDrawable.setBounds(0,0,width,height)
             }
         })
-    imageView.background = shapeDrawable
+//    imageView.background = shapeDrawable
     Glide.with(mContext).asBitmap()
         .load(getRealUrl(url))
         .dontAnimate()

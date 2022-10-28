@@ -4,6 +4,7 @@ import android.app.Application
 import com.yang.lib_common.base.di.factory.BaseViewModelFactory
 import com.yang.lib_common.scope.ActivityScope
 import com.yang.module_main.api.MainApi
+
 import com.yang.module_main.di.factory.MainViewModelFactory
 import com.yang.module_main.repository.MainRepository
 import dagger.Module

@@ -1,6 +1,8 @@
 package com.yang.module_mine.repository
 
 import com.yang.lib_common.base.repository.BaseRepository
+import com.yang.lib_common.data.WallpaperData
+import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.module_mine.api.MineApi
@@ -14,23 +16,29 @@ import javax.inject.Inject
  * @Author: yxy
  * @Date: 2022/7/14 11:36
  */
-class MineRepository @Inject constructor(private val mainApi: MineApi) :BaseRepository(){
+class MineRepository @Inject constructor(private val mineApi: MineApi) :BaseRepository(){
 
 
     suspend fun getA():String{
         return withContext(Dispatchers.IO) {
-            mainApi.getA()
+            mineApi.getA()
         }
     }
 
     suspend fun getUserInfo(id:String): MResult<UserInfoData> {
         return withContextIO {
-            mainApi.getUserInfo(id)
+            mineApi.getUserInfo(id)
         }
     }
     suspend fun loginOut(): MResult<String> {
         return withContextIO {
-            mainApi.loginOut()
+            mineApi.loginOut()
+        }
+    }
+
+    suspend fun getWallpaper(params:MutableMap<String,Any?>): MResult<MListResult<WallpaperData>> {
+        return withContextIO {
+            mineApi.getWallpaper(params)
         }
     }
 }

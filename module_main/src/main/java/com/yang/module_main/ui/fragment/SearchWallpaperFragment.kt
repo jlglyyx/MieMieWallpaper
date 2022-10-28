@@ -1,11 +1,10 @@
 package com.yang.module_main.ui.fragment
 
-import android.view.View
 import androidx.core.app.ActivityOptionsCompat
-import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.hjq.shape.view.ShapeImageView
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.yang.apt_annotation.annotain.InjectViewModel
@@ -13,15 +12,12 @@ import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.module_main.R
-import com.yang.module_main.data.WallpaperData
-import com.yang.module_main.databinding.FraMainItemBinding
 import com.yang.module_main.databinding.FraSearchWallpaperBinding
 import com.yang.module_main.viewmodel.WallpaperViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 /**
@@ -59,7 +55,12 @@ class SearchWallpaperFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,O
 
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
+                val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
+                imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()
                 loadSpaceRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image),3,30f)
+                helper.setText(R.id.tv_title,item.title)
+                    .setText(R.id.tv_like_num,"${item.likeNum}")
+                    .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }
         }
         mViewBinding.recyclerView.adapter = mAdapter
@@ -83,37 +84,7 @@ class SearchWallpaperFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,O
 
         InjectViewModelProxy.inject(this)
         wallpaperViewModel.mWallpaperData.observe(this){
-            when {
-                mViewBinding.smartRefreshLayout.isRefreshing -> {
-                    wallpaperViewModel.uC.refreshEvent.call()
-                    if (it.isNullOrEmpty()) {
-                        wallpaperViewModel.showRecyclerViewEmptyEvent()
-                    } else {
-                        mAdapter.replaceData(it)
-                        mViewBinding.smartRefreshLayout.setNoMoreData(false)
-                    }
-                }
-                mViewBinding.smartRefreshLayout.isLoading -> {
-                    wallpaperViewModel.uC.loadMoreEvent.call()
-                    if (it.isNullOrEmpty()) {
-                        mViewBinding.smartRefreshLayout.setNoMoreData(true)
-                    } else {
-                        mViewBinding.smartRefreshLayout.setNoMoreData(false)
-                        lifecycleScope.launch {
-                            delay(500)
-                            mAdapter.addData(it)
-                        }
-                    }
-                }
-                else -> {
-                    if (it.isNullOrEmpty()) {
-                        wallpaperViewModel.showRecyclerViewEmptyEvent()
-                    } else {
-                        mAdapter.replaceData(it)
-                        mViewBinding.smartRefreshLayout.setNoMoreData(false)
-                    }
-                }
-            }
+            mViewBinding.smartRefreshLayout.smartRefreshLayoutData(it,mAdapter,wallpaperViewModel)
         }
 
     }

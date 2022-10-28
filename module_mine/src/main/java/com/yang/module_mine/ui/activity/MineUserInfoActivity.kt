@@ -5,18 +5,20 @@ import android.content.Intent
 import android.text.TextUtils
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
+import com.hjq.shape.view.ShapeImageView
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
-import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.getUserInfo
-import com.yang.lib_common.*
 import com.yang.lib_common.data.UserInfoHold
+import com.yang.lib_common.data.WallpaperData
+import com.yang.lib_common.proxy.InjectViewModelProxy
+import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
+import com.yang.module_mine.R
 import com.yang.module_mine.databinding.ActMineUserInfoBinding
 import com.yang.module_mine.viewmodel.MineViewModel
 
@@ -31,7 +33,8 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
-    private val FILE_CODE = 100
+
+    private lateinit var mAdapter: BaseQuickAdapter<WallpaperData, BaseViewHolder>
 
 
     override fun initViewBinding(): ActMineUserInfoBinding {
@@ -39,13 +42,14 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
     }
 
     override fun initData() {
+//        mineViewModel.getWallpaper()
         val id = intent.getStringExtra(AppConstant.Constant.ID)
         UserInfoHold.userInfo.let {
             Glide.with(this).load(
                 it?.userImage
                     ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e"
-            ).error(R.drawable.iv_image_error)
-                .placeholder(R.drawable.iv_image_placeholder).into(mViewBinding.sivImg)
+            ).error(com.yang.lib_common.R.drawable.iv_image_error)
+                .placeholder(com.yang.lib_common.R.drawable.iv_image_placeholder).into(mViewBinding.sivImg)
             if (!TextUtils.equals(id, it?.id)) {
                 mViewBinding.commonToolBar.rightContentVisible = false
             }
@@ -68,11 +72,32 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
         lifecycle.addObserver(mViewBinding.ivBg)
 
         mViewBinding.ivBg.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.PICTURE_SELECT_ACTIVITY)
-                .withInt(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_ONE)
-                .withInt(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
-                .navigation(this, FILE_CODE)
+            openGallery(1,{
+                it?.let {
+                    if (it.isNotEmpty()){
+                        mViewBinding.ivBg.imageUrl = it[0].realPath.toString()
+                    }
+                }
+
+            })
         }
+
+//        initRecyclerView()
+//        showRecyclerViewEvent(mAdapter)
+    }
+
+    private fun initRecyclerView(){
+        mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
+            override fun convert(helper: BaseViewHolder, item: WallpaperData) {
+                val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
+                imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()
+                loadSpaceRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image),3,30f)
+                helper.setText(R.id.tv_title,item.title)
+                    .setText(R.id.tv_like_num,"${item.likeNum}")
+                    .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
+            }
+        }
+        mViewBinding.recyclerView.adapter = mAdapter
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -81,22 +106,19 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
-    }
 
+        mineViewModel.mWallpaperData.observe(this){
+            if (it.isNullOrEmpty()) {
+                mineViewModel.showRecyclerViewEmptyEvent()
+            } else {
+                mAdapter.replaceData(it)
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        data?.let {
-            if (requestCode == FILE_CODE && resultCode == RESULT_OK) {
-                it.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
-                    ?.let { beans ->
-                        if (beans.size > 0) {
-                            mViewBinding.ivBg.imageUrl = beans[0].filePath.toString()
-                        }
-                    }
             }
         }
     }
+
+
+
 
 
 

@@ -184,7 +184,11 @@ abstract class BaseLazyFragment<VB : ViewBinding> : Fragment() {
 
     fun showDialog(title:String = "加载中",dismissOnTouchOutside:Boolean = false){
         if (loadingPopupView == null) {
-            loadingPopupView = XPopup.Builder(requireContext()).dismissOnTouchOutside(dismissOnTouchOutside).asLoading(title)
+            loadingPopupView = XPopup.Builder(requireContext())
+                .isViewMode(true)
+                .dismissOnTouchOutside(dismissOnTouchOutside)
+                .hasShadowBg(false)
+                .asLoading(title)
         } else {
             loadingPopupView?.setTitle(title)
         }

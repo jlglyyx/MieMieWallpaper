@@ -1,5 +1,6 @@
 package com.yang.module_main.ui.fragment
 
+import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
@@ -8,6 +9,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.hjq.shape.view.ShapeImageView
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.enums.PopupPosition
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -21,8 +23,8 @@ import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.module_main.R
-import com.yang.module_main.data.WallpaperData
-import com.yang.module_main.data.WallpaperTopData
+import com.yang.lib_common.data.WallpaperData
+import com.yang.lib_common.data.WallpaperTopData
 import com.yang.module_main.databinding.FraMainItemBinding
 import com.yang.module_main.ui.dialog.FilterDialog
 import com.yang.module_main.viewmodel.MainViewModel
@@ -39,13 +41,14 @@ import kotlinx.coroutines.launch
  * @Date: 2022/9/30 16:31
  */
 @Route(path = AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
-class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMoreListener{
+class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMoreListener {
 
     @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: BaseQuickAdapter<WallpaperData, BaseViewHolder>
-    private lateinit var mTopAdapter: BaseQuickAdapter<WallpaperTopData, BaseViewHolder>
+
+    //    private lateinit var mTopAdapter: BaseQuickAdapter<WallpaperTopData, BaseViewHolder>
     private var tabIndex = 0
     private var tabId = ""
 
@@ -54,12 +57,12 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
     }
 
     override fun initView() {
-        tabIndex = arguments?.getInt(AppConstant.Constant.TYPE)?:0
-        tabId = arguments?.getString(AppConstant.Constant.ID,"")?:""
+        tabIndex = arguments?.getInt(AppConstant.Constant.TYPE) ?: 0
+        tabId = arguments?.getString(AppConstant.Constant.ID, "") ?: ""
 //        initBanner()
         initRecyclerView()
         mViewBinding.smartRefreshLayout.setOnRefreshLoadMoreListener(this)
-        registerRefreshAndRecyclerView(mViewBinding.smartRefreshLayout,mAdapter)
+        registerRefreshAndRecyclerView(mViewBinding.smartRefreshLayout, mAdapter)
 
         mViewBinding.llSort.setOnClickListener {
             XPopup.Builder(requireContext())
@@ -72,7 +75,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
                         val mAdapter = object :
                             BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_filter_sort) {
                             override fun convert(helper: BaseViewHolder, item: String) {
-                                helper.setText(R.id.tv_title,item)
+                                helper.setText(R.id.tv_title, item)
 
                             }
                         }
@@ -116,15 +119,20 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
 
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
-                loadSpaceRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image),2,10f)
+                val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
+                imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()
+                loadSpaceRadius(mContext, item.imageUrl, 20f, imageView, 2, 10f)
+                helper.setText(R.id.tv_title,item.title)
+                .setText(R.id.tv_like_num,"${item.likeNum}")
+                    .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }
         }
-        mViewBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        mViewBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     Glide.with(mContext).resumeRequests();
-                }else {
+                } else {
                     Glide.with(mContext).pauseRequests();
                 }
             }
@@ -132,43 +140,49 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
 
         mViewBinding.recyclerView.adapter = mAdapter
 
-        mTopAdapter = object :
-            BaseQuickAdapter<WallpaperTopData, BaseViewHolder>(if (tabIndex == 0) R.layout.item_top_image else R.layout.item_top_type_image) {
-            override fun convert(helper: BaseViewHolder, item: WallpaperTopData) {
-                if (tabIndex == 0){
-                    loadCircle(mContext,item.url,helper.getView(R.id.iv_image))
-                }else{
-                    loadRadius(mContext,item.url,5f,helper.getView(R.id.iv_image))
-                }
-            }
-        }
-        mViewBinding.topRecyclerView.adapter = mTopAdapter
+//        mTopAdapter = object :
+//            BaseQuickAdapter<WallpaperTopData, BaseViewHolder>(if (tabIndex == 0) R.layout.item_top_image else R.layout.item_top_type_image) {
+//            override fun convert(helper: BaseViewHolder, item: WallpaperTopData) {
+//                if (tabIndex == 0){
+//                    loadCircle(mContext,item.url,helper.getView(R.id.iv_image))
+//                }else{
+//                    loadRadius(mContext,item.url,5f,helper.getView(R.id.iv_image))
+//                }
+//            }
+//        }
+//        mViewBinding.topRecyclerView.adapter = mTopAdapter
 
 
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mAdapter.getItem(position)
             item?.let {
                 buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
-                    .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(requireContext(), com.yang.lib_common.R.anim.fade_in, com.yang.lib_common.R.anim.fade_out))
-                    .withString(AppConstant.Constant.DATA,mAdapter.data.toJson())
-                    .withInt(AppConstant.Constant.ORDER,mainViewModel.order)
-                    .withInt(AppConstant.Constant.INDEX,position)
-                    .withInt(AppConstant.Constant.PAGE_NUMBER,mainViewModel.pageNum)
+                    .withOptionsCompat(
+                        ActivityOptionsCompat.makeCustomAnimation(
+                            requireContext(),
+                            com.yang.lib_common.R.anim.fade_in,
+                            com.yang.lib_common.R.anim.fade_out
+                        )
+                    )
+                    .withString(AppConstant.Constant.DATA, mAdapter.data.toJson())
+                    .withInt(AppConstant.Constant.ORDER, mainViewModel.order)
+                    .withInt(AppConstant.Constant.INDEX, position)
+                    .withInt(AppConstant.Constant.PAGE_NUMBER, mainViewModel.pageNum)
                     .navigation()
             }
         }
-        mTopAdapter.setOnItemClickListener { adapter, view, position ->
-            val item = mAdapter.getItem(position)
-            item?.let {
-                WallpaperUtil.setWallpaper(requireContext(), "")
-            }
-        }
-
-        mTopAdapter.setNewData(mutableListOf<WallpaperTopData>().apply {
-            add(WallpaperTopData("AR壁纸","https://pic1.zhimg.com/v2-c8abae935169a75f5efce1c9230554d9_r.jpg?source=1940ef5c"))
-            add(WallpaperTopData("AR壁纸","http://bizihu.com/data/12031020.jpg"))
-            add(WallpaperTopData("AR壁纸","https://pic2.zhimg.com/v2-f783660f6bd3e2875dda9ad7874cd834_r.jpg?source=1940ef5c"))
-        })
+//        mTopAdapter.setOnItemClickListener { adapter, view, position ->
+//            val item = mAdapter.getItem(position)
+//            item?.let {
+//                WallpaperUtil.setWallpaper(requireContext(), "")
+//            }
+//        }
+//
+//        mTopAdapter.setNewData(mutableListOf<WallpaperTopData>().apply {
+//            add(WallpaperTopData("AR壁纸","https://pic1.zhimg.com/v2-c8abae935169a75f5efce1c9230554d9_r.jpg?source=1940ef5c"))
+//            add(WallpaperTopData("AR壁纸","http://bizihu.com/data/12031020.jpg"))
+//            add(WallpaperTopData("AR壁纸","https://pic2.zhimg.com/v2-f783660f6bd3e2875dda9ad7874cd834_r.jpg?source=1940ef5c"))
+//        })
     }
 
 
@@ -176,38 +190,8 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>() ,OnRefreshLoadMo
 
         InjectViewModelProxy.inject(this)
 
-        mainViewModel.mWallpaperData.observe(this){
-            when {
-                mViewBinding.smartRefreshLayout.isRefreshing -> {
-                    mainViewModel.uC.refreshEvent.call()
-                    if (it.isNullOrEmpty()) {
-                        mainViewModel.showRecyclerViewEmptyEvent()
-                    } else {
-                        mAdapter.replaceData(it)
-                        mViewBinding.smartRefreshLayout.setNoMoreData(false)
-                    }
-                }
-                mViewBinding.smartRefreshLayout.isLoading -> {
-                    mainViewModel.uC.loadMoreEvent.call()
-                    if (it.isNullOrEmpty()) {
-                        mViewBinding.smartRefreshLayout.setNoMoreData(true)
-                    } else {
-                        mViewBinding.smartRefreshLayout.setNoMoreData(false)
-                        lifecycleScope.launch {
-                            delay(500)
-                            mAdapter.addData(it)
-                        }
-                    }
-                }
-                else -> {
-                    if (it.isNullOrEmpty()) {
-                        mainViewModel.showRecyclerViewEmptyEvent()
-                    } else {
-                        mAdapter.replaceData(it)
-                        mViewBinding.smartRefreshLayout.setNoMoreData(false)
-                    }
-                }
-            }
+        mainViewModel.mWallpaperData.observe(this) {
+            mViewBinding.smartRefreshLayout.smartRefreshLayoutData(it,mAdapter,mainViewModel)
         }
 
     }

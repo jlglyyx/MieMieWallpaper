@@ -62,7 +62,6 @@ class MainFragment : BaseFragment<FraMainBinding>() {
         mViewBinding.llMore.setOnClickListener {
                  XPopup.Builder(requireContext())
                     .atView(mViewBinding.tabLayout)
-                    .hasShadowBg(true) // 去掉半透明背景
                     .asCustom(FilterDialog(requireContext()).apply {
                         block = {
                             it.sllContainer.shapeDrawableBuilder.setSolidColor(ContextCompat.getColor(requireContext(),

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.BarUtils
@@ -16,11 +15,10 @@ import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.UserInfoHold.userId
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
-import com.yang.module_main.data.WallpaperData
+import com.yang.lib_common.data.WallpaperData
 import com.yang.module_main.databinding.ActWallpaperDetailBinding
 import com.yang.module_main.databinding.ViewWallpaperDetailBinding
 import com.yang.module_main.viewmodel.MainViewModel
@@ -68,6 +66,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         mWallpaperDataList?.apply {
             if (index != -1) {
                 mWallpaperData = this[index]
+                mViewBinding.commonToolBar.centerContent = mWallpaperData?.title
                 mWallpaperData?.let {
                     if (it.imageName!!.isImage()) {
                         preload(this@WallpaperDetailActivity,it.imageUrl)
@@ -76,6 +75,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                     mainViewModel.getWallpaper(it.tabId)
                     mWallpaperViewPagerAdapter.addDataAll(this)
                     mViewBinding.viewPager.setCurrentItem(index,false)
+
                 }
             }
 
@@ -177,6 +177,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             position: Int
         ) {
 
+            mViewBinding.commonToolBar.centerContent = data[position].title
             holder.clControl.setPadding(0,0,0,BarUtils.getNavBarHeight())
 
             holder.ivHead.loadCircle(this@WallpaperDetailActivity,data[position].imageUrl)
