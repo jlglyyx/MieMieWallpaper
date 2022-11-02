@@ -25,5 +25,8 @@
         <activity
             android:name=".ui.activity.MineUserInfoActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.activity.MyFansActivity"
+            android:exported="false" />
     </application>
 </manifest>

@@ -70,11 +70,11 @@ class LoadingProgressView : View {
         mHeight = h.toFloat()
         mPaint.shader = LinearGradient(
             0f, 0f, mWidth, mHeight, intArrayOf(
-                ContextCompat.getColor(mContext, R.color.mediumspringgreen),
-                ContextCompat.getColor(mContext, R.color.lawngreen),
-                ContextCompat.getColor(mContext, R.color.thistle),
-                ContextCompat.getColor(mContext, R.color.coral),
-                ContextCompat.getColor(mContext, R.color.maroon)
+                mContext.getColor(R.color.mediumspringgreen),
+                mContext.getColor(R.color.lawngreen),
+                mContext.getColor(R.color.thistle),
+                mContext.getColor(R.color.coral),
+                mContext.getColor(R.color.maroon)
             ),
             floatArrayOf(0f, 0.1f, 0.2f, 0.3f, 1f), Shader.TileMode.REPEAT
         )

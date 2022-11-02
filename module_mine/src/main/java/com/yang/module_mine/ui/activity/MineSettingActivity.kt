@@ -10,7 +10,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.getDefaultMMKV
+import com.yang.lib_common.util.getMMKVValue
 import com.yang.module_mine.databinding.ActMineSettingsBinding
 import com.yang.module_mine.viewmodel.MineViewModel
 
@@ -34,7 +34,7 @@ class MineSettingActivity : BaseActivity<ActMineSettingsBinding>() {
     }
 
     override fun initView() {
-        val loginStatus = getDefaultMMKV().getInt(AppConstant.Constant.LOGIN_STATUS, -1)
+        val loginStatus = getMMKVValue(AppConstant.Constant.LOGIN_STATUS, -1)
         if (loginStatus == AppConstant.Constant.LOGIN_SUCCESS){
             mViewBinding.tvLoginOut.visibility = View.VISIBLE
         }

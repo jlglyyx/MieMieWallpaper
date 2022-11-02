@@ -2,12 +2,14 @@ package com.yang.lib_common.widget
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.imageview.ShapeableImageView
 import com.yang.lib_common.R
 import com.yang.lib_common.util.clicks
@@ -105,9 +107,14 @@ class CommonToolBar : ConstraintLayout {
         val toolbarBg = obtainStyledAttributes.getResourceId(
             R.styleable.CommonToolBar_toolbarBg, 0
         )
+        val titleTextColor = obtainStyledAttributes.getColor(
+            R.styleable.CommonToolBar_mTitleTextColor, Color.WHITE
+        )
         if (toolbarBg != 0) {
             clToolbar.setBackgroundResource(toolbarBg)
         }
+        tvCenterContent.setTextColor(titleTextColor)
+        DrawableCompat.setTint(ivBack.drawable,titleTextColor)
         tvCenterContent.text = centerContent
         tvLeftContent.text = leftContent
         tvRightContent.text = rightContent

@@ -2,11 +2,9 @@
 
 package com.yang.lib_common.util
 
-import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -16,7 +14,6 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -27,20 +24,16 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.luck.picture.lib.basic.PictureSelector
-import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.config.SelectMimeType
-import com.luck.picture.lib.engine.ImageEngine
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
-import com.lxj.xpopup.util.XPopupUtils
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
-import com.tencent.mmkv.MMKV
 import com.yang.lib_common.R
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
+import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.helper.GlideEngine
-import com.yang.lib_common.room.entity.UserInfoData
 import io.reactivex.rxjava3.core.Observable
 import java.io.*
 import java.lang.reflect.Type
@@ -51,7 +44,7 @@ import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 
-private const val TAG = "AppUtils"
+private const val APP_UTILS_TAG = "AppUtils"
 
 val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
 
@@ -184,7 +177,7 @@ fun getDirectoryName(
         listFiles?.forEach {
             if (it.isDirectory) {
                 getDirectoryName(it.path, mutableListOf)
-                Log.i(TAG, "getDirectoryName: ${it.name}  ${it.path}")
+                Log.i(APP_UTILS_TAG, "getDirectoryName: ${it.name}  ${it.path}")
                 mutableListOf.add(it)
             }
         }
@@ -193,35 +186,6 @@ fun getDirectoryName(
 }
 
 
-/**
- * @return 获取getDefaultMMKV
- */
-fun getDefaultMMKV(): MMKV {
-    return MMKV.defaultMMKV()
-}
-
-/**
- * @return 获取用户缓存
- */
-fun getUserInfo(): UserInfoData? {
-    val userInfo = getDefaultMMKV().decodeString(AppConstant.Constant.USER_INFO, "")
-    if (!userInfo.isNullOrEmpty()) {
-        return Gson().fromJson<UserInfoData>(userInfo, UserInfoData::class.java)
-    }
-    return null
-}
-
-/**
- * @return 更新用户缓存
- */
-fun updateUserInfo(userInfoData: UserInfoData) {
-    getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, userInfoData.toJson())
-}
-
-fun getCurrentUserId(): String {
-    val userInfo = getUserInfo()
-    return userInfo?.id ?: ""
-}
 
 /**
  * @return 返回xx,xx
@@ -264,12 +228,12 @@ fun uri2path(context: Context, uri: Uri): String {
             val columnIndex = query.getColumnIndex(MediaStore.Images.Media.DATA)
             it.moveToFirst()
             path = query.getString(columnIndex)
-            Log.i(TAG, "uri2path: $path")
+            Log.i(APP_UTILS_TAG, "uri2path: $path")
             query.close()
         }
     } catch (e: Exception) {
         e.printStackTrace()
-        Log.i(TAG, "uri2path: ${e.message}")
+        Log.i(APP_UTILS_TAG, "uri2path: ${e.message}")
     }
 
     return path
@@ -323,7 +287,7 @@ fun getAllFileSize(file: File): Long {
  * @return 格式化文件大小格式
  */
 fun formatSize(size: Long): String {
-    Log.i(TAG, "formatSize: $size")
+    Log.i(APP_UTILS_TAG, "formatSize: $size")
 
     val k = size.toFloat() / 1024
     if (k < 1) {
@@ -425,7 +389,7 @@ fun String.isPhone(): Boolean {
  *
  */
 fun toCloseAd(vipLevel: Int): Boolean {
-    val userInfo = getUserInfo()
+    val userInfo = UserInfoHold.userInfo
     userInfo?.let {
         /*如果过期了返回*/
         if (it.userVipExpired) {
@@ -449,7 +413,9 @@ fun hideSoftInput(context: Context, view: View) {
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-
+/**
+ * 生成存于本机appId
+ */
 fun createAppId(updateAppId: String = "", path: String = "/storage/emulated/0/Android/"): String {
     val file = File(path, "._MieMieAppId.txt")
     var appId =
@@ -470,6 +436,9 @@ fun createAppId(updateAppId: String = "", path: String = "/storage/emulated/0/An
     return appId
 }
 
+/**
+ * 获取存于本机appId
+ */
 fun getAppId(path: String = "/storage/emulated/0/Android/"): String {
     val file = File(path, "._MieMieAppId.txt")
     if (file.exists()) {
@@ -482,7 +451,9 @@ fun getAppId(path: String = "/storage/emulated/0/Android/"): String {
     return createAppId()
 }
 
-
+/**
+ * 获取文件uri
+ */
 fun getUriWithPath(context: Context, filePath: String): Uri {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         //7.0以上的读取文件uri要用这种方式了
@@ -496,6 +467,9 @@ fun getUriWithPath(context: Context, filePath: String): Uri {
     }
 }
 
+/**
+ * 保存文件到相册
+ */
 fun save2Album(source: File?, dirName: String?, context: Context) {
 
     if (source == null) {
@@ -583,7 +557,9 @@ fun save2Album(source: File?, dirName: String?, context: Context) {
 
 }
 
-
+/**
+ * 写入文件
+ */
 private fun writeFileFromIS(fos: OutputStream, `is`: InputStream): Boolean {
     var os: OutputStream? = null
     return try {
@@ -611,12 +587,19 @@ private fun writeFileFromIS(fos: OutputStream, `is`: InputStream): Boolean {
     }
 }
 
+/**
+ * 是否视频
+ */
 fun String.isVideo(): Boolean {
 
     return this.endsWith(".mp4", true)
 
 }
 
+
+/**
+ * 是否图片
+ */
 fun String.isImage(): Boolean {
 
     return this.endsWith(".jpg", true) || this.endsWith(".png", true)
@@ -628,6 +611,9 @@ fun String.isImage(): Boolean {
 
 }
 
+/**
+ * 生成随机颜色
+ */
 fun getRandomColor(): Int {
     val buffer = StringBuffer()
     for (i in 0..5) {
@@ -636,12 +622,16 @@ fun getRandomColor(): Int {
     return Color.parseColor("#$buffer")
 }
 
-
+/**
+ * 获取颜色
+ */
 fun Context.getColor(color: Int) {
     ContextCompat.getColor(this, color)
 }
 
-
+/**
+ * 打开相册
+ */
 fun Context.openGallery(
     setMaxSelectNum: Int = 1,
     onResult: (result: ArrayList<LocalMedia>?) -> Unit = {},

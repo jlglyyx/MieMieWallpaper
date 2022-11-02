@@ -8,6 +8,8 @@
     <com.yang.lib_common.widget.CommonToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:toolbarBg="@color/white"
+        app:mTitleTextColor="@color/textColor"
         app:centerContent="设置" />
 
     <com.yang.lib_common.widget.DampScrollView

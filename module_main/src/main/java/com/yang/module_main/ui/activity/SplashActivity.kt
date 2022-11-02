@@ -19,10 +19,7 @@ import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.helper.AdManager
-import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.buildARouterLogin
-import com.yang.lib_common.util.createAppId
-import com.yang.lib_common.util.getAppId
+import com.yang.lib_common.util.*
 import com.yang.module_main.databinding.ActSplashBinding
 
 /**
@@ -32,23 +29,29 @@ import com.yang.module_main.databinding.ActSplashBinding
  * @Date: 2022/7/26 11:26
  */
 @Route(path = AppConstant.RoutePath.SPLASH_ACTIVITY)
-class SplashActivity:BaseActivity<ActSplashBinding>() {
+class SplashActivity : BaseActivity<ActSplashBinding>() {
 
     private var basePopupView: BasePopupView? = null
 
-   private val registerForActivityResult =
+    private val registerForActivityResult =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             var isGrantAll = true
             it.forEach { item ->
                 isGrantAll = isGrantAll and item.value
             }
-            if (isGrantAll){
+            if (isGrantAll) {
                 createAppId(getAppId(path = obbDir.absolutePath))
 
-                AdManager.instance.splashAd(this,mViewBinding.container){
+                AdManager.instance.splashAd(this, mViewBinding.container) {
                     buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY)
-                        .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(this, R.anim.fade_in, R.anim.fade_out))
-                        .navigation(this,object :NavigationCallback{
+                        .withOptionsCompat(
+                            ActivityOptionsCompat.makeCustomAnimation(
+                                this,
+                                R.anim.fade_in,
+                                R.anim.fade_out
+                            )
+                        )
+                        .navigation(this, object : NavigationCallback {
                             override fun onFound(postcard: Postcard?) {
                             }
 
@@ -64,7 +67,7 @@ class SplashActivity:BaseActivity<ActSplashBinding>() {
 
                         })
                 }
-            }else{
+            } else {
                 initDialog()
             }
         }
@@ -79,26 +82,34 @@ class SplashActivity:BaseActivity<ActSplashBinding>() {
 
     override fun initView() {
 
-
+        isNextDay()
     }
 
-    private fun initPermission(){
+    private fun initPermission() {
 
-        registerForActivityResult.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.READ_PHONE_STATE ))
+        registerForActivityResult.launch(
+            arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_PHONE_STATE
+            )
+        )
     }
 
-    private fun initDialog(){
-        if (null == basePopupView){
-            basePopupView = XPopup.Builder(this).dismissOnTouchOutside(false).asConfirm("提示","不授权文件存储权限，将无法下载图片哦~","","去设置",
-                {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    intent.data = Uri.fromParts("package", packageName, null)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                },null,true).show()
-        }else{
-            if (!basePopupView!!.isShow){
+    private fun initDialog() {
+        if (null == basePopupView) {
+            basePopupView = XPopup.Builder(this).dismissOnTouchOutside(false)
+                .asConfirm("提示", "不授权文件存储权限，将无法下载图片哦~", "", "去设置",
+                    {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        intent.data = Uri.fromParts("package", packageName, null)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }, null, true
+                ).show()
+        } else {
+            if (!basePopupView!!.isShow) {
                 basePopupView!!.show()
             }
         }
@@ -107,9 +118,6 @@ class SplashActivity:BaseActivity<ActSplashBinding>() {
     override fun initViewModel() {
 
     }
-
-
-
 
 
     override fun onStart() {

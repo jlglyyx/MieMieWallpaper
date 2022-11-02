@@ -6,11 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.util.getDefaultMMKV
 import com.yang.lib_common.util.showShort
 import com.yang.lib_common.util.updateUserInfo
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.data.WallpaperTabData
+import com.yang.lib_common.util.setMMKVValue
 import com.yang.module_main.repository.MainRepository
 import javax.inject.Inject
 
@@ -92,7 +92,7 @@ class MainViewModel @Inject constructor(
            mainRepository.login(params)
         }, {
             updateUserInfo(it.data)
-            getDefaultMMKV().putInt(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
+            setMMKVValue(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
             LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_SUCCESS)
             finishActivity()
         },{

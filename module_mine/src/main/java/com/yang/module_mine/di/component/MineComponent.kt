@@ -9,6 +9,7 @@ import com.yang.module_mine.ui.activity.MineChangePhoneActivity
 import com.yang.module_mine.ui.activity.MineSettingActivity
 import com.yang.module_mine.ui.activity.MineUserInfoActivity
 import com.yang.module_mine.ui.fragment.MineFragment
+import com.yang.module_mine.ui.fragment.MyFansFragment
 import dagger.Component
 
 /**
@@ -25,6 +26,8 @@ interface MineComponent {
 
 
     fun inject(inject: MineFragment)
+
+    fun inject(inject: MyFansFragment)
 
     fun inject(inject: MineSettingActivity)
 

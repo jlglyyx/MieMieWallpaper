@@ -22,6 +22,7 @@ import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.*
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.data.UserInfoHold
+import com.yang.lib_common.helper.AdManager
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.*
 import com.yang.module_mine.adapter.MoreFunctionAdapter
@@ -58,7 +59,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
 
 
     override fun initView() {
-        mViewBinding.root.get(1).setPadding(0, getStatusBarHeight(requireActivity()), 0, 0)
+        mViewBinding.root[1].setPadding(0, getStatusBarHeight(requireActivity()), 0, 0)
 
         mViewBinding.smartRefreshLayout.setOnRefreshListener(this)
         finishRefreshLoadMore(mViewBinding.smartRefreshLayout)
@@ -118,6 +119,25 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
                 }
             }).show()
         }
+
+        mViewBinding.stvAwardVip.clicks().subscribe {
+            AdManager.instance.showReward(requireActivity()){
+                mViewBinding.stvAwardVip.text = "观看广告1/3"
+            }
+        }
+        mViewBinding.stvAwardAd.clicks().subscribe {
+            AdManager.instance.showReward(requireActivity()){
+                mViewBinding.stvAwardAd.text = "签到天数1/3"
+            }
+        }
+        mViewBinding.llAttention.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY).navigation()
+        }
+        mViewBinding.llFan.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY).navigation()
+        }
+
+
         initBanner()
         initRecyclerView()
 
@@ -151,7 +171,6 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
                 tvName.text = it.userName
                 tvAccount.text = it.userAccount
                 tvDesc.text = it.userDescribe
-                tvIntegral.text = it.userIntegral.toString()
                 tvAttention.text = it.userAttention.toString()
                 tvFan.text = it.userFan.toString()
                 if (it.userIsSign) {

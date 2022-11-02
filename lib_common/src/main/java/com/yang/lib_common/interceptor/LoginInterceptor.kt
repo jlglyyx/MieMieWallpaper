@@ -9,7 +9,7 @@ import com.alibaba.android.arouter.facade.callback.InterceptorCallback
 import com.alibaba.android.arouter.facade.template.IInterceptor
 import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.util.getDefaultMMKV
+import com.yang.lib_common.util.getMMKVValue
 
 
 /**
@@ -51,7 +51,8 @@ class LoginInterceptor : IInterceptor {
 
     override fun process(postcard: Postcard, callback: InterceptorCallback) {
         postcard.timeout = 2
-        when (getDefaultMMKV().decodeInt(AppConstant.Constant.LOGIN_STATUS, -1)) {
+
+        when (getMMKVValue(AppConstant.Constant.LOGIN_STATUS, -1)) {
             AppConstant.Constant.LOGIN_SUCCESS -> {
                 callback.onContinue(postcard)
             }

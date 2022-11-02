@@ -7,7 +7,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.interceptor.LogInterceptor
 import com.yang.lib_common.interceptor.UrlInterceptor
 import com.yang.lib_common.scope.RemoteScope
-import com.yang.lib_common.util.getDefaultMMKV
+import com.yang.lib_common.util.getMMKVValue
 import dagger.Module
 import dagger.Provides
 import okhttp3.ConnectionPool
@@ -70,7 +70,7 @@ class RemoteModule {
     fun provideHeadInterceptor(): Interceptor {
         return Interceptor {
             var request = it.request()
-            val token = getDefaultMMKV().decodeString(AppConstant.Constant.TOKEN)
+            val token = getMMKVValue(AppConstant.Constant.TOKEN,"")
             if (!TextUtils.isEmpty(token)){
                 request = request.newBuilder().addHeader(AppConstant.Constant.TOKEN, token).build()
             }

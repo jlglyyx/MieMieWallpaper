@@ -3,7 +3,7 @@ package com.yang.lib_common.data
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.fromJson
-import com.yang.lib_common.util.getDefaultMMKV
+import com.yang.lib_common.util.getMMKVValue
 
 /**
  * @ClassName: UserInfoHandle
@@ -13,17 +13,17 @@ import com.yang.lib_common.util.getDefaultMMKV
  */
 object UserInfoHold {
 
+
     val userInfo: UserInfoData?
-        get() = getDefaultMMKV().getString(AppConstant.Constant.USER_INFO, "")
-            ?.fromJson<UserInfoData>()
+        get() = getMMKVValue(AppConstant.Constant.USER_INFO, "")?.fromJson<UserInfoData>()
 
 
     val userId: String?
-        get() = getDefaultMMKV().getString(AppConstant.Constant.USER_INFO, "")
+        get() = getMMKVValue(AppConstant.Constant.USER_INFO, "")
             ?.fromJson<UserInfoData>()?.id
 
 
     val userName: String?
-        get() = getDefaultMMKV().getString(AppConstant.Constant.USER_INFO, "")
+        get() = getMMKVValue(AppConstant.Constant.USER_INFO, "")
             ?.fromJson<UserInfoData>()?.userName
 }

@@ -60,6 +60,7 @@ class ItemContentView:LinearLayout {
         val llLl = view.findViewById<LinearLayout>(R.id.ll_ll)
         val ivLeft = view.findViewById<ImageView>(R.id.iv_left)
         val ivRight = view.findViewById<ImageView>(R.id.iv_right)
+        val viewLine = view.findViewById<View>(R.id.view_line)
         tvContent = view.findViewById<TextView>(R.id.tv_content)
         tvRightContent = view.findViewById(R.id.tv_rightContent)
         val obtainStyledAttributes = context.obtainStyledAttributes(attrs, R.styleable.ItemContentView)
@@ -74,6 +75,8 @@ class ItemContentView:LinearLayout {
             obtainStyledAttributes.getBoolean(R.styleable.ItemContentView_itemRightImgVisible, true)
         val rightContentVisible =
             obtainStyledAttributes.getBoolean(R.styleable.ItemContentView_itemRightContentVisible, true)
+        val lineVisible =
+            obtainStyledAttributes.getBoolean(R.styleable.ItemContentView_lineVisible, true)
         val rightImgSrc =
             obtainStyledAttributes.getResourceId(R.styleable.ItemContentView_itemRightImgSrc, 0)
         val itemBg = obtainStyledAttributes.getResourceId(
@@ -106,6 +109,11 @@ class ItemContentView:LinearLayout {
             tvRightContent.visibility = View.VISIBLE
         } else {
             tvRightContent.visibility = View.GONE
+        }
+        if (lineVisible) {
+            viewLine.visibility = View.VISIBLE
+        } else {
+            viewLine.visibility = View.GONE
         }
         obtainStyledAttributes.recycle()
     }

@@ -43,10 +43,9 @@ class MainFragment : BaseFragment<FraMainBinding>() {
     @InjectViewModel(true)
     lateinit var mainViewModel: MainViewModel
 
+    private  var mTitles = mutableListOf<String>()
 
-    private lateinit var mTitles : MutableList<String>
-
-    private lateinit var mFragments: MutableList<Fragment>
+    private var mFragments = mutableListOf<Fragment>()
 
     override fun initViewBinding(): FraMainBinding {
         return bind(FraMainBinding::inflate)
@@ -60,28 +59,33 @@ class MainFragment : BaseFragment<FraMainBinding>() {
         }
 
         mViewBinding.llMore.setOnClickListener {
-                 XPopup.Builder(requireContext())
-                    .atView(mViewBinding.tabLayout)
-                    .asCustom(FilterDialog(requireContext()).apply {
-                        block = {
-                            it.sllContainer.shapeDrawableBuilder.setSolidColor(ContextCompat.getColor(requireContext(),
-                                com.yang.lib_common.R.color.color_F3F4F6)).intoBackground()
-                            it.recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
-                            val mAdapter = object :
-                                BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_filter_tab) {
-                                override fun convert(helper: BaseViewHolder, item: String) {
-                                    helper.setText(R.id.tv_title,item)
 
-                                }
+            XPopup.Builder(requireContext())
+                .atView(mViewBinding.tabLayout)
+                .asCustom(FilterDialog(requireContext()).apply {
+                    block = {
+                        it.sllContainer.shapeDrawableBuilder.setSolidColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                com.yang.lib_common.R.color.color_F3F4F6
+                            )
+                        ).intoBackground()
+                        it.recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
+                        val mAdapter = object :
+                            BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_filter_tab) {
+                            override fun convert(helper: BaseViewHolder, item: String) {
+                                helper.setText(R.id.tv_title, item)
+
                             }
-                            mAdapter.setOnItemClickListener { _, _, position ->
-                                mViewBinding.viewPager.setCurrentItem(position,false)
-                                dismiss()
-                            }
-                            it.recyclerView.adapter = mAdapter
-                            mAdapter.setNewData(mTitles)
                         }
-                    }).show()
+                        mAdapter.setOnItemClickListener { _, _, position ->
+                            mViewBinding.viewPager.setCurrentItem(position, false)
+                            dismiss()
+                        }
+                        it.recyclerView.adapter = mAdapter
+                        mAdapter.setNewData(mTitles)
+                    }
+                }).show()
         }
 
     }
@@ -131,14 +135,15 @@ class MainFragment : BaseFragment<FraMainBinding>() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
-        mainViewModel.mWallpaperTabData.observe(this){
-            mFragments = mutableListOf()
-            mTitles = mutableListOf()
+        mainViewModel.mWallpaperTabData.observe(this) {
+
             it.mapIndexed { index, wallpaperTabData ->
-                mFragments.add( buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
-                    .withInt(AppConstant.Constant.TYPE, index)
-                    .withString(AppConstant.Constant.ID, wallpaperTabData.id)
-                    .navigation() as Fragment)
+                mFragments.add(
+                    buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
+                        .withInt(AppConstant.Constant.TYPE, index)
+                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
+                        .navigation() as Fragment
+                )
                 wallpaperTabData.name
             }.apply {
                 mTitles.addAll(this as MutableList<String>)

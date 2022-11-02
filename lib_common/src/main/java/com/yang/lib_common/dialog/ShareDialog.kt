@@ -2,17 +2,11 @@ package com.yang.lib_common.dialog
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.view.LayoutInflater
-import com.bumptech.glide.Glide
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.lxj.xpopup.core.BottomPopupView
 import com.yang.lib_common.R
-import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.databinding.DialogConfirmBinding
 import com.yang.lib_common.databinding.DialogShareBinding
 import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.getDefaultMMKV
-import com.yang.lib_common.util.toJson
 
 /**
  * @ClassName: ShareDialog

@@ -12,7 +12,6 @@ import android.service.wallpaper.WallpaperService
 import android.text.TextUtils
 import android.util.Log
 import android.view.SurfaceHolder
-import com.yang.lib_common.util.getUriWithPath
 import java.io.IOException
 
 

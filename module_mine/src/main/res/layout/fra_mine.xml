@@ -170,30 +170,7 @@
                     android:orientation="horizontal"
                     app:layout_constraintTop_toBottomOf="@+id/siv_head">
 
-                    <LinearLayout
-                        android:layout_width="@dimen/dp_0"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:id="@+id/ll_integral"
-                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:id="@+id/tv_integral"
-                            android:textColor="@color/textColor"
-                            android:textSize="@dimen/sp_14" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_2"
-                            android:text="我的积分"
-                            android:textColor="@color/textColor_999999"
-                            android:textSize="@dimen/sp_12" />
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="@dimen/dp_0"
@@ -295,6 +272,8 @@
                     android:layout_marginTop="@dimen/dp_10"
                     android:orientation="vertical">
 
+
+
                     <com.youth.banner.Banner
                         android:id="@id/banner"
                         android:layout_marginHorizontal="@dimen/dp_10"
@@ -308,8 +287,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/dp_10"
                         android:layout_marginHorizontal="@dimen/dp_10"
-                        app:cardElevation="@dimen/dp_1"
-                        app:cardCornerRadius="@dimen/dp_10">
+                        app:cardElevation="@dimen/dp_1">
 
 
                         <com.hjq.shape.layout.ShapeLinearLayout
@@ -318,20 +296,20 @@
                             android:orientation="vertical">
 
                             <com.yang.lib_common.widget.ItemContentView
+                                android:id="@+id/icv_my_rights"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:itemLeftContent="我的会员"
+                                app:itemLeftImgVisible="false"
+                                app:itemRightContent="2022-12-01到期"/>
+
+                            <com.yang.lib_common.widget.ItemContentView
                                 android:id="@+id/icv_my_balance"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:itemLeftContent="我的钱包"
                                 app:itemLeftImgVisible="false"
                                 app:itemRightContent="￥16.05" />
-
-                            <com.yang.lib_common.widget.ItemContentView
-                                android:id="@+id/icv_my_rights"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone"
-                                app:itemLeftContent="我的权益"
-                                app:itemLeftImgVisible="false" />
 
                             <com.yang.lib_common.widget.ItemContentView
                                 android:id="@+id/icv_task_history"
@@ -355,7 +333,7 @@
                     app:cardMaxElevation="@dimen/dp_1"
                     android:id="@+id/ll_task"
                     app:layout_constraintTop_toBottomOf="@+id/ll_center"
-                    app:cardCornerRadius="@dimen/dp_10">
+                    >
 
                 <com.hjq.shape.layout.ShapeLinearLayout
                     android:layout_width="match_parent"
@@ -421,6 +399,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
+                            android:id="@+id/stv_award_vip"
                             android:paddingHorizontal="@dimen/dp_8"
                             android:paddingVertical="@dimen/dp_5"
                             android:singleLine="true"
@@ -430,6 +409,12 @@
                             app:shape_radius="@dimen/dp_20"
                             app:shape_solidColor="@color/thistle" />
                     </LinearLayout>
+                    <View
+                        android:id="@+id/view_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_0_5"
+                        android:layout_marginHorizontal="@dimen/dp_8"
+                        android:background="@color/grey_1f" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -458,6 +443,7 @@
                             android:paddingVertical="@dimen/dp_5"
                             android:singleLine="true"
                             android:text="签到天数0/3"
+                            android:id="@+id/stv_award_ad"
                             android:textColor="@color/white"
                             android:textSize="@dimen/sp_12"
                             app:shape_radius="@dimen/dp_20"
@@ -474,8 +460,7 @@
                     android:layout_marginHorizontal="@dimen/dp_10"
                     app:cardElevation="@dimen/dp_1"
                     app:cardMaxElevation="@dimen/dp_1"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_task"
-                    app:cardCornerRadius="@dimen/dp_10">
+                    app:layout_constraintTop_toBottomOf="@+id/ll_task">
                 <LinearLayout
                     android:id="@+id/ll_bottom"
                     android:layout_width="match_parent"

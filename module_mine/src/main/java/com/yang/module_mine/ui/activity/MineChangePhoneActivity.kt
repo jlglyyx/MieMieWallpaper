@@ -9,8 +9,6 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.getDefaultMMKV
-import com.yang.module_mine.databinding.ActMineChangePasswordBinding
 import com.yang.module_mine.databinding.ActMineChangePhoneBinding
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.coroutines.async

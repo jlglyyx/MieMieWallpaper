@@ -177,11 +177,15 @@ interface AppConstant {
 
         const val MINE_MY_RIGHTS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyRightsActivity"
 
+        const val MINE_MY_FANS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyFansActivity"
+
         const val MINE_MY_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyInfoActivity"
 
         const val MINE_TASK_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/TaskHistoryActivity"
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
+
+        const val MINE_FANS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MyFansFragment"
 
         const val MINE_EXCHANGE_STATUS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
 
@@ -298,6 +302,8 @@ interface AppConstant {
         const val BUNDLE = "bundle"
 
         const val REFRESH = "refresh"
+
+        const val LAST_TIME = "last_time"
 
         const val ITEM_CONTENT = 0
         const val ITEM_AD = 1

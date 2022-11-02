@@ -96,7 +96,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
 
             if (position == 0) {
                 tabView.ivImage.setImageResource(mSelectImages[position])
-                tabView.tvTitle.setTextColor(ActivityCompat.getColor(this@MainActivity,R.color.textColor))
+                tabView.tvTitle.setTextColor(this@MainActivity.getColor(R.color.textColor))
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
 //                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
             } else {
@@ -121,7 +121,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
                 customView?.apply {
                     val tvTitle = findViewById<TextView>(R.id.tv_title)
                     val ivImage = findViewById<ImageView>(R.id.iv_image)
-                    tvTitle.setTextColor(ActivityCompat.getColor(this@MainActivity,R.color.textColor_666666))
+                    tvTitle.setTextColor(this@MainActivity.getColor(R.color.textColor_666666))
                     ivImage.setImageResource(mImages[tab.position])
                 }
 
@@ -137,7 +137,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
                 customView?.apply {
                     val tvTitle = findViewById<TextView>(R.id.tv_title)
                     val ivImage = findViewById<ImageView>(R.id.iv_image)
-                    tvTitle.setTextColor(ActivityCompat.getColor(this@MainActivity,R.color.textColor))
+                    tvTitle.setTextColor(this@MainActivity.getColor(R.color.textColor))
                     ivImage.setImageResource(mSelectImages[tab.position])
                 }
 //                tab.setIcon(mSelectImages[tab.position])
@@ -152,9 +152,9 @@ class MainActivity : BaseActivity<ActMainBinding>() {
     override fun initViewModel() {
 
         InjectViewModelProxy.inject(this)
-        showReward()
-        showInterstitial()
-        showFullscreen()
+//        showReward()
+//        showInterstitial()
+//        showFullscreen()
     }
 
 
@@ -191,7 +191,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
 
     private fun showInterstitial() {
         if (interstitialAd == null) interstitialAd = DCInterstitialAd(this)
-        val slot = DCloudAdSlot.Builder().adpid("__UNI__D955F27").build()
+        val slot = DCloudAdSlot.Builder().adpid("2111111113").build()
         interstitialAd!!.load(slot, object : DCInterstitialAdLoadListener {
             override fun onInterstitialAdLoad() {
                 interstitialAd!!.setInterstitialAdListener(object : DCInterstitialAdListener {
@@ -225,7 +225,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
             override fun onClose() {}
             override fun onShowError(i: Int, s: String) {}
         })
-        val slot = DCloudAdSlot.Builder().adpid("__UNI__D955F27").build()
+        val slot = DCloudAdSlot.Builder().adpid("2507000611").build()
         fullScreenAd!!.load(slot, object : DCFullScreenAdLoadListener {
             override fun onFullScreenAdLoad() {
                 fullScreenAd!!.show(this@MainActivity)
@@ -250,7 +250,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
             override fun onClose() {}
             override fun onShowError(i: Int, s: String) {}
         })
-        val slot = DCloudAdSlot.Builder().adpid("__UNI__D955F27").build()
+        val slot = DCloudAdSlot.Builder().adpid("2507000689").build()
         rewardAd!!.load(slot, object : DCRewardAdLoadListener {
             override fun onRewardAdLoad() {
                 rewardAd!!.show(this@MainActivity)

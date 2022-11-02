@@ -8,7 +8,7 @@ import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.room.entity.UserInfoData
-import com.yang.lib_common.util.getDefaultMMKV
+import com.yang.lib_common.util.clearAllMMKV
 import com.yang.lib_common.util.showShort
 import com.yang.module_mine.repository.MineRepository
 import javax.inject.Inject
@@ -63,11 +63,11 @@ class MineViewModel @Inject constructor(application: Application, private val mi
         launch({
                mineRepository.loginOut()
         },{
-            getDefaultMMKV().clearAll()
+            clearAllMMKV()
             LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_FAIL)
             finishActivity()
         },{
-            getDefaultMMKV().clearAll()
+            clearAllMMKV()
             LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_FAIL)
             finishActivity()
         },messages = arrayOf("请求中","退出登陆成功"))
