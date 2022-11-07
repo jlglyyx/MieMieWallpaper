@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.scwang.smart.refresh.layout.SmartRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.scwang.smart.refresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@id/smartRefreshLayout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <com.scwang.smart.refresh.header.MaterialHeader
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+        android:layout_height="wrap_content" />
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <FrameLayout
             android:id="@+id/fl_head"
@@ -28,7 +24,6 @@
                 android:id="@+id/cl_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:padding="@dimen/dp_10"
                 android:visibility="visible"
                 app:layout_constraintTop_toTopOf="parent">
@@ -74,7 +69,7 @@
                 android:id="@+id/cl_head_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+
                 android:padding="@dimen/dp_10"
                 android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent">
@@ -171,20 +166,19 @@
                     app:layout_constraintTop_toBottomOf="@+id/siv_head">
 
 
-
                     <LinearLayout
+                        android:id="@+id/ll_attention"
                         android:layout_width="@dimen/dp_0"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:id="@+id/ll_attention"
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tv_attention"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:id="@+id/tv_attention"
                             android:textColor="@color/textColor"
                             android:textSize="@dimen/sp_14" />
 
@@ -198,18 +192,18 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_fan"
                         android:layout_width="@dimen/dp_0"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:id="@+id/ll_fan"
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tv_fan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:id="@+id/tv_fan"
                             android:textColor="@color/textColor"
                             android:textSize="@dimen/sp_14" />
 
@@ -244,50 +238,39 @@
 
         </FrameLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
 
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:overScrollMode="never"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <com.hjq.shape.layout.ShapeLinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="match_parent">
 
-
-                <LinearLayout
-                    android:id="@+id/ll_center"
+                <com.hjq.shape.layout.ShapeLinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent">
 
 
-
-                    <com.youth.banner.Banner
-                        android:id="@id/banner"
-                        android:layout_marginHorizontal="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_100" />
-
-
-                    <androidx.cardview.widget.CardView
+                    <LinearLayout
+                        android:id="@+id/ll_center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/dp_10"
-                        android:layout_marginHorizontal="@dimen/dp_10"
-                        app:cardElevation="@dimen/dp_1">
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:orientation="vertical">
+
+
+                        <com.youth.banner.Banner
+                            android:id="@id/banner"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_100"
+                            android:layout_marginHorizontal="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_10" />
 
 
                         <com.hjq.shape.layout.ShapeLinearLayout
@@ -300,15 +283,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:itemLeftContent="我的会员"
-                                app:itemLeftImgVisible="false"
-                                app:itemRightContent="2022-12-01到期"/>
+                                app:itemRightContent="2022-12-01到期" />
 
                             <com.yang.lib_common.widget.ItemContentView
                                 android:id="@+id/icv_my_balance"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:itemLeftContent="我的钱包"
-                                app:itemLeftImgVisible="false"
                                 app:itemRightContent="￥16.05" />
 
                             <com.yang.lib_common.widget.ItemContentView
@@ -320,176 +301,160 @@
                                 app:itemLeftImgVisible="false" />
                         </com.hjq.shape.layout.ShapeLinearLayout>
 
-                    </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
 
 
-                </LinearLayout>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/dp_10"
-                    android:layout_marginHorizontal="@dimen/dp_10"
-                    app:cardElevation="@dimen/dp_1"
-                    app:cardMaxElevation="@dimen/dp_1"
-                    android:id="@+id/ll_task"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_center"
-                    >
-
-                <com.hjq.shape.layout.ShapeLinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingVertical="@dimen/dp_10"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_center">
-
-                    <LinearLayout
+                    <com.hjq.shape.layout.ShapeLinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:paddingVertical="@dimen/dp_10"
+                        app:layout_constraintTop_toBottomOf="@+id/ll_center">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_10"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="每日任务"
+                                android:textColor="@color/textColor"
+                                android:textSize="@dimen/sp_16"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="更多任务"
+                                android:textColor="@color/textColor_666666"
+                                android:textSize="@dimen/sp_13" />
+
+                            <ImageView
+                                android:id="@+id/iv_right"
+                                android:layout_width="@dimen/dp_30"
+                                android:layout_height="match_parent"
+                                android:padding="@dimen/dp_5"
+                                android:src="@drawable/iv_into"
+                                app:tint="@color/textColor_666666" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="@dimen/dp_15"
+                            android:paddingEnd="@dimen/dp_8"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxLength="7"
+                                android:paddingVertical="@dimen/dp_15"
+                                android:text="1天vip体验"
+                                android:textColor="@color/textColor"
+                                android:textSize="@dimen/sp_16" />
+
+                            <com.hjq.shape.view.ShapeTextView
+                                android:id="@+id/stv_award_vip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:paddingHorizontal="@dimen/dp_8"
+                                android:paddingVertical="@dimen/dp_5"
+                                android:singleLine="true"
+                                android:text="观看广告0/3"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp_12"
+                                app:shape_radius="@dimen/dp_20"
+                                app:shape_solidColor="@color/appColor" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/view_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_0_5"
+                            android:layout_marginHorizontal="@dimen/dp_8"
+                            android:background="@color/grey_1f" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="@dimen/dp_15"
+                            android:paddingEnd="@dimen/dp_8"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxLength="7"
+                                android:paddingVertical="@dimen/dp_15"
+                                android:text="广告券1张"
+                                android:textColor="@color/textColor"
+                                android:textSize="@dimen/sp_16" />
+
+                            <com.hjq.shape.view.ShapeTextView
+                                android:id="@+id/stv_award_ad"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:paddingHorizontal="@dimen/dp_8"
+                                android:paddingVertical="@dimen/dp_5"
+                                android:singleLine="true"
+                                android:text="签到天数0/3"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp_12"
+                                app:shape_radius="@dimen/dp_20"
+                                app:shape_solidColor="@color/appColor" />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_0_5"
+                            android:layout_marginHorizontal="@dimen/dp_8"
+                            android:background="@color/grey_1f" />
+
+                    </com.hjq.shape.layout.ShapeLinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_bottom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
+                        app:layout_constraintTop_toBottomOf="@+id/ll_task">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="每日任务"
+                            android:text="@string/string_more_function"
                             android:textColor="@color/textColor"
                             android:textSize="@dimen/sp_16"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@id/recyclerView"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="更多任务"
-                            android:textColor="@color/textColor_666666"
-                            android:textSize="@dimen/sp_13" />
-
-                        <ImageView
-                            android:id="@+id/iv_right"
-                            android:layout_width="@dimen/dp_30"
-                            android:layout_height="match_parent"
-                            android:padding="@dimen/dp_5"
-                            android:src="@drawable/iv_into"
-                            app:tint="@color/textColor_666666" />
-
+                            android:layout_marginTop="@dimen/dp_15"
+                            android:overScrollMode="never" />
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_15"
-                        android:gravity="center_vertical"
-                        android:layout_marginStart="@dimen/dp_15"
-                        android:layout_marginEnd="@dimen/dp_5"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxLength="7"
-                            android:paddingVertical="@dimen/dp_13"
-                            android:text="1天vip体验"
-                            android:textColor="@color/textColor"
-                            android:textSize="@dimen/sp_16" />
-
-                        <com.hjq.shape.view.ShapeTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:id="@+id/stv_award_vip"
-                            android:paddingHorizontal="@dimen/dp_8"
-                            android:paddingVertical="@dimen/dp_5"
-                            android:singleLine="true"
-                            android:text="观看广告0/3"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/sp_12"
-                            app:shape_radius="@dimen/dp_20"
-                            app:shape_solidColor="@color/thistle" />
-                    </LinearLayout>
-                    <View
-                        android:id="@+id/view_line"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_0_5"
-                        android:layout_marginHorizontal="@dimen/dp_8"
-                        android:background="@color/grey_1f" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_marginStart="@dimen/dp_15"
-                        android:layout_marginEnd="@dimen/dp_5"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxLength="7"
-                            android:paddingVertical="@dimen/dp_13"
-                            android:text="广告券1张"
-                            android:textColor="@color/textColor"
-                            android:textSize="@dimen/sp_16" />
-
-                        <com.hjq.shape.view.ShapeTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:paddingHorizontal="@dimen/dp_8"
-                            android:paddingVertical="@dimen/dp_5"
-                            android:singleLine="true"
-                            android:text="签到天数0/3"
-                            android:id="@+id/stv_award_ad"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/sp_12"
-                            app:shape_radius="@dimen/dp_20"
-                            app:shape_solidColor="@color/thistle" />
-                    </LinearLayout>
-
-
                 </com.hjq.shape.layout.ShapeLinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/dp_10"
-                    android:layout_marginHorizontal="@dimen/dp_10"
-                    app:cardElevation="@dimen/dp_1"
-                    app:cardMaxElevation="@dimen/dp_1"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_task">
-                <LinearLayout
-                    android:id="@+id/ll_bottom"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:orientation="vertical"
-                    android:padding="@dimen/dp_10"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_task">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/string_more_function"
-                        android:textColor="@color/textColor"
-                        android:textSize="@dimen/sp_16"
-                        android:textStyle="bold" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_15"
-                        android:overScrollMode="never" />
-                </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </com.hjq.shape.layout.ShapeLinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 </com.scwang.smart.refresh.layout.SmartRefreshLayout>

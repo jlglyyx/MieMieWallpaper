@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -21,6 +22,18 @@ class ItemContentView:LinearLayout {
     private lateinit var tvContent:TextView
 
     private lateinit var tvRightContent:TextView
+
+    private lateinit var ibRed:ImageButton
+
+    var redPointVisible:Boolean = false
+        set(value) {
+            field = value
+            if (field) {
+                ibRed.visibility = View.VISIBLE
+            } else {
+                ibRed.visibility = View.GONE
+            }
+        }
 
     var rightContent:String? = null
     set(value) {
@@ -61,7 +74,8 @@ class ItemContentView:LinearLayout {
         val ivLeft = view.findViewById<ImageView>(R.id.iv_left)
         val ivRight = view.findViewById<ImageView>(R.id.iv_right)
         val viewLine = view.findViewById<View>(R.id.view_line)
-        tvContent = view.findViewById<TextView>(R.id.tv_content)
+        ibRed = view.findViewById(R.id.ib_red)
+        tvContent = view.findViewById(R.id.tv_content)
         tvRightContent = view.findViewById(R.id.tv_rightContent)
         val obtainStyledAttributes = context.obtainStyledAttributes(attrs, R.styleable.ItemContentView)
         val leftContent = obtainStyledAttributes.getString(R.styleable.ItemContentView_itemLeftContent)
@@ -77,6 +91,8 @@ class ItemContentView:LinearLayout {
             obtainStyledAttributes.getBoolean(R.styleable.ItemContentView_itemRightContentVisible, true)
         val lineVisible =
             obtainStyledAttributes.getBoolean(R.styleable.ItemContentView_lineVisible, true)
+        val redPointVisible =
+            obtainStyledAttributes.getBoolean(R.styleable.ItemContentView_redPointVisible, false)
         val rightImgSrc =
             obtainStyledAttributes.getResourceId(R.styleable.ItemContentView_itemRightImgSrc, 0)
         val itemBg = obtainStyledAttributes.getResourceId(
@@ -114,6 +130,11 @@ class ItemContentView:LinearLayout {
             viewLine.visibility = View.VISIBLE
         } else {
             viewLine.visibility = View.GONE
+        }
+        if (redPointVisible) {
+            ibRed.visibility = View.VISIBLE
+        } else {
+            ibRed.visibility = View.GONE
         }
         obtainStyledAttributes.recycle()
     }

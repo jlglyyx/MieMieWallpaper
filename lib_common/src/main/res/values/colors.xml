@@ -4,15 +4,16 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorMainTab">#afffffff</color>
-    <color name="toolbarColor">@color/palevioletred</color>
+    <color name="toolbarColor">@color/white</color>
     <color name="colorBar">@color/cornflowerblue</color>
 
-    <color name="appColor">@color/colorBar</color>
+    <color name="appColor">#33cc33</color>
 
     <color name="textColor">#333333</color><!--黑色 -->
     <color name="textColor_999999">#999999</color><!--黑色 -->
     <color name="textColor_666666">#666666</color><!--黑色 -->
     <color name="grey_a0">#a0808080</color><!--黑色 -->
+    <color name="grey_50">#50808080</color><!--黑色 -->
     <color name="grey_0a">#0a808080</color><!--黑色 -->
     <color name="grey_1f">#1f808080</color><!--黑色 -->
     <color name="black">#000000</color><!--黑色 -->
@@ -162,4 +163,7 @@
 
     <color name="color_F3F4F6">#F3F4F6</color>
     <color name="color_F7F8FB">#F7F8FB</color>
+    <color name="color_F2F3F5">#F2F3F5</color>
+    <color name="color_EEEEEE">#EEEEEE</color>
+    <color name="color_F5F5F5">#f5f5f5</color>
 </resources>

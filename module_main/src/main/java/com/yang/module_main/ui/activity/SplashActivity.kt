@@ -12,6 +12,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import com.alibaba.android.arouter.facade.Postcard
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.facade.callback.NavigationCallback
+import com.huawei.hms.mlsdk.common.MLApplicationSetting.BundleKeyConstants.AppInfo.packageName
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.lxj.xpopup.interfaces.OnConfirmListener
@@ -42,7 +43,7 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
             if (isGrantAll) {
                 createAppId(getAppId(path = obbDir.absolutePath))
 
-                AdManager.instance.splashAd(this, mViewBinding.container) {
+                //AdManager.instance.splashAd(this, mViewBinding.container) {
                     buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY)
                         .withOptionsCompat(
                             ActivityOptionsCompat.makeCustomAnimation(
@@ -66,7 +67,7 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
                             }
 
                         })
-                }
+                //}
             } else {
                 initDialog()
             }

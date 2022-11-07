@@ -9,6 +9,8 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.showShort
+import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.databinding.ActMineChangePhoneBinding
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.coroutines.async
@@ -35,9 +37,16 @@ class MineChangePhoneActivity : BaseActivity<ActMineChangePhoneBinding>() {
     }
 
     override fun initView() {
-        mViewBinding.tvTime.clicks().subscribe {
-            mViewBinding.tvTime.isEnabled = false
-            initTimer()
+        mViewBinding.apply {
+            tvTime.clicks().subscribe {
+                tvTime.isEnabled = false
+                initTimer()
+            }
+
+            btConfirm.setOnClickListener {
+                checkForm()
+            }
+
         }
     }
 
@@ -67,5 +76,24 @@ class MineChangePhoneActivity : BaseActivity<ActMineChangePhoneBinding>() {
 
         }
 
+    }
+
+    private fun checkForm(){
+
+        val verificationCode = mViewBinding.etVerificationCode.text.toString()
+
+        val newPhone = mViewBinding.etNewPhone.text.toString()
+
+
+        if (newPhone.isEmpty()){
+            showShort("请输入新手机号")
+            return
+        }
+
+        if (verificationCode.isEmpty()){
+            showShort("请输入验证码")
+            return
+        }
+        finish()
     }
 }

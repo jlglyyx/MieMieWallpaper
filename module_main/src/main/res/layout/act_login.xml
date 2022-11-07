@@ -17,13 +17,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="@dimen/dp_10">
-
         <TextView
             android:id="@+id/tv_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/string_register_content"
-            android:textColor="@color/textColor"
+            android:textColor="@color/white"
             android:textSize="@dimen/sp_18"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -31,65 +30,77 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.36" />
 
-        <EditText
-            android:id="@+id/et_phone"
+        <com.yang.lib_common.widget.CustomEditView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:ceHint="请输入手机号"
+            app:ceType="normal"
+            app:ceMaxLength="11"
+            android:id="@+id/et_phone"
+            app:ceLeftSrc="@drawable/iv_phone"
+            app:layout_constraintTop_toBottomOf="@+id/tv_desc"
             android:layout_marginTop="@dimen/dp_10"
-            android:background="@drawable/layer_list_account_input"
-            android:hint="请输入手机号"
-            android:inputType="phone"
-            android:maxLength="11"
-            android:maxLines="1"
-            android:padding="@dimen/dp_10"
-            android:textSize="@dimen/sp_15"
-            app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
-
-        <EditText
-            android:id="@+id/et_verification_code"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
-            android:background="@drawable/layer_list_account_input"
-            android:hint="请输入验证码"
-            android:inputType="number"
-            android:maxLength="6"
-            android:maxLines="1"
-            android:padding="@dimen/dp_10"
-            android:textSize="@dimen/sp_15"
-            app:layout_constraintEnd_toStartOf="@+id/tv_time"
-            app:layout_constraintRight_toLeftOf="@+id/tv_time"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_phone" />
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <EditText
+
+
+
+
+        <com.yang.lib_common.widget.CustomEditView
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_10"
-            android:background="@drawable/layer_list_account_input"
-            android:hint="请输入密码"
+            app:ceHint="请输入密码"
+            app:ceType="password"
+            app:ceLeftSrc="@drawable/iv_password"
+            app:ceMaxLength="20"
             android:inputType="textPassword"
             android:maxLines="1"
-            android:padding="@dimen/dp_10"
-            android:textSize="@dimen/sp_15"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_phone" />
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:minWidth="@dimen/dp_100"
-            android:paddingHorizontal="@dimen/dp_5"
-            android:text="@string/string_get_verification"
-            android:textSize="@dimen/sp_15"
-            app:layout_constraintBottom_toBottomOf="@+id/et_verification_code"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_verification_code" />
+
+        <com.hjq.shape.layout.ShapeLinearLayout
+            android:layout_width="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_phone"
+            app:shape_radius="@dimen/dp_6"
+            android:id="@+id/cl_time"
+            android:layout_marginTop="@dimen/dp_10"
+            android:orientation="horizontal"
+            app:shape_solidColor="@color/white"
+            android:layout_height="wrap_content">
+            <com.yang.lib_common.widget.CustomEditView
+                android:id="@+id/et_verification_code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:ceHint="请输入验证码"
+                app:ceMaxLength="6" />
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="match_parent"
+                android:background="@color/grey_1f"
+                android:layout_marginVertical="@dimen/dp_5"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minWidth="@dimen/dp_100"
+                android:paddingHorizontal="@dimen/dp_5"
+                android:text="@string/string_get_verification"
+                android:textSize="@dimen/sp_15"
+                android:textColor="@color/textColor_999999" />
+
+        </com.hjq.shape.layout.ShapeLinearLayout>
+
+
 
         <TextView
             android:id="@+id/tv_login_type"
@@ -100,7 +111,17 @@
             android:textSize="@dimen/sp_15"
             android:layout_marginTop="@dimen/dp_15"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+            app:layout_constraintTop_toBottomOf="@+id/cl_time" />
+        <TextView
+            android:id="@+id/tv_lost_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/string_lost_password"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_time" />
 
 
 
@@ -129,6 +150,7 @@
             android:text="第三方账号登录"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_12"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bt_to_login" />
@@ -150,20 +172,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="@color/white"
+                android:id="@+id/tv_service_agreement"
                 android:text="@string/string_service_agreement"
                 app:layout_constraintBottom_toBottomOf="parent" />
         </LinearLayout>
 
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_25"
+            android:padding="@dimen/dp_6"
+            android:src="@drawable/iv_x"
+            app:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <ImageView
-        android:id="@+id/iv_close"
-        android:layout_width="@dimen/dp_30"
-        android:layout_height="@dimen/dp_30"
-        android:layout_marginTop="@dimen/dp_25"
-        android:layout_marginEnd="@dimen/dp_20"
-        android:padding="@dimen/dp_3"
-        android:src="@drawable/iv_x"
-        android:fitsSystemWindows="true"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

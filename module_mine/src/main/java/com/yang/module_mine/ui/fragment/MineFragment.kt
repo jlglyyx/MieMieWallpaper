@@ -57,9 +57,13 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
         return mineViewModel.uC
     }
 
+    override fun setStatusPadding(): Boolean {
+        return true
+    }
+
 
     override fun initView() {
-        mViewBinding.root[1].setPadding(0, getStatusBarHeight(requireActivity()), 0, 0)
+//        mViewBinding.appBarLayout.setPadding(0, getStatusBarHeight(requireActivity()), 0, 0)
 
         mViewBinding.smartRefreshLayout.setOnRefreshListener(this)
         finishRefreshLoadMore(mViewBinding.smartRefreshLayout)
@@ -190,28 +194,28 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
 
     private fun initRecyclerView() {
         moreFunctionAdapter = MoreFunctionAdapter(mutableListOf<MoreFunctionData>().apply {
-            add(
-                MoreFunctionData(
-                    R.drawable.iv_message,
-                    "消息通知",
-                    AppConstant.RoutePath.MINE_WEB_ACTIVITY,
-                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/message/messageList"
-                )
-            )
-            add(
-                MoreFunctionData(
-                    R.drawable.iv_kf,
-                    "客服中心",
-                    AppConstant.RoutePath.MINE_WEB_ACTIVITY,
-                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/service/customService"
-                )
-            )
+//            add(
+//                MoreFunctionData(
+//                    R.drawable.iv_message,
+//                    "消息通知",
+//                    AppConstant.RoutePath.MINE_WEB_ACTIVITY,
+//                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/message/messageList"
+//                )
+//            )
+//            add(
+//                MoreFunctionData(
+//                    R.drawable.iv_kf,
+//                    "客服中心",
+//                    AppConstant.RoutePath.MINE_WEB_ACTIVITY,
+//                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/service/customService"
+//                )
+//            )
             add(
                 MoreFunctionData(
                     R.drawable.iv_suggestion,
                     "意见反馈",
-                    AppConstant.RoutePath.MINE_WEB_ACTIVITY,
-                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/suggestion/suggestion"
+                    AppConstant.RoutePath.MINE_SUGGESTION_ACTIVITY,
+                    ""
                 )
             )
             add(
@@ -219,7 +223,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
                     R.drawable.iv_about,
                     "关于App",
                     AppConstant.RoutePath.MINE_ABOUT_ACTIVITY,
-                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/message/messageList"
+                    ""
                 )
             )
             add(

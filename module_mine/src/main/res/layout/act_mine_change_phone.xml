@@ -1,86 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <com.yang.lib_common.widget.CommonToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:centerContent="换绑手机"
         app:layout_constraintTop_toTopOf="parent"
-        app:rightContent="确定"
-        app:rightContentVisible="true"
-        app:centerContent="换绑手机"/>
-    <com.yang.lib_common.widget.DampScrollView
+        android:id="@id/commonToolBar"
+        app:rightContentVisible="true" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:paddingHorizontal="@dimen/dp_10"
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="match_parent">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_10"
-        android:maxLength="11"
-        android:maxLines="1"
-        android:text="13311119456"
-        android:textSize="@dimen/sp_15"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/textColor"
-        android:background="@drawable/layer_list_account_input"
-        android:id="@+id/tv_phone"/>
-    <EditText
-        android:layout_width="0dp"
-        android:padding="@dimen/dp_10"
-        android:layout_height="wrap_content"
-        app:layout_constraintRight_toLeftOf="@+id/tv_time"
-        app:layout_constraintEnd_toStartOf="@+id/tv_time"
-        app:layout_constraintTop_toBottomOf="@+id/tv_phone"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/layer_list_account_input"
-        android:layout_marginTop="@dimen/dp_10"
-        android:hint="请输入验证码"
-        android:inputType="number"
-        android:maxLength="6"
-        android:maxLines="1"
-        android:textColor="@color/textColor"
-        android:textSize="@dimen/sp_15"
-        android:id="@+id/et_verification_code"/>
 
-
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="@string/string_get_verification"
-        android:gravity="center"
-        android:textSize="@dimen/sp_15"
-        android:paddingHorizontal="@dimen/dp_5"
-        android:minWidth="@dimen/dp_100"
-        android:textColor="@color/textColor"
-        app:layout_constraintTop_toTopOf="@+id/et_verification_code"
-        app:layout_constraintBottom_toBottomOf="@+id/et_verification_code"
-        app:layout_constraintEnd_toEndOf="parent" />
-        <EditText
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_time"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:padding="@dimen/dp_10"
+            android:layout_height="match_parent"
             android:layout_marginTop="@dimen/dp_10"
-            android:background="@drawable/layer_list_account_input"
-            android:hint="请输入新手机号"
-            android:maxLines="1"
-            android:maxLength="11"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/sp_15"
-            android:inputType="phone"
-            android:id="@+id/et_new_phone"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
-    </com.yang.lib_common.widget.DampScrollView>
+            android:background="@color/white"
+            android:paddingHorizontal="@dimen/dp_10">
+
+            <com.hjq.shape.view.ShapeTextView
+                android:id="@+id/tv_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:padding="@dimen/dp_15"
+                android:text="13311119456"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shape_radius="@dimen/dp_10"
+                app:shape_solidColor="@color/color_F5F5F5" />
+
+            <com.hjq.shape.view.ShapeEditText
+                android:id="@+id/et_new_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:hint="请输入新手机号"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:padding="@dimen/dp_15"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_phone"
+                app:shape_radius="@dimen/dp_10"
+                app:shape_solidColor="@color/color_F5F5F5" />
+
+            <com.hjq.shape.view.ShapeEditText
+                android:id="@+id/et_verification_code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:hint="请输入新手机号验证码"
+                android:inputType="number"
+                android:maxLength="6"
+                android:maxLines="1"
+                android:padding="@dimen/dp_15"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintEnd_toStartOf="@+id/tv_time"
+                app:layout_constraintRight_toLeftOf="@+id/tv_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_new_phone"
+                app:shape_radius="@dimen/dp_10"
+                app:shape_solidColor="@color/color_F5F5F5" />
+
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:minWidth="@dimen/dp_100"
+                android:paddingHorizontal="@dimen/dp_5"
+                android:text="@string/string_get_verification"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintBottom_toBottomOf="@+id/et_verification_code"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_verification_code" />
+
+            <com.hjq.shape.view.ShapeButton
+                android:id="@+id/bt_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                android:background="@drawable/selector_commit_button_bg"
+                android:enabled="true"
+                app:shape_solidColor="@color/deepskyblue"
+                app:shape_solidDisabledColor="@color/aa_deepskyblue"
+                android:gravity="center"
+                android:padding="@dimen/dp_13"
+                app:shape_radius="@dimen/dp_10"
+                android:text="@string/string_confirm"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

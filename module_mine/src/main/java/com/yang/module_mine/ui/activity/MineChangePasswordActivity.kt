@@ -9,6 +9,9 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.showShort
+import com.yang.lib_common.widget.CommonSearchToolBar
+import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.databinding.ActMineChangePasswordBinding
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.coroutines.async
@@ -35,9 +38,16 @@ class MineChangePasswordActivity : BaseActivity<ActMineChangePasswordBinding>() 
     }
 
     override fun initView() {
-        mViewBinding.tvTime.clicks().subscribe {
-            mViewBinding.tvTime.isEnabled = false
-            initTimer()
+        mViewBinding.apply {
+            tvTime.clicks().subscribe {
+                tvTime.isEnabled = false
+                initTimer()
+            }
+
+            btConfirm.setOnClickListener {
+                checkForm()
+            }
+
         }
     }
 
@@ -66,6 +76,29 @@ class MineChangePasswordActivity : BaseActivity<ActMineChangePasswordBinding>() 
             }
 
         }
+    }
 
+    private fun checkForm(){
+
+        val phone = mViewBinding.etPhone.text.toString()
+
+        val verificationCode = mViewBinding.etVerificationCode.text.toString()
+
+        val newPassword = mViewBinding.etNewPassword.text.toString()
+
+        if (phone.isEmpty()){
+            showShort("请输入手机号")
+            return
+        }
+        if (verificationCode.isEmpty()){
+            showShort("请输入验证码")
+            return
+        }
+
+        if (newPassword.isEmpty()){
+            showShort("请输入新密码")
+            return
+        }
+        finish()
     }
 }

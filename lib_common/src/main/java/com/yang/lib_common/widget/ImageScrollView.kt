@@ -6,9 +6,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.FrameLayout
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -20,7 +18,7 @@ import com.yang.lib_common.util.getScreenPx
  * Created by Administrator on 2021/4/1_9:56.
  * Describe:
  */
-class ImageScrollView : FrameLayout, LifecycleObserver {
+class ImageScrollView : FrameLayout, DefaultLifecycleObserver {
 
     companion object {
         private const val TAG = "ImageScrollView"
@@ -215,8 +213,9 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
     }
 
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
         if (isPause) {
             isPause = false
             invalidateView()
@@ -224,19 +223,20 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         Log.i(TAG, "onResume: ")
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
         if (!isPause) {
             isPause = true
         }
         Log.i(TAG, "onPause: ")
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
         isPause = true
         Log.i(TAG, "onDestroy: ")
     }
+
 
 
 }

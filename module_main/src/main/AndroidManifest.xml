@@ -19,6 +19,7 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="false"
+            android:theme="@style/WhiteActivity"
             />
         <activity
             android:name=".ui.activity.WallpaperDetailActivity"
@@ -29,7 +30,6 @@
             android:exported="false"/>
         <activity
             android:name=".ui.activity.SearchWallpaperActivity"
-            android:exported="false"
-            android:theme="@style/WhiteActivity"/>
+            android:exported="false" />
     </application>
 </manifest>

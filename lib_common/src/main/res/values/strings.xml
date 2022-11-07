@@ -17,11 +17,13 @@
     <string name="string_more_function">更多功能</string>
     <string name="string_login_account_password">账号密码登录</string>
     <string name="string_login_verification_code">验证码登录</string>
+    <string name="string_lost_password">忘记密码</string>
     <string name="string_register_content">未注册号码将自动注册</string>
     <string name="string_get_verification">获取验证码</string>
-    <string name="string_service_agreement">已阅读并同意服务协议和隐私保护指引</string>
+    <string name="string_service_agreement">已阅读并同意<font color="#ffa500">《咩咩壁纸服务协议》</font></string>
     <string name="string_to_login">立即登录</string>
     <string name="staring_close">关闭</string>
+    <string name="string_confirm">确定</string>
 
 
     <string name="string_requesting">请求中…</string>

@@ -1,6 +1,7 @@
 package com.yang.module_mine.ui.fragment
 
 import androidx.core.app.ActivityOptionsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder

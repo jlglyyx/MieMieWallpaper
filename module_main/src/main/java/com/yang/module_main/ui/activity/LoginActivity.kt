@@ -3,9 +3,12 @@ package com.yang.module_main.ui.activity
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.bytedance.msdk.adapter.util.UIUtils.setOnClickListener
+import com.jakewharton.rxbinding4.view.clicks
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
@@ -25,11 +28,10 @@ import kotlinx.coroutines.*
  * @Date: 2022/7/22 14:58
  */
 @Route(path = AppConstant.RoutePath.LOGIN_ACTIVITY)
-class LoginActivity:BaseActivity<ActLoginBinding>() {
+class LoginActivity : BaseActivity<ActLoginBinding>() {
 
     @InjectViewModel
     lateinit var mainViewModel: MainViewModel
-
 
 
     override fun initViewBinding(): ActLoginBinding {
@@ -40,21 +42,27 @@ class LoginActivity:BaseActivity<ActLoginBinding>() {
     }
 
     override fun initView() {
-        mViewBinding.tvLoginType.clicks().subscribe {
-            if (mainViewModel.loginType == 0){
-                mViewBinding.etVerificationCode.visibility = View.INVISIBLE
-                mViewBinding.tvTime.visibility = View.INVISIBLE
+        lifecycle.addObserver(mViewBinding.imageScrollView)
+        mViewBinding.imageScrollView.imageUrl =
+            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F26%2F20200626112703_lipuj.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1670404916&t=38727bed25bebdc8c93e1f66a3c599c9"
+
+
+        mViewBinding.tvLoginType.setOnClickListener {
+            if (mainViewModel.loginType == 0) {
+                mViewBinding.clTime.visibility = View.INVISIBLE
                 mViewBinding.etPassword.visibility = View.VISIBLE
                 mainViewModel.loginType = 1
                 mainViewModel.verificationText = ""
                 mViewBinding.etPassword.setText("")
-            }else{
-                mViewBinding.etVerificationCode.visibility = View.VISIBLE
-                mViewBinding.tvTime.visibility = View.VISIBLE
+
+                mViewBinding.tvLoginType.setText(getString(R.string.string_login_verification_code))
+            } else {
+                mViewBinding.clTime.visibility = View.VISIBLE
                 mViewBinding.etPassword.visibility = View.INVISIBLE
                 mainViewModel.loginType = 0
                 mainViewModel.passwordText = ""
                 mViewBinding.etVerificationCode.setText("")
+                mViewBinding.tvLoginType.setText(getString(R.string.string_login_account_password))
             }
         }
 
@@ -64,7 +72,7 @@ class LoginActivity:BaseActivity<ActLoginBinding>() {
         }
 
         mViewBinding.btToLogin.clicks().subscribe {
-            hideSoftInput(this,mViewBinding.btToLogin)
+            hideSoftInput(this, mViewBinding.btToLogin)
             mainViewModel.login()
         }
         mViewBinding.tvOtherToLogin.clicks().subscribe {
@@ -89,27 +97,50 @@ class LoginActivity:BaseActivity<ActLoginBinding>() {
 
         }
 
-        mViewBinding.cbServiceAgreement.setOnCheckedChangeListener { buttonView, isChecked ->
-            mainViewModel.checkStatus = isChecked
+        mViewBinding.apply {
+            cbServiceAgreement.setOnCheckedChangeListener { buttonView, isChecked ->
+                mainViewModel.checkStatus = isChecked
+            }
+            tvServiceAgreement.clicks().subscribe {
+                buildARouter(AppConstant.RoutePath.MINE_WEB_ACTIVITY).withString(
+                    AppConstant.Constant.TITLE,
+                    "服务协议"
+                ).withString(
+                    AppConstant.Constant.URL,
+                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/about/privacyPolicy"
+                ).navigation()
+            }
+            tvLostPassword.clicks().subscribe {
+                buildARouter(AppConstant.RoutePath.MINE_CHANGE_PASSWORD_ACTIVITY).navigation()
+            }
+
+            ivClose.clicks().subscribe {
+                finish()
+            }
+            etPhone.setRadius(6f)
+            etPassword.setRadius(6f)
+            etVerificationCode.setRadius(6f)
         }
-        mViewBinding.ivClose.clicks().subscribe {
-            finish()
-        }
+
+
+
+
+
 
 
         initTextChangedListener()
     }
 
-    private fun initTimer(){
+    private fun initTimer() {
         lifecycleScope.launch {
-            val await = async  {
+            val await = async {
                 repeat(60) {
                     mViewBinding.tvTime.text = "${60 - it}秒后获取"
                     delay(1000)
                 }
                 true
             }
-            if (await.await()){
+            if (await.await()) {
                 mViewBinding.tvTime.text = "获取验证码"
                 mViewBinding.tvTime.isEnabled = true
             }
@@ -118,18 +149,24 @@ class LoginActivity:BaseActivity<ActLoginBinding>() {
 
     }
 
-    private fun initTextChangedListener(){
-        mViewBinding.etPhone.addTextChangedListener(object : TextWatcher{
+    private fun initTextChangedListener() {
+        mViewBinding.etPhone.getEdit().addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 mainViewModel.phoneText = s.toString()
-                if (mainViewModel.loginType == 0){
-                    mViewBinding.btToLogin.isEnabled = !TextUtils.isEmpty(mainViewModel.phoneText) && !TextUtils.isEmpty(mainViewModel.verificationText)
-                }else{
-                    mViewBinding.btToLogin.isEnabled = !TextUtils.isEmpty(mainViewModel.phoneText) && !TextUtils.isEmpty(mainViewModel.passwordText)
+                if (mainViewModel.loginType == 0) {
+                    mViewBinding.btToLogin.isEnabled =
+                        !TextUtils.isEmpty(mainViewModel.phoneText) && !TextUtils.isEmpty(
+                            mainViewModel.verificationText
+                        )
+                } else {
+                    mViewBinding.btToLogin.isEnabled =
+                        !TextUtils.isEmpty(mainViewModel.phoneText) && !TextUtils.isEmpty(
+                            mainViewModel.passwordText
+                        )
                 }
             }
 
@@ -138,14 +175,15 @@ class LoginActivity:BaseActivity<ActLoginBinding>() {
             }
 
         })
-        mViewBinding.etPassword.addTextChangedListener(object : TextWatcher{
+        mViewBinding.etPassword.getEdit().addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 mainViewModel.passwordText = s.toString()
-                mViewBinding.btToLogin.isEnabled = !TextUtils.isEmpty(mainViewModel.phoneText) && !TextUtils.isEmpty(mainViewModel.passwordText)
+                mViewBinding.btToLogin.isEnabled =
+                    !TextUtils.isEmpty(mainViewModel.phoneText) && !TextUtils.isEmpty(mainViewModel.passwordText)
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -154,14 +192,15 @@ class LoginActivity:BaseActivity<ActLoginBinding>() {
 
         })
 
-        mViewBinding.etVerificationCode.addTextChangedListener(object : TextWatcher{
+        mViewBinding.etVerificationCode.getEdit().addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 mainViewModel.verificationText = s.toString()
-                mViewBinding.btToLogin.isEnabled = !TextUtils.isEmpty(mainViewModel.phoneText) && !TextUtils.isEmpty(mainViewModel.verificationText)
+                mViewBinding.btToLogin.isEnabled =
+                    !TextUtils.isEmpty(mainViewModel.phoneText) && !TextUtils.isEmpty(mainViewModel.verificationText)
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -170,7 +209,6 @@ class LoginActivity:BaseActivity<ActLoginBinding>() {
 
         })
     }
-
 
 
     override fun initViewModel() {
@@ -183,7 +221,7 @@ class LoginActivity:BaseActivity<ActLoginBinding>() {
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.bottom_in,R.anim.bottom_out)
+        overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out)
     }
 
 }

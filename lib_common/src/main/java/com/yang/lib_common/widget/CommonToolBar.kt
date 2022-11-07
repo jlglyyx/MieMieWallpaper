@@ -108,13 +108,20 @@ class CommonToolBar : ConstraintLayout {
             R.styleable.CommonToolBar_toolbarBg, 0
         )
         val titleTextColor = obtainStyledAttributes.getColor(
-            R.styleable.CommonToolBar_mTitleTextColor, Color.WHITE
+            R.styleable.CommonToolBar_mTitleTextColor, context.getColor(R.color.textColor)
         )
         if (toolbarBg != 0) {
             clToolbar.setBackgroundResource(toolbarBg)
         }
         tvCenterContent.setTextColor(titleTextColor)
+        tvRightContent.setTextColor(titleTextColor)
+        tvLeftContent.setTextColor(titleTextColor)
         DrawableCompat.setTint(ivBack.drawable,titleTextColor)
+        DrawableCompat.setTint(ivAdd.drawable,titleTextColor)
+
+
+
+
         tvCenterContent.text = centerContent
         tvLeftContent.text = leftContent
         tvRightContent.text = rightContent

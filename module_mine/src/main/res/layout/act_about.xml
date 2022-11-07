@@ -8,16 +8,19 @@
     <com.yang.lib_common.widget.CommonToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:mTitleTextColor="@color/textColor"
         app:centerContent="关于App" />
 
     <com.yang.lib_common.widget.DampScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+
+        android:fillViewport="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_10"
             android:orientation="vertical">
 
             <com.yang.lib_common.widget.ItemContentView
@@ -25,8 +28,7 @@
                 android:layout_height="wrap_content"
                 app:itemLeftContent="版本更新"
                 app:itemLeftImgVisible="false"
-                android:id="@+id/icv_update"
-                app:itemRightContent="v1.0.0" />
+                android:id="@+id/icv_update" />
 
             <com.yang.lib_common.widget.ItemContentView
                 android:layout_width="match_parent"

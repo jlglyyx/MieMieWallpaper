@@ -173,6 +173,8 @@ interface AppConstant {
 
         const val MINE_ABOUT_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/AboutActivity"
 
+        const val MINE_SUGGESTION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/SuggestionActivity"
+
         const val MINE_MY_BALANCE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyBalanceActivity"
 
         const val MINE_MY_RIGHTS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyRightsActivity"

@@ -231,5 +231,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:rightContent="修改资料"
         app:rightContentVisible="true"
+        app:mTitleTextColor="@color/white"
         app:toolbarBg="@android:color/transparent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

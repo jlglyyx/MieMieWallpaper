@@ -21,6 +21,7 @@
         <attr name="itemRightImgSrc" format="reference"/>
         <attr name="itemRightContentVisible" format="boolean"/>
         <attr name="lineVisible" format="boolean"/>
+        <attr name="redPointVisible" format="boolean"/>
         <attr name="itemBg" format="reference"/>
     </declare-styleable>
     <declare-styleable name="ItemImageView">
@@ -43,5 +44,14 @@
     <declare-styleable name="GridNinePictureView">
         <attr name="spanCount" format="integer"/>
         <attr name="maxChild" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="CustomEditView">
+        <attr name="ceMaxLength" format="integer"/>
+        <attr name="ceHint" format="string"/>
+        <attr name="ceType" format="enum">
+            <enum name="normal" value="1"/>
+            <enum name="password" value="2"/>
+        </attr>
+        <attr name="ceLeftSrc" format="reference"/>
     </declare-styleable>
 </resources>
