@@ -1,6 +1,7 @@
 package com.yang.lib_common.widget
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.graphics.drawable.DrawableCompat
 import com.yang.lib_common.R
 
 /**
@@ -83,6 +85,8 @@ class ItemContentView:LinearLayout {
             obtainStyledAttributes.getBoolean(R.styleable.ItemContentView_itemLeftImgVisible, true)
         val leftImgSrc =
             obtainStyledAttributes.getResourceId(R.styleable.ItemContentView_itemLeftImgSrc, 0)
+        val leftImgTint =
+            obtainStyledAttributes.getResourceId(R.styleable.ItemContentView_itemLeftImgTint, 0)
 
         val rightContent = obtainStyledAttributes.getString(R.styleable.ItemContentView_itemRightContent)
         val rightImgVisible =
@@ -95,6 +99,8 @@ class ItemContentView:LinearLayout {
             obtainStyledAttributes.getBoolean(R.styleable.ItemContentView_redPointVisible, false)
         val rightImgSrc =
             obtainStyledAttributes.getResourceId(R.styleable.ItemContentView_itemRightImgSrc, 0)
+        val rightImgTint =
+            obtainStyledAttributes.getResourceId(R.styleable.ItemContentView_itemRightImgTint, 0)
         val itemBg = obtainStyledAttributes.getResourceId(
             R.styleable.ItemContentView_itemBg, 0
         )
@@ -111,6 +117,9 @@ class ItemContentView:LinearLayout {
 
         if (leftImgSrc != 0){
             ivLeft.setImageResource(leftImgSrc)
+            if (leftImgTint != 0){
+                DrawableCompat.setTint(ivLeft.drawable,context.getColor(leftImgTint))
+            }
         }
         if (rightImgVisible) {
             ivRight.visibility = View.VISIBLE
@@ -119,6 +128,9 @@ class ItemContentView:LinearLayout {
         }
         if (rightImgSrc != 0){
             ivRight.setImageResource(rightImgSrc)
+            if (rightImgTint != 0){
+                DrawableCompat.setTint(ivRight.drawable,context.getColor(rightImgTint))
+            }
         }
 
         if (rightContentVisible) {

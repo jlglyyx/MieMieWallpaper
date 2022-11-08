@@ -1,6 +1,8 @@
 package com.yang.module_mine.ui.activity
 
+import android.os.Environment
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.impl.ConfirmPopupView
@@ -12,11 +14,14 @@ import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.getMMKVValue
+import com.yang.lib_common.util.*
 import com.yang.module_mine.databinding.ActMineSettingsBinding
 import com.yang.module_mine.viewmodel.MineViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.io.File
 
 /**
  * @ClassName: SettingActivity
@@ -40,6 +45,8 @@ class MineSettingActivity : BaseActivity<ActMineSettingsBinding>() {
     }
 
     override fun initView() {
+
+
         val loginStatus = getMMKVValue(AppConstant.Constant.LOGIN_STATUS, -1)
         if (loginStatus == AppConstant.Constant.LOGIN_SUCCESS) {
             mViewBinding.tvLoginOut.visibility = View.VISIBLE
@@ -52,6 +59,31 @@ class MineSettingActivity : BaseActivity<ActMineSettingsBinding>() {
         }
         mViewBinding.icvChangePassword.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_CHANGE_PASSWORD_ACTIVITY).navigation()
+        }
+        mViewBinding.icvClearCache.rightContent = formatSize(externalCacheDirs.sumOf {
+            val allFileSize = getAllFileSize(it)
+            allFileSize
+        })
+        mViewBinding.icvClearCache.clicks().subscribe {
+
+            lifecycleScope.launch {
+                showDialog("清理中")
+                val async = async(Dispatchers.IO) {
+                    externalCacheDirs.forEach {
+                        deleteDirectory(it, this@MineSettingActivity)
+                    }
+                    true
+                }
+                if (async.await()){
+                    delay(2000)
+                    dismissDialog()
+                    mViewBinding.icvClearCache.rightContent = formatSize(externalCacheDirs.sumOf {
+                        val allFileSize = getAllFileSize(it)
+                        allFileSize
+                    })
+                }
+            }
+
         }
         mViewBinding.icvLoginOutAccount.clicks().subscribe {
             if (null == mConfirmPopupView) {

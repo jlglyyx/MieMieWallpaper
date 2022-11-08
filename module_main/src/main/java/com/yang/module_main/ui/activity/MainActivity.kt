@@ -1,12 +1,15 @@
 package com.yang.module_main.ui.activity
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
@@ -96,7 +99,9 @@ class MainActivity : BaseActivity<ActMainBinding>() {
 
             if (position == 0) {
                 tabView.ivImage.setImageResource(mSelectImages[position])
-                tabView.tvTitle.setTextColor(this@MainActivity.getColor(R.color.textColor))
+//                tabView.tvTitle.setTextColor(getColor(R.color.appColor))
+                DrawableCompat.setTintList(tabView.ivImage.drawable, ColorStateList.valueOf(
+                    getColor( R.color.appColor)))
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
 //                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
             } else {
@@ -123,6 +128,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
                     val ivImage = findViewById<ImageView>(R.id.iv_image)
                     tvTitle.setTextColor(this@MainActivity.getColor(R.color.textColor_666666))
                     ivImage.setImageResource(mImages[tab.position])
+                    DrawableCompat.setTintList(ivImage.drawable, null)
                 }
 
 
@@ -137,8 +143,10 @@ class MainActivity : BaseActivity<ActMainBinding>() {
                 customView?.apply {
                     val tvTitle = findViewById<TextView>(R.id.tv_title)
                     val ivImage = findViewById<ImageView>(R.id.iv_image)
-                    tvTitle.setTextColor(this@MainActivity.getColor(R.color.textColor))
+                    tvTitle.setTextColor(this@MainActivity.getColor(R.color.appColor))
                     ivImage.setImageResource(mSelectImages[tab.position])
+                    DrawableCompat.setTintList(ivImage.drawable, ColorStateList.valueOf(
+                        getColor( R.color.appColor)))
                 }
 //                tab.setIcon(mSelectImages[tab.position])
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =

@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -14,6 +15,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -22,6 +24,7 @@ import com.blankj.utilcode.util.ImageUtils.getImageType
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
+import com.huawei.hms.ads.kb
 import com.jakewharton.rxbinding4.view.clicks
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
@@ -29,6 +32,7 @@ import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.yang.lib_common.R
+import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
@@ -261,7 +265,11 @@ fun getVersionName(context: Context): String {
 /**
  * @return 获取指定文件大小
  */
-fun getAllFileSize(file: File): Long {
+fun getAllFileSize(file: File?): Long {
+
+    if (null == file){
+        return 0L
+    }
     var size = 0L
     if (file.isDirectory) {
         val listFiles = file.listFiles()
@@ -287,6 +295,7 @@ fun getAllFileSize(file: File): Long {
  * @return 格式化文件大小格式
  */
 fun formatSize(size: Long): String {
+
     Log.i(APP_UTILS_TAG, "formatSize: $size")
 
     val k = size.toFloat() / 1024
@@ -321,20 +330,30 @@ fun formatSize(size: Long): String {
 /**
  * @return 删除文件夹
  */
-fun deleteDirectory(file: File, context: Context) {
+fun deleteDirectory(file: File?, context: Context) {
     try {
+        if (null == file){
+            return
+        }
         if (file.isDirectory) {
-            file.listFiles()?.let {
-                if (it.isNotEmpty()) {
-                    for (mFile in it) {
-                        if (mFile.isDirectory) {
-                            deleteDirectory(file, context)
-                        } else {
-                            toDeleteFile(mFile, context)
+            if (file.listFiles() != null && file.listFiles().isNotEmpty()){
+                file.listFiles()?.let {
+                    if (it.isNotEmpty()) {
+                        for (mFile in it) {
+                            if (mFile.isDirectory) {
+                                deleteDirectory(mFile, context)
+                            } else {
+                                toDeleteFile(mFile, context)
+                            }
                         }
+                    }else{
+                        toDeleteFile(file, context)
                     }
                 }
+            }else{
+                toDeleteFile(file, context)
             }
+
         } else {
             toDeleteFile(file, context)
         }
@@ -467,6 +486,10 @@ fun getUriWithPath(context: Context, filePath: String): Uri {
     }
 }
 
+fun getSaveAlbumPath(dirName:String?,context: Context):String{
+    return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath+"/"+if (TextUtils.isEmpty(dirName)) context.packageName else dirName!!
+}
+
 /**
  * 保存文件到相册
  */
@@ -477,11 +500,8 @@ fun save2Album(source: File?, dirName: String?, context: Context) {
         return
     }
     try {
-        val safeDirName =
-            if (TextUtils.isEmpty(dirName)) context.packageName else dirName!!
         val dir = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
-            safeDirName
+            getSaveAlbumPath(dirName,context)
         )
         if (!dir.exists()) dir.mkdirs()
         val destFile: File = if (source.name.endsWith(".mp4")) {
@@ -652,6 +672,17 @@ fun Context.openGallery(
             }
 
         })
+}
+
+
+fun getTypeFace(path: String = "font/font_1.otf"): Typeface {
+    val assetManager = BaseApplication.baseApplication.assets
+    return Typeface.createFromAsset(assetManager, path)
+}
+
+fun TextView.changeTypeface(path: String = "font/font_1.otf") {
+    val tf: Typeface = getTypeFace(path)
+    this.typeface = tf
 }
 
 

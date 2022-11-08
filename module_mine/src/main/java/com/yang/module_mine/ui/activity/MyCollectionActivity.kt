@@ -16,17 +16,17 @@ import com.yang.module_mine.databinding.ActMyFansBinding
 import com.yang.module_mine.databinding.ActMyRightsBinding
 
 /**
- * @ClassName: MyFansActivity
+ * @ClassName: MyCollectionActivity
  * @Description:
  * @Author: yxy
  * @Date: 2022/8/4 17:09
  */
-@Route(path = AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY)
-class MyFansActivity : BaseActivity<ActMyFansBinding>() {
+@Route(path = AppConstant.RoutePath.MINE_MY_COLLECTION_ACTIVITY)
+class MyCollectionActivity : BaseActivity<ActMyFansBinding>() {
+
+    private var mTitles: MutableList<String> = arrayListOf("我的收藏", "我的下载")
 
     private var index = 0
-
-    private var mTitles : MutableList<String> = arrayListOf("关注","粉丝")
 
     private lateinit var mFragments: MutableList<Fragment>
 
@@ -36,13 +36,21 @@ class MyFansActivity : BaseActivity<ActMyFansBinding>() {
 
     override fun initData() {
         mFragments = mutableListOf()
-        mTitles.forEach { _ ->
-            mFragments.add( buildARouter(AppConstant.RoutePath.MINE_FANS_FRAGMENT)
-                .navigation() as Fragment
+        mFragments.add(
+            buildARouter(AppConstant.RoutePath.MINE_COLLECTION_FRAGMENT).withInt(
+                AppConstant.Constant.INDEX,
+                0
             )
-        }
-
-        index = intent.getIntExtra(AppConstant.Constant.INDEX,index)
+                .navigation() as Fragment
+        )
+        mFragments.add(
+            buildARouter(AppConstant.RoutePath.MINE_DOWN_FRAGMENT).withInt(
+                AppConstant.Constant.INDEX,
+                1
+            )
+                .navigation() as Fragment
+        )
+        index = intent.getIntExtra(AppConstant.Constant.INDEX, index)
     }
 
     override fun initView() {
@@ -73,7 +81,7 @@ class MyFansActivity : BaseActivity<ActMyFansBinding>() {
             view.overScrollMode = View.OVER_SCROLL_NEVER
         }
 
-        mViewBinding.viewPager.setCurrentItem(index,false)
+        mViewBinding.viewPager.setCurrentItem(index, false)
     }
 
     private fun initTabLayout() {

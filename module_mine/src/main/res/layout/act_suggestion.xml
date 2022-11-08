@@ -63,7 +63,7 @@
                 app:shape_radius="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_15"
                 android:paddingVertical="@dimen/dp_12"
-                app:shape_solidColor="@color/thistle"
+                app:shape_solidColor="@color/appColor"
                 android:enabled="false"
                 app:shape_solidDisabledColor="@color/grey_50"
                 app:layout_constraintTop_toBottomOf="@+id/set_suggestion"/>

@@ -181,6 +181,8 @@ interface AppConstant {
 
         const val MINE_MY_FANS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyFansActivity"
 
+        const val MINE_MY_COLLECTION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyCollectionActivity"
+
         const val MINE_MY_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyInfoActivity"
 
         const val MINE_TASK_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/TaskHistoryActivity"
@@ -188,6 +190,10 @@ interface AppConstant {
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
         const val MINE_FANS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MyFansFragment"
+
+        const val MINE_COLLECTION_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MyCollectionFragment"
+
+        const val MINE_DOWN_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MyDownFragment"
 
         const val MINE_EXCHANGE_STATUS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
 

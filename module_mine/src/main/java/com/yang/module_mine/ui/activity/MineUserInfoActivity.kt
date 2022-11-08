@@ -1,7 +1,6 @@
 package com.yang.module_mine.ui.activity
 
 
-import android.content.Intent
 import android.text.TextUtils
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -12,7 +11,6 @@ import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.proxy.InjectViewModelProxy
@@ -87,7 +85,7 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
     }
 
     private fun initRecyclerView(){
-        mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
+        mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_collection_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
                 imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()

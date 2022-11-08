@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">SHelp</string>
     <string name="string_input_account">请输入账号</string>
     <string name="string_input_password">请输入密码</string>
     <string name="string_confirm_password">请确认密码</string>

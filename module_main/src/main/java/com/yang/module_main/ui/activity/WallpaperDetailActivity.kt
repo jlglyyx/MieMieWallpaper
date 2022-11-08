@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.BarUtils
+import com.bytedance.tea.crash.R.string.app_name
 import com.google.gson.reflect.TypeToken
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.yang.apt_annotation.annotain.InjectViewModel
@@ -298,7 +299,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                             file.absolutePath
                         )
                     }
-                    save2Album(file, getString(R.string.app_name), this@WallpaperDetailActivity)
+                    save2Album(file, getString(com.yang.module_main.R.string.app_name), this@WallpaperDetailActivity)
                 }
 
                 override fun downStart() {

@@ -8,6 +8,7 @@
     <color name="colorBar">@color/cornflowerblue</color>
 
     <color name="appColor">#33cc33</color>
+    <color name="appColor_30">#3033cc33</color>
 
     <color name="textColor">#333333</color><!--黑色 -->
     <color name="textColor_999999">#999999</color><!--黑色 -->

@@ -16,10 +16,13 @@
         <attr name="itemLeftContent" format="string"/>
         <attr name="itemLeftImgVisible" format="boolean"/>
         <attr name="itemLeftImgSrc" format="reference"/>
+        <attr name="itemLeftImgTint" format="reference"/>
         <attr name="itemRightContent" format="string"/>
         <attr name="itemRightImgVisible" format="boolean"/>
         <attr name="itemRightImgSrc" format="reference"/>
+        <attr name="itemRightImgTint" format="reference"/>
         <attr name="itemRightContentVisible" format="boolean"/>
+        <attr name="itemRightContentColor" format="reference"/>
         <attr name="lineVisible" format="boolean"/>
         <attr name="redPointVisible" format="boolean"/>
         <attr name="itemBg" format="reference"/>

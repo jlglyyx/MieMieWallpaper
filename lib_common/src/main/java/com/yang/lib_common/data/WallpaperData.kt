@@ -21,6 +21,7 @@ class WallpaperData(){
     var title: String? = null
     var likeNum: Int? = null
     var extra: String? = null
+    var isEdit: Boolean = false
     var createTime: String? = null
     var updateTime: String? = null
 

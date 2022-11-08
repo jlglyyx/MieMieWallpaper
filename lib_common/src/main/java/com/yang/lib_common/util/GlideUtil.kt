@@ -157,6 +157,9 @@ fun getRealUrl(url: String?):String?{
     var realUrl = url
     if (realUrl != null) {
         if (!realUrl.contains("http")){
+            if (realUrl.contains("/storage")){
+                return realUrl
+            }
             realUrl = AppConstant.ClientInfo.IMAGE_MODULE+realUrl
         }
     }

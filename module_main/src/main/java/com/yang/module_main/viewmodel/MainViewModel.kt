@@ -107,8 +107,8 @@ class MainViewModel @Inject constructor(
         },{
             mWallpaperTabData.postValue(it.data)
         },{
-
-        },messages = arrayOf("加载中...","加载成功!"))
+          requestFail()
+        },errorDialog = false)
     }
 
 

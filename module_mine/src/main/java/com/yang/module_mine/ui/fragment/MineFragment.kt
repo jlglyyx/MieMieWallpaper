@@ -49,6 +49,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
 
     private var buildBitmap: Bitmap? = null
 
+
     override fun initViewBinding(): FraMineBinding {
         return bind(FraMineBinding::inflate)
     }
@@ -74,8 +75,14 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
         mViewBinding.clHeadLogin.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(AppConstant.Constant.ID,UserInfoHold.userId).navigation()
         }
-        mViewBinding.icvMyBalance.clicks().subscribe {
+        mViewBinding.llWallet.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_MY_BALANCE_ACTIVITY).navigation()
+        }
+        mViewBinding.tvWalletDetail.clicks().subscribe {
+
+        }
+        mViewBinding.icvMyWork.clicks().subscribe {
+
         }
         mViewBinding.icvMyRights.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_MY_RIGHTS_ACTIVITY).navigation()
@@ -135,10 +142,16 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             }
         }
         mViewBinding.llAttention.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY).withInt(AppConstant.Constant.INDEX,0).navigation()
         }
         mViewBinding.llFan.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY).withInt(AppConstant.Constant.INDEX,1).navigation()
+        }
+        mViewBinding.icvMyCollection.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_MY_COLLECTION_ACTIVITY).withInt(AppConstant.Constant.INDEX,0).navigation()
+        }
+        mViewBinding.icvMyDown.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_MY_COLLECTION_ACTIVITY).withInt(AppConstant.Constant.INDEX,1).navigation()
         }
 
 

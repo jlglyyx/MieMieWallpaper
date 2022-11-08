@@ -68,7 +68,6 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
             commonToolBar.searchListener = object :CommonSearchToolBar.OnSearchListener{
                 override fun onSearch(text: String) {
                     doSearch(text)
-                    showShort(text)
                 }
             }
             commonToolBar.etSearch.doOnTextChanged { text, start, before, count ->

@@ -24,6 +24,7 @@ import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.showShort
+import com.yang.lib_common.widget.ErrorReLoadView
 import com.yang.module_main.R
 import com.yang.module_main.databinding.FraMainBinding
 import com.yang.module_main.ui.dialog.FilterDialog
@@ -88,9 +89,15 @@ class MainFragment : BaseFragment<FraMainBinding>() {
                 }).show()
         }
 
+        mViewBinding.errorReLoadView.onClick = {
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
+            mainViewModel.getTabs(0)
+        }
+
     }
 
     override fun initData() {
+        mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
         mainViewModel.getTabs(0)
     }
 
@@ -136,7 +143,7 @@ class MainFragment : BaseFragment<FraMainBinding>() {
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
         mainViewModel.mWallpaperTabData.observe(this) {
-
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.NORMAL
             it.mapIndexed { index, wallpaperTabData ->
                 mFragments.add(
                     buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
@@ -151,7 +158,9 @@ class MainFragment : BaseFragment<FraMainBinding>() {
             initViewPager()
             initTabLayout()
         }
-
+        mainViewModel.uC.requestFailEvent.observe(this){
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.ERROR
+        }
 
     }
 
