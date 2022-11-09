@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:text="133****9654"
-        android:textColor="@color/textColor"
+        android:textColor="@color/textColor_666666"
         android:textSize="@dimen/sp_14"
         app:layout_constraintLeft_toLeftOf="@+id/tv_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -47,11 +47,14 @@
     <com.hjq.shape.view.ShapeTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="关注"
-        app:shape_radius="@dimen/dp_5"
-        android:paddingHorizontal="@dimen/dp_8"
-        android:paddingVertical="@dimen/dp_2"
-        app:shape_solidColor="@color/grey_1f"
+        android:text="+关注"
+        android:textSize="@dimen/sp_14"
+        app:shape_radius="@dimen/dp_12"
+        android:textColor="@color/appColor"
+        android:paddingHorizontal="@dimen/dp_10"
+        android:paddingVertical="@dimen/dp_3"
+        app:shape_strokeWidth="@dimen/dp_1"
+        app:shape_strokeColor="@color/appColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

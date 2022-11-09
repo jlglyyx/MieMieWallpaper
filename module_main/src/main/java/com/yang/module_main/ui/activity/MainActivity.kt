@@ -64,7 +64,8 @@ class MainActivity : BaseActivity<ActMainBinding>() {
 
     override fun initData() {
         mFragments = mutableListOf<Fragment>().apply {
-            add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_STATIC_TYPE).navigation() as Fragment)
+            //add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE).navigation() as Fragment)
 //            add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
             add(buildARouter(AppConstant.RoutePath.MINE_FRAGMENT).navigation() as Fragment)
         }
@@ -99,7 +100,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
 
             if (position == 0) {
                 tabView.ivImage.setImageResource(mSelectImages[position])
-//                tabView.tvTitle.setTextColor(getColor(R.color.appColor))
+                tabView.tvTitle.setTextColor(getColor(R.color.appColor))
                 DrawableCompat.setTintList(tabView.ivImage.drawable, ColorStateList.valueOf(
                     getColor( R.color.appColor)))
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
@@ -160,6 +161,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
     override fun initViewModel() {
 
         InjectViewModelProxy.inject(this)
+
 //        showReward()
 //        showInterstitial()
 //        showFullscreen()

@@ -1,6 +1,7 @@
 package com.yang.lib_common.util
 
 import android.Manifest
+import android.app.Activity
 import android.app.WallpaperManager
 import android.app.WallpaperManager.FLAG_LOCK
 import android.app.WallpaperManager.FLAG_SYSTEM
@@ -20,6 +21,7 @@ import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.RomUtils
 import com.blankj.utilcode.util.Utils
 import com.lxj.xpopup.XPopup
+import com.yang.lib_common.R
 import com.yang.lib_common.service.CustomWallpaperService
 import java.io.File
 import java.io.FileInputStream
@@ -57,6 +59,7 @@ class WallpaperUtil {
         fun setStaticWallpaper(context: Context, path: String) {
             try {
                 val uri = getUriWithPath(context, path)
+                Log.i(TAG, "setStaticWallpaper: $path  $uri")
                 val intent: Intent
                 val componentName: ComponentName
                 when {
@@ -105,6 +108,7 @@ class WallpaperUtil {
                 intent.putExtra("mimeType", "image/*")
                 intent.component = componentName
                 context.startActivity(intent)
+                (context as Activity).overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 
 
             } catch (e: Exception) {

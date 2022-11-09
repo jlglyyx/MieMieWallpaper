@@ -79,6 +79,8 @@ interface AppConstant {
         const val MY_COLLECTION_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionFragment"
         const val MY_DOWNLOAD_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyDownLoadFragment"
         const val SEARCH_WALLPAPER_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/SearchWallpaperFragment"
+        const val SEARCH_USER_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/SearchUserFragment"
+        const val SEARCH_DYNAMIC_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/SearchDynamicFragment"
 
         /**
          * task
@@ -237,7 +239,11 @@ interface AppConstant {
 
         const val ORDER = "order"
 
+        const val TAB_ID = "tabId"
+
         const val INDEX = "index"
+
+        const val IS_COLLECTION = "isCollection"
 
         const val CONTENT = "content"
 
@@ -259,6 +265,7 @@ interface AppConstant {
 
         const val KEYWORD = "keyword"
 
+
         const val LOCATION = "location"
 
         const val PHONE = "phone"
@@ -272,6 +279,10 @@ interface AppConstant {
         const val VERIFICATION = "verification"
 
         const val WALL_TYPE = "wallType"
+
+        const val WALL_STATIC_TYPE = 0
+
+        const val WALL_VIDEO_TYPE = 1
 
         const val NUM_MINUS_ONE = -1
 

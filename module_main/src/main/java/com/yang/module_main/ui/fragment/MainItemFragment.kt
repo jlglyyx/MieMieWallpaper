@@ -1,6 +1,7 @@
 package com.yang.module_main.ui.fragment
 
 import android.graphics.drawable.ColorDrawable
+import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
@@ -24,8 +25,8 @@ import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.module_main.R
 import com.yang.lib_common.data.WallpaperData
-import com.yang.lib_common.data.WallpaperTopData
 import com.yang.module_main.databinding.FraMainItemBinding
+import com.yang.module_main.databinding.ViewMainRvHeadBinding
 import com.yang.module_main.ui.dialog.FilterDialog
 import com.yang.module_main.viewmodel.MainViewModel
 import com.youth.banner.config.IndicatorConfig
@@ -46,6 +47,10 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMo
     @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
+    private val mViewMainRvHeadBinding by lazy {
+        ViewMainRvHeadBinding.inflate(LayoutInflater.from(requireContext()))
+    }
+
     private lateinit var mAdapter: BaseQuickAdapter<WallpaperData, BaseViewHolder>
 
     //    private lateinit var mTopAdapter: BaseQuickAdapter<WallpaperTopData, BaseViewHolder>
@@ -59,14 +64,17 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMo
     override fun initView() {
         tabIndex = arguments?.getInt(AppConstant.Constant.TYPE) ?: 0
         tabId = arguments?.getString(AppConstant.Constant.ID, "") ?: ""
+        mainViewModel.wallType = arguments?.getInt(AppConstant.Constant.WALL_TYPE) ?:mainViewModel.wallType
 //        initBanner()
         initRecyclerView()
         mViewBinding.smartRefreshLayout.setOnRefreshLoadMoreListener(this)
         registerRefreshAndRecyclerView(mViewBinding.smartRefreshLayout, mAdapter)
 
-        mViewBinding.llSort.setOnClickListener {
+
+
+        mViewMainRvHeadBinding.llSort.setOnClickListener {
             XPopup.Builder(requireContext())
-                .atView(mViewBinding.llSort)
+                .atView(mViewMainRvHeadBinding.llSort)
                 .hasShadowBg(true) // 去掉半透明背景
                 .popupPosition(PopupPosition.Bottom)
                 .asCustom(FilterDialog(requireContext()).apply {
@@ -86,7 +94,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMo
                         })
                         mAdapter.setOnItemClickListener { _, _, position ->
                             val item = mAdapter.getItem(position)
-                            mViewBinding.tvTitle.text = item
+                            mViewMainRvHeadBinding.tvTitle.text = item
                             mainViewModel.pageNum = 1
                             mainViewModel.order = position
                             mainViewModel.getWallpaper(tabId)
@@ -102,7 +110,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMo
     }
 
     private fun initBanner() {
-        mViewBinding.banner.addBannerLifecycleObserver(this)
+        mViewMainRvHeadBinding.banner.addBannerLifecycleObserver(this)
             .setAdapter(MBannerAdapter(mutableListOf<BannerBean>().apply {
                 add(BannerBean("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201606%2F23%2F20160623142756_YyXNw.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660986299&t=9fc850da14dfd73a1d7c1c3f068e3d57"))
                 add(BannerBean("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201607%2F29%2F20160729224352_rVhZA.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660986299&t=326f6993d0c1ee5c0048b33fe9f0a6dc"))
@@ -120,8 +128,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMo
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()
-                loadSpaceRadius(mContext, item.imageUrl, 20f, imageView, 2, 10f)
+                loadSpaceRadius(mContext, item.imageUrl, 10f, imageView, 2, 10f)
                 helper.setText(R.id.tv_title,item.title)
                 .setText(R.id.tv_like_num,"${item.likeNum}")
                     .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
@@ -131,12 +138,14 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMo
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    Glide.with(mContext).resumeRequests();
+                    Glide.with(mContext).resumeRequests()
                 } else {
-                    Glide.with(mContext).pauseRequests();
+                    Glide.with(mContext).pauseRequests()
                 }
             }
         })
+
+        mAdapter.addHeaderView(mViewMainRvHeadBinding.root)
 
         mViewBinding.recyclerView.adapter = mAdapter
 

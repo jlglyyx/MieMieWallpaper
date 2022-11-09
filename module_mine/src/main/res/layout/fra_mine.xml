@@ -460,7 +460,8 @@
                     app:itemLeftContent="我的会员"
                     app:itemLeftImgSrc="@drawable/iv_vip"
                     app:itemLeftImgTint="@color/firebrick"
-                    app:itemRightContent="2022-12-01到期" />
+                    app:itemRightContentColor="@color/firebrick"
+                    app:itemRightContent="限时优惠,立即开通" />
 
                 <com.yang.lib_common.widget.ItemContentView
                     android:id="@+id/icv_my_work"

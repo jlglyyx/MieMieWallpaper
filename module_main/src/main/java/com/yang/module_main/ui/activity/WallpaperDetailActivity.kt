@@ -49,6 +49,10 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
 
     private var index = -1
 
+    private var keyword = ""
+
+    private var isCollection = false
+
     override fun initViewBinding(): ActWallpaperDetailBinding {
         return bind(ActWallpaperDetailBinding::inflate)
     }
@@ -62,8 +66,15 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             intent.getIntExtra(AppConstant.Constant.ORDER, order)
         index =
             intent.getIntExtra(AppConstant.Constant.INDEX, index)
+
         mainViewModel.pageNum =
             intent.getIntExtra(AppConstant.Constant.PAGE_NUMBER, 0)+1
+
+        isCollection =
+            intent.getBooleanExtra(AppConstant.Constant.IS_COLLECTION, isCollection)
+
+        keyword = intent.getStringExtra(AppConstant.Constant.KEYWORD)?:keyword
+
         mWallpaperDataList?.apply {
             if (index != -1) {
                 mWallpaperData = this[index]
@@ -73,7 +84,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                         preload(this@WallpaperDetailActivity,it.imageUrl)
                     }
                     mainViewModel.order = order
-                    mainViewModel.getWallpaper(it.tabId)
+                    mainViewModel.getWallpaper(it.tabId,keyword,isCollection)
                     mWallpaperViewPagerAdapter.addDataAll(this)
                     mViewBinding.viewPager.setCurrentItem(index,false)
 
@@ -96,7 +107,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         mViewBinding.smartRefreshLayout.setOnLoadMoreListener {
             mWallpaperData?.let {
                 mainViewModel.pageNum++
-                mainViewModel.getWallpaper(it.tabId)
+                mainViewModel.getWallpaper(it.tabId,keyword,isCollection)
             }
 
         }
@@ -204,9 +215,11 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                 holder.clControl.visibility = View.GONE
             }
             holder.stvSetWallpaper.clicks().subscribe {
+                data[position].imageName = "${System.currentTimeMillis()}.jpg"
                 downAndSetWallpaper(data[position].imageUrl?:"", data[position].imageName?:"")
             }
             holder.iivDown.clicks().subscribe {
+                data[position].imageName = "${System.currentTimeMillis()}.jpg"
                 downAndSetWallpaper(data[position].imageUrl?:"", data[position].imageName?:"", true)
             }
             try {
@@ -287,7 +300,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         justDown: Boolean = false
     ) {
         MultiMoreThreadDownload.Builder(this)
-            .parentFilePath(cacheDir.absolutePath)
+            .parentFilePath(externalCacheDir?.absolutePath?:cacheDir.absolutePath)
             .filePath(imageName).fileUrl(AppConstant.ClientInfo.IMAGE_MODULE + imageUrl)
             .downListener(object : MultiMoreThreadDownload.DownListener {
                 override fun downSuccess(file: File) {

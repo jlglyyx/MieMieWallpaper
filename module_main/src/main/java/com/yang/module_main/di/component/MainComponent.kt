@@ -8,9 +8,7 @@ import com.yang.module_main.di.module.MainModule
 import com.yang.module_main.ui.activity.LoginActivity
 import com.yang.module_main.ui.activity.SearchWallpaperActivity
 import com.yang.module_main.ui.activity.WallpaperDetailActivity
-import com.yang.module_main.ui.fragment.MainFragment
-import com.yang.module_main.ui.fragment.MainItemFragment
-import com.yang.module_main.ui.fragment.SearchWallpaperFragment
+import com.yang.module_main.ui.fragment.*
 import dagger.Component
 
 /**
@@ -33,7 +31,6 @@ interface MainComponent {
 //
 //    fun inject(inject: TaskDetailActivity)
 
-
     fun inject(inject: MainFragment)
 
     fun inject(inject: MainItemFragment)
@@ -43,6 +40,10 @@ interface MainComponent {
     fun inject(inject: LoginActivity)
 
     fun inject(inject: SearchWallpaperFragment)
+
+    fun inject(inject: SearchDynamicFragment)
+
+    fun inject(inject: SearchUserFragment)
 
     fun inject(inject: SearchWallpaperActivity)
 

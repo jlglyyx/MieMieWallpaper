@@ -88,7 +88,6 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_collection_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()
                 loadSpaceRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image),3,30f)
                 helper.setText(R.id.tv_title,item.title)
                     .setText(R.id.tv_like_num,"${item.likeNum}")

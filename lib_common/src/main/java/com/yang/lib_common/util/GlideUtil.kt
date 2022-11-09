@@ -24,7 +24,9 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
+import com.hjq.shape.view.ShapeImageView
 import com.shuyu.gsyvideoplayer.utils.CommonUtil.dip2px
+import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.interceptor.UrlInterceptor.Companion.url
 
@@ -49,6 +51,8 @@ fun preload(mContext: Context, url: String?) {
 fun loadImage(mContext: Context, url: String?, imageView: ImageView) {
     Glide.with(mContext).asBitmap()
         .load(getRealUrl(url))
+        .placeholder(R.drawable.iv_image_placeholder)
+        .error(R.drawable.iv_image_error)
         .into(imageView)
 }
 
@@ -56,6 +60,8 @@ fun loadCircle(mContext: Context, url: String?, imageView: ImageView) {
     val options = RequestOptions.circleCropTransform()
     Glide.with(mContext).asBitmap()
         .load(getRealUrl(url))
+        .placeholder(R.drawable.iv_image_placeholder)
+        .error(R.drawable.iv_image_error)
         .apply(options)
         .into(imageView)
 }
@@ -92,13 +98,9 @@ fun loadRadius(mContext: Context, url: String?,radius:Float, imageView: ImageVie
         .load(getRealUrl(url))
         .into(imageView)
 }
-fun loadSpaceRadius(mContext: Context, url: String?,radius:Float, imageView: ImageView,count:Int = 1,space:Float = 0f) {
-    val options = RequestOptions.bitmapTransform(RoundedCorners(radius.toInt()))
-    val shapeDrawable = ShapeDrawable()
-    shapeDrawable.apply {
-        shape = RoundRectShape(FloatArray(8){radius}, null, null)
-        paint.color = getRandomColor()
-    }
+fun loadSpaceRadius(mContext: Context, url: String?, radius:Float, imageView: ShapeImageView, count:Int = 1, space:Float = 0f) {
+    imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).setRadius((radius+2f).dip2px(mContext).toFloat()).intoBackground()
+    val options = RequestOptions.bitmapTransform(RoundedCorners(radius.dip2px(mContext)))
     var width = 0
     var height = 0
     Glide.with(mContext).asBitmap()
@@ -109,24 +111,24 @@ fun loadSpaceRadius(mContext: Context, url: String?,radius:Float, imageView: Ima
             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                 width = getScreenPx(mContext)[0]/count - space.dip2px(mContext)
                 height = (((getScreenPx(mContext)[0]/count -space.dip2px(mContext))/resource.width.toFloat())*resource.height).toInt()
-
-//                val layoutParams = imageView.layoutParams
-//                layoutParams.width = width
-//                layoutParams.height = height
-//                imageView.layoutParams = layoutParams
-//                shapeDrawable.setBounds(0,0,width,height)
             }
         })
-//    imageView.background = shapeDrawable
     Glide.with(mContext).asBitmap()
         .load(getRealUrl(url))
         .dontAnimate()
-        .placeholder(shapeDrawable)
-        .error(shapeDrawable)
         .fitCenter()
         .apply(options)
         .override(width,height)
         .into(imageView)
+//    Glide.with(mContext).asBitmap()
+//        .load(getRealUrl(url))
+//        .dontAnimate()
+//        .placeholder(R.drawable.iv_image_placeholder)
+//        .error(R.drawable.iv_image_error)
+//        .fitCenter()
+//        .apply(options)
+//        .override(width,height)
+//        .into(imageView)
 }
 
 fun loadBgImage(mContext: Context, url: String?,imageView: ImageView){

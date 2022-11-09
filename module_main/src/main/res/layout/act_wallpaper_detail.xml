@@ -29,6 +29,7 @@
         app:leftImgVisible="true"
         app:rightImgVisible="true"
         android:id="@id/commonToolBar"
+        app:mTitleTextColor="@color/white"
         app:rightImgSrc="@drawable/iv_ellipsis"
         app:layout_constraintTop_toTopOf="parent"/>
 

@@ -23,13 +23,13 @@ import com.yang.module_main.viewmodel.WallpaperViewModel
 
 
 /**
- * @ClassName: SearchWallpaperFragment
+ * @ClassName: SearchUserFragment
  * @Description:
  * @Author: yxy
  * @Date: 2022/9/30 16:31
  */
-@Route(path = AppConstant.RoutePath.SEARCH_WALLPAPER_FRAGMENT)
-class SearchWallpaperFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,OnRefreshLoadMoreListener{
+@Route(path = AppConstant.RoutePath.SEARCH_USER_FRAGMENT)
+class SearchUserFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,OnRefreshLoadMoreListener{
 
     @InjectViewModel
     lateinit var wallpaperViewModel: WallpaperViewModel

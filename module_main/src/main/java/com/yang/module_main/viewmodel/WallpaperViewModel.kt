@@ -22,15 +22,20 @@ class WallpaperViewModel @Inject constructor(
 
     var keyword = ""
 
+    var wallType = 0
+
     var pageNum = 1
 
     val mWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
 
     val mSearchFindData = MutableLiveData<MutableList<SearchFindData>>()
 
+    /**
+     * 关键字搜索壁纸
+     */
     fun getWallpaper() {
         launch({
-            params["tabId"] = "1"
+            params[AppConstant.Constant.WALL_TYPE] = wallType
             params[AppConstant.Constant.KEYWORD] = keyword
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
             params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
@@ -45,7 +50,6 @@ class WallpaperViewModel @Inject constructor(
 
     fun getSearchFind() {
         launch({
-            params["tabId"] = "1"
             params[AppConstant.Constant.KEYWORD] = keyword
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
             params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT

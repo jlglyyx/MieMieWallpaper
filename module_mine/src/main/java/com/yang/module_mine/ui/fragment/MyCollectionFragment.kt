@@ -1,7 +1,10 @@
 package com.yang.module_mine.ui.fragment
 
 import android.util.Log
+import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.hjq.shape.view.ShapeImageView
@@ -56,25 +59,41 @@ class MyCollectionFragment : BaseLazyFragment<FraMyFansBinding>(), OnRefreshLoad
             BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_collection_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()
-                loadSpaceRadius(mContext, item.imageUrl, 10f, helper.getView(R.id.iv_image), 4, 30f)
+                loadSpaceRadius(mContext, item.imageUrl, 10f, imageView, 4, 30f)
                 helper.setText(R.id.tv_title, item.title)
                     .setText(R.id.tv_like_num, "${item.likeNum}")
                     .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }
         }
+        mViewBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Glide.with(mContext).resumeRequests()
+                } else {
+                    Glide.with(mContext).pauseRequests()
+                }
+            }
+        })
         mViewBinding.recyclerView.adapter = mAdapter
 
 
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mAdapter.getItem(position)
             item?.let {
-//                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
-//                    .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(requireContext(), com.yang.lib_common.R.anim.fade_in, com.yang.lib_common.R.anim.fade_out))
-//                    .withString(AppConstant.Constant.DATA,mAdapter.data.toJson())
-//                    .withInt(AppConstant.Constant.INDEX,position)
-//                    .withInt(AppConstant.Constant.PAGE_NUMBER,wallpaperViewModel.pageNum)
-//                    .navigation()
+                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
+                    .withOptionsCompat(
+                        ActivityOptionsCompat.makeCustomAnimation(
+                            requireContext(),
+                            com.yang.lib_common.R.anim.fade_in,
+                            com.yang.lib_common.R.anim.fade_out
+                        )
+                    )
+                    .withString(AppConstant.Constant.DATA, mAdapter.data.toJson())
+                    .withBoolean(AppConstant.Constant.IS_COLLECTION, true)
+                    .withInt(AppConstant.Constant.INDEX, position)
+                    .withInt(AppConstant.Constant.PAGE_NUMBER, mineViewModel.pageNum)
+                    .navigation()
             }
         }
 
@@ -97,13 +116,13 @@ class MyCollectionFragment : BaseLazyFragment<FraMyFansBinding>(), OnRefreshLoad
     override fun onRefresh(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum = 1
-        mineViewModel.getCollectionWallpaper()
+        mineViewModel.getWallpaper()
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum++
-        mineViewModel.getCollectionWallpaper()
+        mineViewModel.getWallpaper()
 
     }
 }

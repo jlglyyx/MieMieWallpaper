@@ -71,8 +71,8 @@ class TestView : View , ILifecycleObserver {
     }
 
     private fun init() {
-        mDisBitmap = BitmapFactory.decodeResource(resources, R.drawable.a)
-        mSrcBitmap = BitmapFactory.decodeResource(resources, R.drawable.b)
+        mDisBitmap = BitmapFactory.decodeResource(resources, R.drawable.iv_password_visibility)
+        mSrcBitmap = BitmapFactory.decodeResource(resources, R.drawable.iv_password_visibility)
         mShadowDisBitmap = mDisBitmap.extractAlpha()
 
         mPaint = Paint(Paint.ANTI_ALIAS_FLAG)

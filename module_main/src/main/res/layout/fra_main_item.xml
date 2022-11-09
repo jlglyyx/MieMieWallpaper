@@ -14,96 +14,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:overScrollMode="never">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <com.youth.banner.Banner
-                    android:id="@id/banner"
-                    android:visibility="gone"
-                    android:layout_marginVertical="@dimen/dp_8"
-                    android:layout_width="match_parent"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_height="@dimen/dp_160" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/top_recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:overScrollMode="never"
-                    android:paddingVertical="@dimen/dp_10"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dp_5"
-                    android:layout_marginVertical="@dimen/dp_5"
-                    android:orientation="horizontal">
-                    <com.hjq.shape.view.ShapeTextView
-                        android:layout_width="@dimen/dp_5"
-                        android:layout_height="match_parent"
-                        app:shape_radius="@dimen/dp_2"
-                        android:layout_marginVertical="@dimen/dp_4"
-                        app:shape_solidColor="@color/colorBar"/>
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/sp_14"
-                        android:textColor="@color/textColor"
-                        android:layout_height="match_parent"
-                        android:textStyle="bold"
-                        android:id="@+id/tv_title"
-                        android:layout_marginHorizontal="@dimen/dp_6"
-                        android:gravity="center_vertical"
-                        android:text="最新上传"/>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ll_sort"
-                        android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:textSize="@dimen/sp_14"
-                        android:textColor="@color/textColor"
-                        android:textStyle="bold"
-                        android:gravity="center"
-                        android:text="排序"/>
-                    <ImageView
-                        android:layout_width="@dimen/dp_30"
-                        android:layout_height="@dimen/dp_30"
-                        android:textSize="@dimen/sp_16"
-                        android:textColor="@color/textColor"
-                        android:padding="@dimen/dp_5"
-                        android:src="@drawable/iv_sort"
-                        app:tint="@color/textColor"
-                        android:text="排序"/>
-                    </LinearLayout>
-
-                </LinearLayout>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:overScrollMode="never"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2" />
-
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2" />
 
         <com.scwang.smart.refresh.footer.ClassicsFooter
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srlFinishDuration="10"/>
+            app:srlFinishDuration="10" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </LinearLayout>

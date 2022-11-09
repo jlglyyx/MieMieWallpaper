@@ -104,6 +104,9 @@ class ItemContentView:LinearLayout {
         val itemBg = obtainStyledAttributes.getResourceId(
             R.styleable.ItemContentView_itemBg, 0
         )
+        val itemRightContentColor = obtainStyledAttributes.getResourceId(
+            R.styleable.ItemContentView_itemRightContentColor, 0
+        )
         if (itemBg != 0) {
             llLl.setBackgroundResource(itemBg)
         }
@@ -135,6 +138,9 @@ class ItemContentView:LinearLayout {
 
         if (rightContentVisible) {
             tvRightContent.visibility = View.VISIBLE
+            if (itemRightContentColor != 0){
+                tvRightContent.setTextColor(context.getColor(itemRightContentColor))
+            }
         } else {
             tvRightContent.visibility = View.GONE
         }
@@ -148,6 +154,8 @@ class ItemContentView:LinearLayout {
         } else {
             ibRed.visibility = View.GONE
         }
+
+
         obtainStyledAttributes.recycle()
     }
 

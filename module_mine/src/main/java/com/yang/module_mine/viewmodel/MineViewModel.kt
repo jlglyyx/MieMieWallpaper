@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.*
@@ -142,26 +143,15 @@ class MineViewModel @Inject constructor(
     }
 
 
+
+
+
+    /**
+     * 获取收藏壁纸
+     */
     fun getWallpaper() {
         launch({
-            params["tabId"] = "1"
-            params[AppConstant.Constant.KEYWORD] = keyword
-            params[AppConstant.Constant.PAGE_NUMBER] = pageNum
-            params[AppConstant.Constant.PAGE_SIZE] = 3
-            mineRepository.getWallpaper(params)
-        }, {
-            mWallpaperData.postValue(it.data.list)
-        }, {
-            cancelRefreshLoadMore()
-            showRecyclerViewErrorEvent()
-        }, errorDialog = false)
-    }
-
-
-    fun getCollectionWallpaper() {
-        launch({
-            params["tabId"] = "1"
-            params[AppConstant.Constant.KEYWORD] = keyword
+            params[AppConstant.Constant.USER_ID] = UserInfoHold.userId
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
             params[AppConstant.Constant.PAGE_SIZE] = 3
             mineRepository.getWallpaper(params)

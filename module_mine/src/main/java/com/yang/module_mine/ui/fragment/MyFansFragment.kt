@@ -1,7 +1,9 @@
 package com.yang.module_mine.ui.fragment
 
+import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -34,6 +36,8 @@ class MyFansFragment : BaseLazyFragment<FraMyFansBinding>() ,OnRefreshLoadMoreLi
 
     private lateinit var mAdapter: BaseQuickAdapter<String, BaseViewHolder>
 
+    private var fanType = 0
+
     override fun initViewBinding(): FraMyFansBinding {
         return bind(FraMyFansBinding::inflate)
     }
@@ -45,6 +49,7 @@ class MyFansFragment : BaseLazyFragment<FraMyFansBinding>() ,OnRefreshLoadMoreLi
     }
 
     override fun initData() {
+        fanType = arguments?.getInt(AppConstant.Constant.TYPE) ?:fanType
         onRefresh(mViewBinding.smartRefreshLayout)
 
     }
@@ -53,14 +58,14 @@ class MyFansFragment : BaseLazyFragment<FraMyFansBinding>() ,OnRefreshLoadMoreLi
 
         mAdapter = object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_fans) {
             override fun convert(helper: BaseViewHolder, item: String) {
-//                val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-//                imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()
-//                loadSpaceRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image),3,30f)
+                val imageView = helper.getView<ImageView>(R.id.iv_image)
+                imageView.loadCircle(mContext,"https://img1.baidu.com/it/u=1924711271,453761707&fm=253&fmt=auto&app=138&f=JPG?w=500&h=500")
 //                helper.setText(R.id.tv_title,item.title)
 //                    .setText(R.id.tv_like_num,"${item.likeNum}")
 //                    .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }
         }
+        mViewBinding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mViewBinding.recyclerView.adapter = mAdapter
 
         mAdapter.setNewData(mutableListOf<String>().apply {

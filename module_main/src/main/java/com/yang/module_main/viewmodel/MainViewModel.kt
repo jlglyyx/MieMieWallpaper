@@ -6,10 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.util.showShort
 import com.yang.lib_common.util.updateUserInfo
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.data.WallpaperTabData
+import com.yang.lib_common.data.WallpaperTypeData
 import com.yang.lib_common.util.setMMKVValue
 import com.yang.module_main.repository.MainRepository
 import javax.inject.Inject
@@ -41,11 +43,15 @@ class MainViewModel @Inject constructor(
 
     var order = 0
 
+    var wallType = 0
+
 //    val taskLiveData = MutableLiveData<MutableList<TaskData>>()
 
     val pictureListLiveData = MutableLiveData<MutableList<String>>()
 
     val mWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
+
+    val mWallpaperTypeData = MutableLiveData<MutableList<WallpaperTypeData>>()
 
     val mWallpaperTabData = MutableLiveData<MutableList<WallpaperTabData>>()
 //
@@ -101,7 +107,23 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun getTabs(wallType:Int){
+    /**
+     * 获取壁纸类型
+     */
+    fun getWallType(){
+        launch({
+            mainRepository.getWallType()
+        },{
+            mWallpaperTypeData.postValue(it.data)
+        },{
+          requestFail()
+        },errorDialog = false)
+    }
+
+    /**
+     * 获取壁纸类型 - 类型
+     */
+    fun getTabs(){
         launch({
             mainRepository.getTabs(wallType)
         },{
@@ -112,15 +134,20 @@ class MainViewModel @Inject constructor(
     }
 
 
-
-    fun getWallpaper(tabId:String?,keyword:String = ""){
+    /**
+     * 关键字查询 收藏查询 tab查询
+     */
+    fun getWallpaper(tabId:String?,keyword:String = "",isCollection:Boolean = false){
         launch({
-            if (TextUtils.isEmpty(keyword)){
-                params[AppConstant.Constant.ORDER] = order
-                params["tabId"] = tabId
-            }else{
+            if (!TextUtils.isEmpty(keyword)){
                 params[AppConstant.Constant.KEYWORD] = keyword
+            }else if (isCollection){
+                params[AppConstant.Constant.USER_ID] = UserInfoHold.userId
+            }else{
+                params[AppConstant.Constant.ORDER] = order
+                params[AppConstant.Constant.TAB_ID] = tabId
             }
+            params[AppConstant.Constant.WALL_TYPE] = wallType
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
             params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
             mainRepository.getWallpaper(params)

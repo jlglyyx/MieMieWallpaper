@@ -548,7 +548,7 @@ fun save2Album(source: File?, dirName: String?, context: Context) {
                     }
                 contentValues.put(
                     MediaStore.Images.Media.RELATIVE_PATH,
-                    Environment.DIRECTORY_DCIM + "/" + context.packageName
+                    Environment.DIRECTORY_DCIM + "/" + dirName
                 )
             }
 

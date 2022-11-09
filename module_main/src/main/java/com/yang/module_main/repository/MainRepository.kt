@@ -7,6 +7,7 @@ import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.module_main.api.MainApi
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.data.WallpaperTabData
+import com.yang.lib_common.data.WallpaperTypeData
 import com.yang.module_main.data.SearchFindData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -39,6 +40,11 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) :BaseRepo
     }
 
 
+    suspend fun getWallType(): MResult<MutableList<WallpaperTypeData>> {
+        return withContextIO {
+            mainApi.getWallType()
+        }
+    }
     suspend fun getTabs(wallType:Int): MResult<MutableList<WallpaperTabData>> {
         return withContextIO {
             mainApi.getTabs(wallType)

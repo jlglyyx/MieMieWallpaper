@@ -116,8 +116,7 @@ class CommonToolBar : ConstraintLayout {
         tvCenterContent.setTextColor(titleTextColor)
         tvRightContent.setTextColor(titleTextColor)
         tvLeftContent.setTextColor(titleTextColor)
-        DrawableCompat.setTint(ivBack.drawable,titleTextColor)
-        DrawableCompat.setTint(ivAdd.drawable,titleTextColor)
+
 
 
 
@@ -164,7 +163,8 @@ class CommonToolBar : ConstraintLayout {
         ivAdd.clicks().subscribe {
             imageAddCallBack?.imageAddClickListener()
         }
-
+        DrawableCompat.setTint(ivBack.drawable,titleTextColor)
+        DrawableCompat.setTint(ivAdd.drawable,titleTextColor)
         obtainStyledAttributes.recycle()
     }
 

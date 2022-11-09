@@ -13,7 +13,7 @@ class WallpaperData(){
     var id:String? = null
     var userId:String? = null
     var imageUrl:String? = ""
-    var imageName:String? = "${System.currentTimeMillis()}.jpg"
+    var imageName:String? = ""
     var tabId: String? = null
     var headType: Int? = null
     var isVip: Boolean = false
@@ -36,8 +36,9 @@ data class WallpaperTabData(
     var createTime:String?,
     var updateTime:String?
 )
-data class WallpaperTopData(
-    var title:String?,
-    var url:String?,//类型
+data class WallpaperTypeData(
+    var id:String?,
+    var index:Int?,
+    var name:String?,//类型
 )
 

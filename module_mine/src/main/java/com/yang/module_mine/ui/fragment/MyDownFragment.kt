@@ -1,7 +1,9 @@
 package com.yang.module_mine.ui.fragment
 
 import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.hjq.shape.view.ShapeImageView
@@ -58,10 +60,19 @@ class MyDownFragment : BaseLazyFragment<FraMyFansBinding>(), OnRefreshListener {
             BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_down_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()
-                loadSpaceRadius(mContext, item.imageUrl, 10f, helper.getView(R.id.iv_image), 4, 30f)
+                loadSpaceRadius(mContext, item.imageUrl, 10f, imageView, 4, 30f)
             }
         }
+        mViewBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Glide.with(mContext).resumeRequests()
+                } else {
+                    Glide.with(mContext).pauseRequests()
+                }
+            }
+        })
         mViewBinding.recyclerView.adapter = mAdapter
 
         mAdapter.setOnItemLongClickListener { adapter, view, position ->

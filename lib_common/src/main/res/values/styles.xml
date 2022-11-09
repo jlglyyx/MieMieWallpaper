@@ -48,13 +48,21 @@
     <style name="mainTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">@dimen/sp_15</item>
     </style>
-    <style name="tabTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabTextAppearance">@style/itemTabTextAppearance</item>
-        <item name="tabMode">scrollable</item>
-        <item name="tabSelectedTextColor">@color/colorBar</item>
+
+
+    <style name="customTabTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/customItemTabTextAppearance</item>
         <item name="tabRippleColor">@android:color/transparent</item>
-        <item name="tabIndicatorColor">@color/colorBar</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="android:paddingBottom">@dimen/dp_1</item>
+        <item name="tabMode">auto</item>
+        <item name="tabIndicatorColor">@color/appColor</item>
     </style>
+    <style name="customItemTabTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+
 
 
     <style name="mainTopTabTabLayout" parent="Widget.Design.TabLayout">
