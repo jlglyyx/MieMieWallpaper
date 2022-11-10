@@ -8,6 +8,7 @@ import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.module_mine.api.MineApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 /**
@@ -39,6 +40,24 @@ class MineRepository @Inject constructor(private val mineApi: MineApi) :BaseRepo
     suspend fun getWallpaper(params:MutableMap<String,Any?>): MResult<MListResult<WallpaperData>> {
         return withContextIO {
             mineApi.getWallpaper(params)
+        }
+    }
+
+
+    suspend fun uploadFile(filePaths: MutableMap<String, RequestBody>): MResult<MutableList<String>> {
+        return withContext(Dispatchers.IO) {
+            mineApi.uploadFile(filePaths)
+        }
+    }
+
+    suspend fun changePassword(password: String): MResult<String> {
+        return withContextIO{
+            mineApi.changePassword(password)
+        }
+    }
+    suspend fun changeUserInfo(userInfoData: UserInfoData): MResult<UserInfoData> {
+        return withContextIO{
+            mineApi.changeUserInfo(userInfoData)
         }
     }
 }

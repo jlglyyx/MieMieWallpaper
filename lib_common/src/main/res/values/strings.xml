@@ -59,4 +59,8 @@
     <string name="string_close_application">再按一次退出应用</string>
 
 
+    <string name="string_fans_attention_num"><Data><![CDATA[粉丝 <font color="#ffa500"><b>%1$s</b></font> 人 关注 <font color="#ffa500"><b>%2$s</b></font> 人]]></Data></string>
+    <string name="string_vip_level"><Data><![CDATA[等级：<font color="#ff0000"><b>VIP%1$s</b></font>]]></Data></string>
+
+
 </resources>

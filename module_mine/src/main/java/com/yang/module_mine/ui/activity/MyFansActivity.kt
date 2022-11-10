@@ -75,13 +75,8 @@ class MyFansActivity : BaseActivity<ActMyFansBinding>() {
 
         mViewBinding.viewPager.adapter = TabAndViewPagerAdapter(this, mFragments, mTitles)
         mViewBinding.viewPager.offscreenPageLimit = mFragments.size
-
-        val view: View = mViewBinding.viewPager.getChildAt(0)
-        if (view is RecyclerView) {
-            view.overScrollMode = View.OVER_SCROLL_NEVER
-        }
-
         mViewBinding.viewPager.setCurrentItem(index,false)
+
     }
 
     private fun initTabLayout() {
@@ -93,7 +88,7 @@ class MyFansActivity : BaseActivity<ActMyFansBinding>() {
             val tabView = ViewCustomTopTabBinding.inflate(LayoutInflater.from(this))
             tabView.tvTitle.text = mTitles[position]
             tab.customView = tabView.root
-            if (position == 0) {
+            if (position == index) {
                 tabView.tvTitle.setTextColor(getColor(com.yang.lib_common.R.color.appColor))
                 tabView.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,tabSelectTextSize)
             } else {

@@ -55,6 +55,13 @@ fun loadImage(mContext: Context, url: String?, imageView: ImageView) {
         .error(R.drawable.iv_image_error)
         .into(imageView)
 }
+fun loadImage(mContext: Context, resourceId: Int, imageView: ImageView) {
+    Glide.with(mContext).asBitmap()
+        .load(resourceId)
+        .placeholder(R.drawable.iv_image_placeholder)
+        .error(R.drawable.iv_image_error)
+        .into(imageView)
+}
 
 fun loadCircle(mContext: Context, url: String?, imageView: ImageView) {
     val options = RequestOptions.circleCropTransform()
@@ -144,6 +151,9 @@ fun loadBgImage(mContext: Context, url: String?,imageView: ImageView){
 
 fun ImageView.loadImage(mContext: Context, url: String?){
     loadImage(mContext,url,this)
+}
+fun ImageView.loadImage(mContext: Context, resourceId: Int){
+    loadImage(mContext,resourceId,this)
 }
 fun ImageView.loadCircle(mContext: Context, url: String?){
     loadCircle(mContext,url,this)

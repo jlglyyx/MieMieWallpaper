@@ -45,7 +45,8 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
 
     private lateinit var mAdapter: BaseQuickAdapter<SearchFindData, BaseViewHolder>
 
-    private var mTitles : MutableList<String> = arrayListOf("静态壁纸","动态壁纸","动态","用户")
+    private var mTitles : MutableList<String> = arrayListOf("静态壁纸","动态壁纸","用户")
+//    private var mTitles : MutableList<String> = arrayListOf("静态壁纸","动态壁纸","动态","用户")
 
     private lateinit var mFragments: MutableList<Fragment>
 
@@ -65,10 +66,10 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
         mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_WALLPAPER_FRAGMENT)
             .withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE)
             .navigation() as Fragment)
-        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_DYNAMIC_FRAGMENT)
-            .withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE)
-            .navigation() as Fragment)
-        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_USER_FRAGMENT)
+//        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_DYNAMIC_FRAGMENT)
+//            .withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE)
+//            .navigation() as Fragment)
+        mFragments.add(buildARouter(AppConstant.RoutePath.MINE_FANS_FRAGMENT)
             .withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE)
             .navigation() as Fragment)
     }

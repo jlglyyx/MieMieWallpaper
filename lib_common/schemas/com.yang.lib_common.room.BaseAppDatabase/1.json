@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "efcf5b8fb8d47a15a210f5c4fc0f866a",
+    "identityHash": "a68c42f2838ab5fe95506ad30af42694",
     "entities": [
       {
         "tableName": "user_info",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `token` TEXT, `userName` TEXT, `userSex` INTEGER, `userAge` INTEGER, `userBirthDay` TEXT, `userDescribe` TEXT, `userAccount` TEXT NOT NULL, `userPassword` TEXT NOT NULL, `userAddress` TEXT, `userIntegral` INTEGER NOT NULL, `userAttention` INTEGER NOT NULL, `userFan` INTEGER NOT NULL, `userLocationAddress` TEXT, `userLeftBackgroundImage` TEXT, `userInfoBackgroundImage` TEXT, `userMineBackgroundImage` TEXT, `userPhone` TEXT, `userImage` TEXT, `userVipLevel` INTEGER NOT NULL, `userCredit` INTEGER NOT NULL, `userVipExpired` INTEGER NOT NULL, `userType` INTEGER NOT NULL, `userObtain` TEXT, `userSign` INTEGER, `userIsSign` INTEGER NOT NULL, `userExtension` TEXT, `updateTime` TEXT, `createTime` TEXT, `userExtraInfo` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `token` TEXT, `userName` TEXT, `userSex` INTEGER NOT NULL, `userAge` INTEGER, `userBirthDay` TEXT, `userDescribe` TEXT, `userAccount` TEXT NOT NULL, `userPassword` TEXT NOT NULL, `userAddress` TEXT, `userIntegral` INTEGER NOT NULL, `userAttention` INTEGER NOT NULL, `userFan` INTEGER NOT NULL, `userLocationAddress` TEXT, `userLeftBackgroundImage` TEXT, `userInfoBackgroundImage` TEXT, `userMineBackgroundImage` TEXT, `userPhone` TEXT, `userImage` TEXT, `userVipLevel` INTEGER NOT NULL, `userCredit` INTEGER NOT NULL, `userVipExpired` INTEGER NOT NULL, `userType` INTEGER NOT NULL, `userObtain` TEXT, `userSign` INTEGER, `userIsSign` INTEGER NOT NULL, `userExtension` TEXT, `updateTime` TEXT, `createTime` TEXT, `userExtraInfo` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -30,7 +30,7 @@
             "fieldPath": "userSex",
             "columnName": "userSex",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "userAge",
@@ -546,7 +546,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'efcf5b8fb8d47a15a210f5c4fc0f866a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a68c42f2838ab5fe95506ad30af42694')"
     ]
   }
 }

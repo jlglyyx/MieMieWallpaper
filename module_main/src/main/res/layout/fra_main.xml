@@ -12,12 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:leftImgVisible="false"
-        app:rightImgVisible="false" />
+        app:rightImgVisible="true" />
 
 
     <com.yang.lib_common.widget.ErrorReLoadView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@id/errorReLoadView"
         android:orientation="vertical">
     <LinearLayout

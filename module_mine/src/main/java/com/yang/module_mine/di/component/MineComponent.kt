@@ -4,10 +4,7 @@ import com.yang.lib_common.remote.di.component.RemoteComponent
 import com.yang.lib_common.scope.ActivityScope
 import com.yang.module_mine.di.factory.MineViewModelFactory
 import com.yang.module_mine.di.module.MineModule
-import com.yang.module_mine.ui.activity.MineChangePasswordActivity
-import com.yang.module_mine.ui.activity.MineChangePhoneActivity
-import com.yang.module_mine.ui.activity.MineSettingActivity
-import com.yang.module_mine.ui.activity.MineUserInfoActivity
+import com.yang.module_mine.ui.activity.*
 import com.yang.module_mine.ui.fragment.MineFragment
 import com.yang.module_mine.ui.fragment.MyCollectionFragment
 import com.yang.module_mine.ui.fragment.MyDownFragment
@@ -42,4 +39,6 @@ interface MineComponent {
     fun inject(inject: MineChangePhoneActivity)
 
     fun inject(inject: MineUserInfoActivity)
+
+    fun inject(inject: MineChangeUserInfoActivity)
 }

@@ -52,14 +52,14 @@
                 android:id="@+id/flowLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_6" />
+                android:layout_marginHorizontal="@dimen/dp_10" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp_10"
                 android:gravity="center"
+                android:layout_marginTop="@dimen/dp_14"
                 android:orientation="horizontal">
 
                 <TextView
@@ -92,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_6"
+                android:layout_marginTop="@dimen/dp_8"
                 android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"

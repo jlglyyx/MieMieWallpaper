@@ -64,10 +64,12 @@ class ErrorReLoadView : ConstraintLayout {
             Status.LOADING ->{
                 this.mBinding.llLoadingContainer.visibility = VISIBLE
                 this.mBinding.llReLoadContainer.visibility = GONE
+                this.mBinding.root.visibility = VISIBLE
             }
             Status.ERROR ->{
                 this.mBinding.llReLoadContainer.visibility = VISIBLE
                 this.mBinding.llLoadingContainer.visibility = GONE
+                this.mBinding.root.visibility = VISIBLE
             }
             Status.NORMAL ->{
                 this.mBinding.root.visibility = GONE

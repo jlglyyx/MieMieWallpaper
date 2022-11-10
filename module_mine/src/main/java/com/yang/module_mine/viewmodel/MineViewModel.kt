@@ -3,16 +3,22 @@ package com.yang.module_mine.viewmodel
 import android.app.Application
 import android.text.TextUtils
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.MutableLiveData
+import com.bytedance.sdk.openadsdk.*
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.data.WallpaperData
+import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.*
+import com.yang.lib_common.R
 import com.yang.module_mine.repository.MineRepository
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import java.io.File
+import java.net.URLEncoder
 import javax.inject.Inject
 
 /**
@@ -158,6 +164,7 @@ class MineViewModel @Inject constructor(
         }, {
             mCollectionWallpaperData.postValue(it.data.list)
         }, {
+            requestFail()
             cancelRefreshLoadMore()
             showRecyclerViewErrorEvent()
         }, errorDialog = false)
@@ -172,4 +179,106 @@ class MineViewModel @Inject constructor(
         } as MutableList<WallpaperData>
         mDownWallpaperData.postValue(data)
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var mUserInfoData = MutableLiveData<UserInfoData>()
+
+    var pictureListLiveData = MutableLiveData<MutableList<String>>()
+
+
+    var mTTRewardMineTaskAd = MutableLiveData<TTRewardVideoAd>()
+
+
+
+
+    fun uploadFile(filePaths: MutableList<String>) {
+        launch({
+            val mutableMapOf = mutableMapOf<String, RequestBody>()
+            filePaths.forEach {
+                val file = File(it)
+                val requestBody = RequestBody.create(MediaType.parse(AppConstant.ClientInfo.CONTENT_TYPE), file)
+                val encode = URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", AppConstant.ClientInfo.UTF_8)
+                mutableMapOf["file\";filename=\"$encode"] = requestBody
+            }
+            mineRepository.uploadFile(mutableMapOf)
+        }, {
+            pictureListLiveData.postValue(it.data)
+        }, messages = arrayOf(getString(R.string.string_uploading), getString(R.string.string_insert_success)))
+    }
+
+    fun changePassword(password: String) {
+        launch({
+            mineRepository.changePassword(password)
+        }, {
+            requestSuccess()
+        }, messages = arrayOf(getString(R.string.string_change_password_ing), getString(R.string.string_change_password_success), getString(R.string.string_change_password_fail)))
+    }
+
+    fun changeUserInfo(userInfoData: UserInfoData) {
+        launch({
+            mineRepository.changeUserInfo(userInfoData)
+        }, {
+            mUserInfoData.postValue(it.data)
+        }, messages = arrayOf(getString(R.string.string_requesting)))
+    }
+
+
+
+
+
+
+
+
+
+
+    fun loadMineTaskAd(){
+        val bigAdSlot = AdSlot.Builder()
+            .setCodeId("947676680") //广告位id
+            .setUserID("tag123")//tag_id
+            .setMediaExtra("media_extra") //附加参数
+            .setOrientation(TTAdConstant.VERTICAL)
+            .setExpressViewAcceptedSize(0f, 0f) //期望模板广告view的size,单位dp
+            .setAdLoadType(TTAdLoadType.PRELOAD) //推荐使用，用于标注此次的广告请求用途为预加载（当做缓存）还是实时加载，方便后续为开发者优化相关策略
+            .build()
+        mTTAdNative?.loadRewardVideoAd(bigAdSlot, object : TTAdNative.RewardVideoAdListener {
+            override fun onError(code: Int, message: String?) {
+                Log.i("TAG", "onError: $code  $message")
+            }
+
+
+            override fun onRewardVideoAdLoad(p0: TTRewardVideoAd?) {
+            }
+
+            //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
+            override fun onRewardVideoCached() {
+
+            }
+
+            override fun onRewardVideoCached(ad: TTRewardVideoAd?) {
+                mTTRewardMineTaskAd.postValue(ad)
+            }
+
+        })
+    }
+
 }

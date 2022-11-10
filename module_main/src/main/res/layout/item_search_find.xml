@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="10"
-        android:textColor="@color/orchid"
+        android:textColor="@color/appColor"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/stv_tv"
         app:layout_constraintDimensionRatio="1:1"

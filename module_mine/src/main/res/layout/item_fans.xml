@@ -1,73 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/cl_head_login"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_head_login"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:paddingHorizontal="@dimen/dp_10"
-    android:paddingTop="@dimen/dp_10"
-    app:layout_constraintTop_toTopOf="parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/iv_image"
-        android:layout_width="@dimen/dp_60"
-        android:layout_height="@dimen/dp_60"
-        android:src="@drawable/iv_image_placeholder"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_10"
-        android:text="张三李四"
-        android:textColor="@color/black"
-        android:textSize="@dimen/sp_16"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@+id/iv_image"
-        app:layout_constraintTop_toTopOf="@+id/iv_image" />
-
-
-
-    <TextView
-        android:id="@+id/tv_account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10"
-        android:text="133****9654"
-        android:textColor="@color/textColor_666666"
-        android:textSize="@dimen/sp_14"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
-
-
-
-    <com.hjq.shape.view.ShapeTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+关注"
-        android:textSize="@dimen/sp_14"
-        app:shape_radius="@dimen/dp_12"
-        android:textColor="@color/appColor"
-        android:paddingHorizontal="@dimen/dp_10"
-        android:paddingVertical="@dimen/dp_3"
-        app:shape_strokeWidth="@dimen/dp_1"
-        app:shape_strokeColor="@color/appColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <View
-        android:id="@+id/view_line"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_0_5"
-        app:layout_constraintTop_toBottomOf="@+id/iv_image"
-        android:layout_marginTop="@dimen/dp_10"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="@dimen/dp_8"
-        android:background="@color/grey_1f" />
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_ripple_button"
+        android:paddingHorizontal="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_10"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_60"
+            android:src="@drawable/iv_image_placeholder"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="张三李四"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@+id/iv_image"
+            app:layout_constraintTop_toTopOf="@+id/iv_image" />
+
+
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:textColor="@color/textColor_666666"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+
+        <com.hjq.shape.view.ShapeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/dp_10"
+            android:paddingVertical="@dimen/dp_3"
+            android:text="+关注"
+            android:textColor="@color/appColor"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shape_radius="@dimen/dp_12"
+            app:shape_strokeColor="@color/appColor"
+            app:shape_strokeWidth="@dimen/dp_1" />
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0_5"
+            android:layout_marginHorizontal="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/grey_1f"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

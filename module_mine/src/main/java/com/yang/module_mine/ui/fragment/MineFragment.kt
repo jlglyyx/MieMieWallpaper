@@ -1,12 +1,15 @@
 package com.yang.module_mine.ui.fragment
 
 import android.graphics.Bitmap
+import android.graphics.drawable.RippleDrawable
 import android.view.View
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.google.android.material.ripple.RippleDrawableCompat
+import com.google.android.material.ripple.RippleUtils
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.lxj.xpopup.XPopup
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -46,6 +49,8 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
 
 
     lateinit var moreFunctionAdapter: MoreFunctionAdapter
+
+
 
     private var buildBitmap: Bitmap? = null
 

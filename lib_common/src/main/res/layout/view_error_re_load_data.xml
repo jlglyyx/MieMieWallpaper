@@ -12,7 +12,6 @@
         android:id="@+id/ll_re_load_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -32,7 +31,6 @@
         android:id="@+id/ll_loading_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical">
 

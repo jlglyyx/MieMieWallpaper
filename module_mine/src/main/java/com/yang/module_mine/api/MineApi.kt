@@ -4,11 +4,10 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
+import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.room.entity.UserInfoData
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import okhttp3.RequestBody
+import retrofit2.http.*
 
 /**
  * @ClassName: MineApi
@@ -29,4 +28,20 @@ interface MineApi {
 
     @POST("main/queryAllByTab")
     suspend fun getWallpaper(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperData>>
+
+
+
+    @Multipart
+    @POST("/uploadFile")
+    suspend fun uploadFile(@PartMap file: MutableMap<String, RequestBody>): MResult<MutableList<String>>
+
+    @POST("user/changePassword")
+    suspend fun changePassword(@Query("password") password:String): MResult<String>
+
+    @POST("user/changeUserInfo")
+    suspend fun changeUserInfo(@Body userInfoData: UserInfoData): MResult<UserInfoData>
+
+
+
+
 }

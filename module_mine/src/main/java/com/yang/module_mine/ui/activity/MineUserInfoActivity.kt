@@ -1,9 +1,9 @@
 package com.yang.module_mine.ui.activity
 
 
+import android.text.Html
 import android.text.TextUtils
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.hjq.shape.view.ShapeImageView
@@ -16,6 +16,7 @@ import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
+import com.yang.lib_common.widget.ErrorReLoadView
 import com.yang.module_mine.R
 import com.yang.module_mine.databinding.ActMineUserInfoBinding
 import com.yang.module_mine.viewmodel.MineViewModel
@@ -31,6 +32,9 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
+    private var sexArray = arrayOf("玉树临风大帅哥~", "可可爱爱小仙女~")
+
+    private var sexIconArray = arrayOf(com.yang.lib_common.R.drawable.iv_man, com.yang.lib_common.R.drawable.iv_woman)
 
     private lateinit var mAdapter: BaseQuickAdapter<WallpaperData, BaseViewHolder>
 
@@ -40,22 +44,30 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
     }
 
     override fun initData() {
-//        mineViewModel.getWallpaper()
+        mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
+        mineViewModel.getWallpaper()
         val id = intent.getStringExtra(AppConstant.Constant.ID)
-        UserInfoHold.userInfo.let {
-            Glide.with(this).load(
-                it?.userImage
-                    ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e"
-            ).error(com.yang.lib_common.R.drawable.iv_image_error)
-                .placeholder(com.yang.lib_common.R.drawable.iv_image_placeholder).into(mViewBinding.sivImg)
-            if (!TextUtils.equals(id, it?.id)) {
+        UserInfoHold.userInfo?.apply {
+            if (userImage.isNullOrEmpty()){
+                mViewBinding.sivImg.loadImage(this@MineUserInfoActivity, com.yang.lib_common.R.drawable.iv_attr)
+            }else{
+                mViewBinding.sivImg.loadCircle(this@MineUserInfoActivity,userImage)
+            }
+            if (!TextUtils.equals(id, this.id)) {
                 mViewBinding.commonToolBar.rightContentVisible = false
             }
-            mViewBinding.tvName.text = it?.userName?:"修改一下昵称吧"
-            mViewBinding.tvAccount.text = "账号：${it?.userAccount}"
-            mViewBinding.tvVipLevel.text = "等级：vip${it?.userVipLevel?:""}"
-            mViewBinding.tvInfo.text = "${it?.userSex} ${it?.userAge}岁 | ${it?.userBirthDay} "
-            mViewBinding.tvDesc.text = it?.userDescribe?:"人生在世总要留点什么吧..."
+            mViewBinding.tvName.text = userName
+            mViewBinding.tvAccount.text = "账号：${userAccount}"
+            if (userVipLevel == 0){
+                mViewBinding.tvVipLevel.text = "暂未开通会员"
+                mViewBinding.tvVipLevel.setTextColor(getColor(com.yang.lib_common.R.color.textColor_999999))
+            }else{
+                mViewBinding.tvVipLevel.text = Html.fromHtml(String.format(getString(com.yang.lib_common.R.string.string_vip_level), userVipLevel),Html.FROM_HTML_OPTION_USE_CSS_COLORS)
+            }
+            mViewBinding.tvFanAttentionNum.text = Html.fromHtml(String.format(getString(com.yang.lib_common.R.string.string_fans_attention_num), userFan,userAttention),Html.FROM_HTML_OPTION_USE_CSS_COLORS)
+            mViewBinding.tvInfo.text = sexArray[userSex]
+            mViewBinding.ivSex.setImageResource(sexIconArray[userSex])
+            mViewBinding.tvDesc.text = userDescribe?:"人生在世总要留点什么吧..."
         }
     }
 
@@ -80,15 +92,19 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
             })
         }
 
-//        initRecyclerView()
-//        showRecyclerViewEvent(mAdapter)
+        mViewBinding.errorReLoadView.onClick = {
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
+            mineViewModel.getWallpaper()
+        }
+
+        initRecyclerView()
     }
 
     private fun initRecyclerView(){
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_collection_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                loadSpaceRadius(mContext,item.imageUrl,20f,helper.getView(R.id.iv_image),3,30f)
+                loadSpaceRadius(mContext,item.imageUrl,20f,imageView,3,30f)
                 helper.setText(R.id.tv_title,item.title)
                     .setText(R.id.tv_like_num,"${item.likeNum}")
                     .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
@@ -105,12 +121,18 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
         InjectViewModelProxy.inject(this)
 
         mineViewModel.mWallpaperData.observe(this){
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.NORMAL
             if (it.isNullOrEmpty()) {
                 mineViewModel.showRecyclerViewEmptyEvent()
+                mAdapter.setEmptyView(com.yang.lib_common.R.layout.view_empty_data)
             } else {
                 mAdapter.replaceData(it)
 
             }
+        }
+
+        mineViewModel.uC.requestFailEvent.observe(this){
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.ERROR
         }
     }
 
