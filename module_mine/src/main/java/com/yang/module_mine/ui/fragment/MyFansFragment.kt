@@ -53,8 +53,7 @@ class MyFansFragment : BaseLazyFragment<FraMyFansBinding>() ,OnRefreshLoadMoreLi
 
     override fun initData() {
         fanType = arguments?.getInt(AppConstant.Constant.TYPE) ?:fanType
-        onRefresh(mViewBinding.smartRefreshLayout)
-
+        mViewBinding.smartRefreshLayout.autoRefresh()
     }
 
     private fun initRecyclerView() {

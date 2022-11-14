@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         style="@style/mainTabLayout"
         app:tabIndicatorHeight="@dimen/dp_0"
-        android:elevation="@dimen/dp_1"
         app:tabIndicatorColor="@android:color/transparent"
         android:background="@color/white10"
         app:layout_constraintBottom_toBottomOf="parent"

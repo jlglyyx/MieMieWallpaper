@@ -1,0 +1,12 @@
+apply from: "../module_config.gradle"
+
+android {
+    defaultConfig {
+        if (isModule.toBoolean()) {
+            applicationId 'com.yang.module_square'
+        }
+    }
+}
+
+dependencies {
+}

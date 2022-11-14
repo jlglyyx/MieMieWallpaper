@@ -68,6 +68,7 @@ interface AppConstant {
 
         const val WALLPAPER_DETAIL_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/WallpaperDetailActivity"
         const val SEARCH_WALLPAPER_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/SearchWallpaperActivity"
+        const val ADD_WALLPAPER_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AddWallpaperActivity"
 
 
 
@@ -129,6 +130,26 @@ interface AppConstant {
         const val VIDEO_UPLOAD_TASK_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoUploadTaskActivity"
 
         const val VIDEO_SCREEN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoScreenActivity"
+
+
+        /**
+         * square
+         */
+        const val SQUARE_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/SquareFragment"
+        const val SQUARE_ITEM_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/SquareItemFragment"
+
+
+//        const val ADVERTISEMENT_VIDEO_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
+//        const val VIDEO_MAIN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/MainActivity"
+//
+//        const val VIDEO_ITEM_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoItemActivity"
+//        const val VIDEO_SEARCH_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/SearchActivity"
+//
+//        const val VIDEO_UPLOAD_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoUploadActivity"
+//
+//        const val VIDEO_UPLOAD_TASK_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoUploadTaskActivity"
+//
+//        const val VIDEO_SCREEN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoScreenActivity"
 
         /**
          * mine

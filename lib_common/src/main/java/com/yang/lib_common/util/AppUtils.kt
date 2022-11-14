@@ -30,6 +30,10 @@ import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
+import com.luck.picture.lib.style.AlbumWindowStyle
+import com.luck.picture.lib.style.PictureSelectorStyle
+import com.luck.picture.lib.style.SelectMainStyle
+import com.luck.picture.lib.style.TitleBarStyle
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.yang.lib_common.R
 import com.yang.lib_common.app.BaseApplication
@@ -655,13 +659,30 @@ fun Context.getColor(color: Int) {
 fun Context.openGallery(
     setMaxSelectNum: Int = 1,
     onResult: (result: ArrayList<LocalMedia>?) -> Unit = {},
-    onCancel: () -> Unit = {}
+    onCancel: () -> Unit = {},
+    selectData:MutableList<LocalMedia>? = null
 ) {
-
     PictureSelector.create(this)
         .openGallery(SelectMimeType.TYPE_IMAGE)
         .setImageEngine(GlideEngine.instance)
         .setMaxSelectNum(setMaxSelectNum)
+        .setSelectedData(selectData)
+        .setSelectorUIStyle(PictureSelectorStyle().apply {
+
+
+
+            selectMainStyle = SelectMainStyle().apply {
+                isCompleteSelectRelativeTop = true
+
+            }
+            titleBarStyle =  TitleBarStyle().apply {
+                isHideCancelButton  = true
+                //titleTextColor = Color.BLACK
+                //titleDrawableRightResource = R.drawable.iv_down
+
+            }
+
+        })
         .forResult(object : OnResultCallbackListener<LocalMedia> {
             override fun onResult(result: ArrayList<LocalMedia>?) {
                 onResult(result)

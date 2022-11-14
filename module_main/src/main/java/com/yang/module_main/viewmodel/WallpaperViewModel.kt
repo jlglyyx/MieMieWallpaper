@@ -2,11 +2,16 @@ package com.yang.module_main.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import com.yang.lib_common.R
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.WallpaperData
 import com.yang.module_main.data.SearchFindData
 import com.yang.module_main.repository.MainRepository
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import java.io.File
+import java.net.URLEncoder
 import javax.inject.Inject
 
 /**
@@ -29,6 +34,8 @@ class WallpaperViewModel @Inject constructor(
     val mWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
 
     val mSearchFindData = MutableLiveData<MutableList<SearchFindData>>()
+
+    var pictureListLiveData = MutableLiveData<MutableList<String>>()
 
     /**
      * 关键字搜索壁纸
@@ -60,6 +67,22 @@ class WallpaperViewModel @Inject constructor(
             cancelRefreshLoadMore()
             showRecyclerViewErrorEvent()
         }, errorDialog = false)
+    }
+
+
+    fun uploadFile(filePaths: MutableList<String>) {
+        launch({
+            val mutableMapOf = mutableMapOf<String, RequestBody>()
+            filePaths.forEach {
+                val file = File(it)
+                val requestBody = RequestBody.create(MediaType.parse(AppConstant.ClientInfo.CONTENT_TYPE), file)
+                val encode = URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", AppConstant.ClientInfo.UTF_8)
+                mutableMapOf["file\";filename=\"$encode"] = requestBody
+            }
+            mainRepository.uploadFile(mutableMapOf)
+        }, {
+            pictureListLiveData.postValue(it.data)
+        }, messages = arrayOf(getString(R.string.string_uploading), getString(R.string.string_insert_success)))
     }
 }
 

@@ -46,9 +46,4 @@ include ':module_main'
 include ':module_mine'
 
 
-
-
-
-
-
-
+include ':module_square'

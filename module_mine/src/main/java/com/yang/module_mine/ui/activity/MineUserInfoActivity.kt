@@ -120,11 +120,11 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
 
-        mineViewModel.mWallpaperData.observe(this){
+        mineViewModel.mCollectionWallpaperData.observe(this){
             mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.NORMAL
             if (it.isNullOrEmpty()) {
                 mineViewModel.showRecyclerViewEmptyEvent()
-                mAdapter.setEmptyView(com.yang.lib_common.R.layout.view_empty_data)
+                mAdapter.setEmptyView(com.yang.lib_common.R.layout.view_empty_data,mViewBinding.recyclerView)
             } else {
                 mAdapter.replaceData(it)
 

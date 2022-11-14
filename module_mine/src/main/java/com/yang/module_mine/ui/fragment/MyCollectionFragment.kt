@@ -48,9 +48,7 @@ class MyCollectionFragment : BaseLazyFragment<FraMyFansBinding>(), OnRefreshLoad
     }
 
     override fun initData() {
-
-        onRefresh(mViewBinding.smartRefreshLayout)
-
+        mViewBinding.smartRefreshLayout.autoRefresh()
     }
 
     private fun initRecyclerView() {

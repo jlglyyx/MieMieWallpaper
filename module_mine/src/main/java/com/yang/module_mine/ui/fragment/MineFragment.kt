@@ -200,7 +200,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
                 }
                 loadCircle(requireContext(), it.userImage, sivHead)
                 if (null == buildBitmap) {
-                    buildBitmap = ScanUtil.buildBitmap("sssssssssss${it.id}", 500, 500)
+                    buildBitmap = ScanUtil.buildBitmap("http://www.yyxjlgl.tk/module-main/image/apk/miemie_1.0.0.apk", 500, 500)
                     ivErCode.setImageBitmap(buildBitmap)
                 }
             }

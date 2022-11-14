@@ -1,16 +1,10 @@
 package com.yang.module_main.ui.fragment
 
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,26 +16,20 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.hjq.shape.view.ShapeTextView
 import com.lxj.xpopup.XPopup
 import com.yang.apt_annotation.annotain.InjectViewModel
-import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.adapter.TabAndViewPagerFragmentAdapter
+import com.yang.lib_common.adapter.TabMoreAdapter
 import com.yang.lib_common.base.ui.fragment.BaseFragment
-import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.BannerBean
-import com.yang.lib_common.databinding.ViewCustomTabBinding
 import com.yang.lib_common.databinding.ViewCustomTopTabBinding
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.showShort
 import com.yang.lib_common.widget.ErrorReLoadView
 import com.yang.module_main.R
 import com.yang.module_main.databinding.FraMainBinding
-import com.yang.module_main.ui.dialog.FilterDialog
+import com.yang.lib_common.dialog.FilterDialog
 import com.yang.module_main.viewmodel.MainViewModel
-import com.youth.banner.config.IndicatorConfig
-import com.youth.banner.indicator.CircleIndicator
 
 /**
  * @ClassName: MainFragment
@@ -58,9 +46,11 @@ class MainFragment : BaseFragment<FraMainBinding>() {
     private val tabTextSize = 16f
     private val tabSelectTextSize = 17f
 
-    private  var mTitles = mutableListOf<String>()
+    private var mTitles = mutableListOf<String>()
 
     private var mFragments = mutableListOf<Fragment>()
+
+    private var mTabMoreAdapter: TabMoreAdapter? = null
 
     override fun initViewBinding(): FraMainBinding {
         return bind(FraMainBinding::inflate)
@@ -71,6 +61,9 @@ class MainFragment : BaseFragment<FraMainBinding>() {
 
         mViewBinding.commonToolBar.etSearch.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.SEARCH_WALLPAPER_ACTIVITY).navigation()
+        }
+        mViewBinding.commonToolBar.ivAdd.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.ADD_WALLPAPER_ACTIVITY).navigation()
         }
 
         mViewBinding.llMore.setOnClickListener {
@@ -86,30 +79,16 @@ class MainFragment : BaseFragment<FraMainBinding>() {
                             )
                         ).intoBackground()
                         it.recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
-                        val mAdapter = object :
-                            BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_filter_tab) {
-                            override fun convert(helper: BaseViewHolder, item: String) {
-                                helper.setText(R.id.tv_title, item)
-                                val tvTitle = helper.getView<ShapeTextView>(R.id.tv_title)
-                                if (helper.absoluteAdapterPosition == mViewBinding.tabLayout.selectedTabPosition){
-                                    tvTitle.shapeDrawableBuilder.setSolidColor(requireContext().getColor(
-                                        com.yang.lib_common.R.color.appColor)).intoBackground()
-                                    tvTitle.setTextColor(requireContext().getColor(
-                                        com.yang.lib_common.R.color.white))
-                                }else{
-                                    tvTitle.shapeDrawableBuilder.setSolidColor(requireContext().getColor(
-                                        com.yang.lib_common.R.color.white)).intoBackground()
-                                    tvTitle.setTextColor(requireContext().getColor(
-                                        com.yang.lib_common.R.color.textColor_666666))
-                                }
-                            }
+                        if (null == mTabMoreAdapter){
+                            mTabMoreAdapter = TabMoreAdapter()
                         }
-                        mAdapter.setOnItemClickListener { _, _, position ->
+                        mTabMoreAdapter!!.currentPosition = mViewBinding.tabLayout.selectedTabPosition
+                        mTabMoreAdapter!!.setOnItemClickListener { _, _, position ->
                             mViewBinding.viewPager.setCurrentItem(position, false)
                             dismiss()
                         }
-                        it.recyclerView.adapter = mAdapter
-                        mAdapter.setNewData(mTitles)
+                        it.recyclerView.adapter = mTabMoreAdapter
+                        mTabMoreAdapter!!.setNewData(mTitles)
                     }
                 }).show()
         }
@@ -122,7 +101,8 @@ class MainFragment : BaseFragment<FraMainBinding>() {
     }
 
     override fun initData() {
-        mainViewModel.wallType = arguments?.getInt(AppConstant.Constant.WALL_TYPE)?:mainViewModel.wallType
+        mainViewModel.wallType =
+            arguments?.getInt(AppConstant.Constant.WALL_TYPE) ?: mainViewModel.wallType
         mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
         mainViewModel.getTabs()
     }
@@ -150,10 +130,10 @@ class MainFragment : BaseFragment<FraMainBinding>() {
             tab.customView = tabView.root
             if (position == 0) {
                 tabView.tvTitle.setTextColor(requireContext().getColor(com.yang.lib_common.R.color.appColor))
-                tabView.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,tabSelectTextSize)
+                tabView.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, tabSelectTextSize)
             } else {
                 tabView.tvTitle.setTextColor(requireContext().getColor(com.yang.lib_common.R.color.textColor_666666))
-                tabView.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,tabTextSize)
+                tabView.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, tabTextSize)
             }
             tab.view.setOnLongClickListener { true }
         }.attach()
@@ -168,7 +148,7 @@ class MainFragment : BaseFragment<FraMainBinding>() {
                 val customView = tab.customView
                 customView?.apply {
                     val tvTitle = findViewById<TextView>(com.yang.lib_common.R.id.tv_title)
-                    tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,tabTextSize)
+                    tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, tabTextSize)
                     tvTitle.setTextColor(requireContext().getColor(com.yang.lib_common.R.color.textColor_666666))
                 }
             }
@@ -177,7 +157,7 @@ class MainFragment : BaseFragment<FraMainBinding>() {
                 val customView = tab.customView
                 customView?.apply {
                     val tvTitle = findViewById<TextView>(com.yang.lib_common.R.id.tv_title)
-                    tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,tabSelectTextSize)
+                    tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, tabSelectTextSize)
                     tvTitle.setTextColor(requireContext().getColor(com.yang.lib_common.R.color.appColor))
                 }
             }
@@ -215,7 +195,7 @@ class MainFragment : BaseFragment<FraMainBinding>() {
             initViewPager()
             initTabLayout()
         }
-        mainViewModel.uC.requestFailEvent.observe(this){
+        mainViewModel.uC.requestFailEvent.observe(this) {
             mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.ERROR
         }
 

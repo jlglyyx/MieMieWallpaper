@@ -38,7 +38,7 @@ class ShareDialog(context: Context) : BottomPopupView(context) {
     override fun onCreate() {
         super.onCreate()
         if (null == buildBitmap) {
-            buildBitmap = ScanUtil.buildBitmap("sssssssssss", 500, 500)
+            buildBitmap = ScanUtil.buildBitmap("http://www.yyxjlgl.tk/module-main/image/apk/miemie_1.0.0.apk", 500, 500)
             mBinding.ivErCode.setImageBitmap(buildBitmap)
         }
         mBinding.tvCancel.clicks().subscribe {

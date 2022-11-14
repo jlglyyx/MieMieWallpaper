@@ -3,7 +3,7 @@ apply from: "../module_config.gradle"
 android {
     defaultConfig {
         if (isModule.toBoolean()) {
-            applicationId 'com.android.module_mine'
+            applicationId 'com.yang.module_mine'
         }
     }
 }

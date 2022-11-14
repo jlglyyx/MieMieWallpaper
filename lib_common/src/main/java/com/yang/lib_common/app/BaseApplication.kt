@@ -181,8 +181,8 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
 
     private fun initAd(){
         val config = DCloudAdManager.InitConfig()
-        //config.setAppId("__UNI__D955F27").adId = "121276090510"
-        config.setAppId("__UNI__HelloUNIAD").adId = "129530020804"
+        config.setAppId("__UNI__D955F27").adId = "121276090510"
+        //config.setAppId("__UNI__HelloUNIAD").adId = "129530020804"
 //        config.setAppId("__UNI__D955F27").adId = createAppId(path = obbDir.absolutePath)
         DCloudAdManager.init(this, config)
     }

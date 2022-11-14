@@ -49,9 +49,7 @@ class MyDownFragment : BaseLazyFragment<FraMyFansBinding>(), OnRefreshListener {
     }
 
     override fun initData() {
-
-        onRefresh(mViewBinding.smartRefreshLayout)
-
+        mViewBinding.smartRefreshLayout.autoRefresh()
     }
 
     private fun initRecyclerView() {

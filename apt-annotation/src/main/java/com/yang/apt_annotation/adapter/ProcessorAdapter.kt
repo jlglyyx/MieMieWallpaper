@@ -18,6 +18,7 @@ class ProcessorAdapter {
         const val MODULE_PICTURE = "module_picture"
         const val MODULE_LOGIN = "module_login"
         const val MODULE_TASK = "module_task"
+        const val MODULE_SQUARE = "module_square"
     }
 
     fun getProcessor(type: String): IProcessor {
@@ -40,6 +41,9 @@ class ProcessorAdapter {
             }
             type.contains(MODULE_TASK) -> {
                 mark = "task"
+            }
+            type.contains(MODULE_SQUARE) -> {
+                mark = "square"
             }
         }
         val mMark = captureName(mark)

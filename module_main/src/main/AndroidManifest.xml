@@ -32,5 +32,8 @@
             android:name=".ui.activity.SearchWallpaperActivity"
             android:exported="false"
             android:theme="@style/WhiteActivity"/>
+        <activity
+            android:name=".ui.activity.AddWallpaperActivity"
+            android:exported="false" />
     </application>
 </manifest>

@@ -43,7 +43,7 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
             if (isGrantAll) {
                 createAppId(getAppId(path = obbDir.absolutePath))
 
-                //AdManager.instance.splashAd(this, mViewBinding.container) {
+                AdManager.instance.splashAd(this, mViewBinding.container) {
                     buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY)
                         .withOptionsCompat(
                             ActivityOptionsCompat.makeCustomAnimation(
@@ -67,7 +67,7 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
                             }
 
                         })
-                //}
+                }
             } else {
                 initDialog()
             }

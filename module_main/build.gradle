@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         if (isModule.toBoolean()) {
-            applicationId 'com.android.module_main'
+            applicationId 'com.yang.module_main'
         }
 
     }

@@ -1,10 +1,7 @@
 package com.yang.module_main.ui.fragment
 
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
-import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -27,12 +24,10 @@ import com.yang.module_main.R
 import com.yang.lib_common.data.WallpaperData
 import com.yang.module_main.databinding.FraMainItemBinding
 import com.yang.module_main.databinding.ViewMainRvHeadBinding
-import com.yang.module_main.ui.dialog.FilterDialog
+import com.yang.lib_common.dialog.FilterDialog
 import com.yang.module_main.viewmodel.MainViewModel
 import com.youth.banner.config.IndicatorConfig
 import com.youth.banner.indicator.CircleIndicator
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 /**

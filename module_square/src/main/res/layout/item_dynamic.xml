@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_8"
+        android:id="@+id/view_top"
+        android:background="@color/color_F5F5F5" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/dp_6"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
+            android:scaleType="centerCrop"
+            android:src="@drawable/iv_attr"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/circleShapeImage" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_5"
+            android:text="张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三"
+            android:maxLines="1"
+            android:maxEms="10"
+            android:ellipsize="end"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/sp_16"
+            android:layout_marginTop="@dimen/dp_6"
+            app:layout_constraintStart_toEndOf="@+id/iv_image"
+            app:layout_constraintTop_toTopOf="@+id/iv_image" />
+
+
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/tv_vip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_5"
+            android:text="VIP9"
+            android:textSize="@dimen/sp_10"
+            android:textColor="@color/white"
+            app:shape_topLeftRadius="@dimen/dp_6"
+            app:shape_topRightRadius="@dimen/dp_3"
+            app:shape_bottomRightRadius="@dimen/dp_6"
+            app:shape_bottomLeftRadius="@dimen/dp_3"
+            android:paddingHorizontal="@dimen/dp_3"
+            android:paddingVertical="@dimen/dp_1"
+            app:shape_solidColor="@color/red"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_image"
+            app:layout_constraintLeft_toRightOf="@+id/iv_image" />
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/tv_yc_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_5"
+            android:text="原创认证"
+            android:textSize="@dimen/sp_11"
+            android:textColor="@color/white"
+            app:shape_topLeftRadius="@dimen/dp_6"
+            app:shape_topRightRadius="@dimen/dp_3"
+            app:shape_bottomRightRadius="@dimen/dp_6"
+            app:shape_bottomLeftRadius="@dimen/dp_3"
+            android:paddingHorizontal="@dimen/dp_3"
+            android:paddingVertical="@dimen/dp_1"
+            app:shape_solidColor="@color/appColor"
+            app:layout_goneMarginStart="@dimen/dp_8"
+            app:layout_constraintTop_toTopOf="@+id/tv_vip"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_vip"
+            app:layout_constraintLeft_toRightOf="@+id/tv_vip" />
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/tv_attention"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/dp_8"
+            android:paddingVertical="@dimen/dp_2"
+            android:text="+关注"
+            android:textColor="@color/appColor"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_image"
+            android:layout_marginTop="@dimen/dp_10"
+            app:shape_radius="@dimen/dp_12"
+            app:shape_strokeColor="@color/appColor"
+            app:shape_strokeWidth="@dimen/dp_1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_text"
+        android:text="关闭R文件传递可以通过编译避免的方式获得更快的编译速度"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/textColor"
+        android:padding="@dimen/dp_6"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <com.yang.lib_common.widget.GridNinePictureView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_3"
+        android:id="@+id/gridNinePictureView"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/dp_6"
+        android:paddingTop="@dimen/dp_6">
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="北京市"
+            android:textSize="@dimen/sp_10"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/dp_6"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_location">
+
+            <TextView
+                android:id="@+id/tv_degree"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="浏览108次"
+                android:textSize="@dimen/sp_12"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_location" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_5"
+                android:text="2020-11-14 14:27:27"
+                android:textSize="@dimen/sp_11" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_25"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/dp_5"
+            app:layout_constraintTop_toBottomOf="@+id/ll_location" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_6"
+        android:paddingVertical="@dimen/dp_6"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <com.hjq.shape.view.ShapeTextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@null"
+            android:hint="评论一下..."
+            android:layout_marginVertical="@dimen/dp_1"
+            android:paddingStart="@dimen/dp_5"
+            android:textSize="@dimen/sp_13"
+            android:id="@+id/tv_content"
+            android:gravity="center_vertical"
+            app:shape_radius="@dimen/dp_20"
+            app:shape_solidColor="@color/grey_1f"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <com.yang.lib_common.widget.ImageTintView
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                app:tint="@color/textColor_999999"
+                android:src="@drawable/iv_fabulous"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/sp_11"
+                android:layout_marginTop="@dimen/dp_2"
+                android:textColor="@color/textColor_999999"
+                android:text="1111"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp_12"
+            android:gravity="center"
+            android:orientation="vertical">
+            <com.yang.lib_common.widget.ImageTintView
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                app:tint="@color/textColor_999999"
+                android:src="@drawable/iv_comment"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/dp_2"
+                android:textColor="@color/textColor_999999"
+                android:textSize="@dimen/sp_11"
+                android:text="10.1万"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <com.yang.lib_common.widget.ImageTintView
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                app:tint="@color/textColor_999999"
+                android:src="@drawable/iv_forward"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/sp_11"
+                android:textColor="@color/textColor_999999"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="1111"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_8"
+        android:background="@color/color_F5F5F5" />
+</LinearLayout>

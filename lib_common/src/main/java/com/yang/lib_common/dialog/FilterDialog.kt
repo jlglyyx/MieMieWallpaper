@@ -1,12 +1,9 @@
-package com.yang.module_main.ui.dialog
+package com.yang.lib_common.dialog
 
 import android.content.Context
-import android.view.ViewGroup
-import com.lxj.xpopup.core.AttachPopupView
 import com.lxj.xpopup.impl.PartShadowPopupView
-import com.yang.lib_common.util.getScreenPx
-import com.yang.module_main.R
-import com.yang.module_main.databinding.DialogFilterBinding
+import com.yang.lib_common.R
+import com.yang.lib_common.databinding.DialogFilterBinding
 
 /**
  * @ClassName: FilterDialog
