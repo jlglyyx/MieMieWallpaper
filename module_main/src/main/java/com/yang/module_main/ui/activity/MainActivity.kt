@@ -1,5 +1,6 @@
 package com.yang.module_main.ui.activity
 
+import android.Manifest
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.util.Log
@@ -11,9 +12,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.tbruyelle.rxpermissions3.RxPermissions
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.*
 import com.yang.lib_common.adapter.TabAndViewPagerAdapter
@@ -36,6 +39,10 @@ import io.dcloud.ads.core.v2.interstitial.DCInterstitialAdLoadListener
 import io.dcloud.ads.core.v2.reward.DCRewardAd
 import io.dcloud.ads.core.v2.reward.DCRewardAdListener
 import io.dcloud.ads.core.v2.reward.DCRewardAdLoadListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 import org.json.JSONArray
 import org.json.JSONObject
@@ -49,9 +56,10 @@ class MainActivity : BaseActivity<ActMainBinding>() {
 
     private lateinit var mFragments: MutableList<Fragment>
 
-    private var mTitles = arrayListOf("静态壁纸","广场","我的")
+    private var mTitles = arrayListOf("静态壁纸", "广场", "我的")
 
-    private var mImages = arrayListOf(R.drawable.iv_picture,R.drawable.iv_dynamic, R.drawable.iv_mine)
+    private var mImages =
+        arrayListOf(R.drawable.iv_picture, R.drawable.iv_dynamic, R.drawable.iv_mine)
 
 
     private var lastTime = 0L
@@ -62,19 +70,32 @@ class MainActivity : BaseActivity<ActMainBinding>() {
     }
 
     override fun initData() {
-        mFragments = mutableListOf<Fragment>().apply {
-            add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_STATIC_TYPE).navigation() as Fragment)
-            //add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE).navigation() as Fragment)
+        lifecycleScope.launch {
+            val async = async(Dispatchers.IO) {
+                mFragments = mutableListOf<Fragment>().apply {
+                    add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT)
+                        .withInt(AppConstant.Constant.WALL_TYPE, AppConstant.Constant.WALL_STATIC_TYPE)
+                        .navigation() as Fragment)
+                    //add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE).navigation() as Fragment)
 //            add(buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
-            add(buildARouter(AppConstant.RoutePath.SQUARE_FRAGMENT).navigation() as Fragment)
-            add(buildARouter(AppConstant.RoutePath.MINE_FRAGMENT).navigation() as Fragment)
+                    add(buildARouter(AppConstant.RoutePath.SQUARE_FRAGMENT).navigation() as Fragment)
+                    add(buildARouter(AppConstant.RoutePath.MINE_FRAGMENT).navigation() as Fragment)
+                }
+                true
+            }
+            val await = async.await()
+            withContext(Dispatchers.Main) {
+                if (await) {
+                    initPermission()
+                    initViewPager()
+                    initTabLayout()
+                }
+            }
         }
     }
 
     override fun initView() {
 
-        initViewPager()
-        initTabLayout()
 
 
     }
@@ -92,6 +113,18 @@ class MainActivity : BaseActivity<ActMainBinding>() {
         TabLayoutMediator(
             mViewBinding.tabLayout, mViewBinding.viewPager, true, false
         ) { tab, position ->
+
+//            tab.setText(mTitles[position])
+//            tab.setIcon(mImages[position])
+//            if (position == 0) {
+//                (tab.view.getChildAt(0) as ImageView).imageTintList =
+//                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.appColor))
+//            } else {
+//                (tab.view.getChildAt(0) as ImageView).imageTintList =
+//                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.grey))
+//            }
+
+
             val tabView = ViewCustomTabBinding.inflate(LayoutInflater.from(this))
 
             tabView.tvTitle.text = mTitles[position]
@@ -101,8 +134,11 @@ class MainActivity : BaseActivity<ActMainBinding>() {
             if (position == 0) {
                 tabView.ivImage.setImageResource(mImages[position])
                 tabView.tvTitle.setTextColor(getColor(R.color.appColor))
-                DrawableCompat.setTintList(tabView.ivImage.drawable, ColorStateList.valueOf(
-                    getColor( R.color.appColor)))
+                DrawableCompat.setTintList(
+                    tabView.ivImage.drawable, ColorStateList.valueOf(
+                        getColor(R.color.appColor)
+                    )
+                )
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
 //                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
             } else {
@@ -114,7 +150,12 @@ class MainActivity : BaseActivity<ActMainBinding>() {
         }.attach()
 
         mViewBinding.tabLayout.post {
-            mViewBinding.viewPager.setPadding(0, 0, 0, mViewBinding.tabLayout.height + 10f.px2dip(this))
+            mViewBinding.viewPager.setPadding(
+                0,
+                0,
+                0,
+                mViewBinding.tabLayout.height + 10f.px2dip(this)
+            )
         }
 
         mViewBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -133,7 +174,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
                 }
 
 
-
+//
 //                tab.setIcon(mImages[tab.position])
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
 //                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.grey))
@@ -146,16 +187,45 @@ class MainActivity : BaseActivity<ActMainBinding>() {
                     val ivImage = findViewById<ImageView>(R.id.iv_image)
                     tvTitle.setTextColor(this@MainActivity.getColor(R.color.appColor))
                     ivImage.setImageResource(mImages[tab.position])
-                    DrawableCompat.setTintList(ivImage.drawable, ColorStateList.valueOf(
-                        getColor( R.color.appColor)))
+                    DrawableCompat.setTintList(
+                        ivImage.drawable, ColorStateList.valueOf(
+                            getColor(R.color.appColor)
+                        )
+                    )
                 }
 //                tab.setIcon(mImages[tab.position])
 //                (tab.view.getChildAt(0) as ImageView).imageTintList =
-//                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
+//                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.appColor))
 
             }
 
         })
+    }
+
+
+    private fun initPermission() {
+        RxPermissions(this).requestEachCombined(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_PHONE_STATE
+        )
+            .subscribe {
+                when {
+                    it.granted -> {
+                        //showShort("呦西，小伙子很不错")
+                    }
+
+                    it.shouldShowRequestPermissionRationale -> {
+
+                        showShort("逼崽子把权限关了还怎么玩，赶紧打开")
+                    }
+                    else -> {
+                        showShort("逼崽子把权限关了还怎么玩，赶紧打开")
+                    }
+                }
+            }
     }
 
     override fun initViewModel() {
@@ -218,7 +288,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
             }
 
             override fun onError(i: Int, s: String?, p2: JSONArray?) {
-                Log.e("打印日志", i.toString() + s+" "+p2)
+                Log.e("打印日志", i.toString() + s + " " + p2)
             }
         })
     }
@@ -242,7 +312,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
             }
 
             override fun onError(i: Int, s: String?, p2: JSONArray?) {
-                Log.e("打印日志", i.toString() + s+" "+p2)
+                Log.e("打印日志", i.toString() + s + " " + p2)
             }
         })
     }
@@ -267,27 +337,19 @@ class MainActivity : BaseActivity<ActMainBinding>() {
             }
 
             override fun onError(i: Int, s: String?, p2: JSONArray?) {
-                Log.e("打印日志", i.toString() + s+" "+p2)
+                Log.e("打印日志", i.toString() + s + " " + p2)
             }
         })
     }
 
 
-
-
-
-
-
-
-
-
     override fun onBackPressed() {
         //super.onBackPressed()
         val currentTimeMillis = System.currentTimeMillis()
-        if (currentTimeMillis-lastTime > 1000){
+        if (currentTimeMillis - lastTime > 1000) {
             lastTime = currentTimeMillis
             showShort(getString(R.string.string_close_application))
-        }else{
+        } else {
             moveTaskToBack(true)
         }
     }

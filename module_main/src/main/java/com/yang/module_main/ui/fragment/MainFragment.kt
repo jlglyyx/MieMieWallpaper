@@ -19,6 +19,7 @@ import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.TabAndViewPagerFragmentAdapter
 import com.yang.lib_common.adapter.TabMoreAdapter
 import com.yang.lib_common.base.ui.fragment.BaseFragment
+import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.databinding.ViewCustomTopTabBinding
@@ -38,7 +39,7 @@ import com.yang.module_main.viewmodel.MainViewModel
  * @Date: 2022/9/30 16:31
  */
 @Route(path = AppConstant.RoutePath.MAIN_FRAGMENT)
-class MainFragment : BaseFragment<FraMainBinding>() {
+class MainFragment : BaseLazyFragment<FraMainBinding>() {
 
     @InjectViewModel(true)
     lateinit var mainViewModel: MainViewModel
@@ -105,6 +106,41 @@ class MainFragment : BaseFragment<FraMainBinding>() {
             arguments?.getInt(AppConstant.Constant.WALL_TYPE) ?: mainViewModel.wallType
         mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
         mainViewModel.getTabs()
+
+
+
+
+        mainViewModel.mWallpaperTabData.observe(this) {
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.NORMAL
+            it.mapIndexed { index, wallpaperTabData ->
+                mFragments.add(
+                    buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
+                        .withInt(AppConstant.Constant.TYPE, index)
+                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
+                        .withInt(AppConstant.Constant.WALL_TYPE, mainViewModel.wallType)
+                        .navigation() as Fragment
+                )
+
+                // TODO:  删除
+                mFragments.add(
+                    buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
+                        .withInt(AppConstant.Constant.TYPE, index)
+                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
+                        .withInt(AppConstant.Constant.WALL_TYPE, mainViewModel.wallType)
+                        .navigation() as Fragment
+                )
+                wallpaperTabData.name
+            }.apply {
+                mTitles.addAll(this as MutableList<String>)
+                // TODO:  删除
+                mTitles.addAll(this as MutableList<String>)
+            }
+            initViewPager()
+            initTabLayout()
+        }
+        mainViewModel.uC.requestFailEvent.observe(this) {
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.ERROR
+        }
     }
 
 
@@ -167,37 +203,7 @@ class MainFragment : BaseFragment<FraMainBinding>() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
-        mainViewModel.mWallpaperTabData.observe(this) {
-            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.NORMAL
-            it.mapIndexed { index, wallpaperTabData ->
-                mFragments.add(
-                    buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
-                        .withInt(AppConstant.Constant.TYPE, index)
-                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
-                        .withInt(AppConstant.Constant.WALL_TYPE, mainViewModel.wallType)
-                        .navigation() as Fragment
-                )
 
-                // TODO:  删除
-                mFragments.add(
-                    buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
-                        .withInt(AppConstant.Constant.TYPE, index)
-                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
-                        .withInt(AppConstant.Constant.WALL_TYPE, mainViewModel.wallType)
-                        .navigation() as Fragment
-                )
-                wallpaperTabData.name
-            }.apply {
-                mTitles.addAll(this as MutableList<String>)
-                // TODO:  删除
-                mTitles.addAll(this as MutableList<String>)
-            }
-            initViewPager()
-            initTabLayout()
-        }
-        mainViewModel.uC.requestFailEvent.observe(this) {
-            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.ERROR
-        }
 
     }
 

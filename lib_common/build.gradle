@@ -43,6 +43,7 @@ android {
 
 
     buildTypes {
+        /*key_password 19981201*/
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

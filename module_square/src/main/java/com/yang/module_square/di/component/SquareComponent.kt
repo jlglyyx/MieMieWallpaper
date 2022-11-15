@@ -4,6 +4,7 @@ import com.yang.lib_common.remote.di.component.RemoteComponent
 import com.yang.lib_common.scope.ActivityScope
 import com.yang.module_square.di.factory.SquareViewModelFactory
 import com.yang.module_square.di.module.SquareModule
+import com.yang.module_square.ui.activity.DynamicDetailActivity
 import com.yang.module_square.ui.fragment.SquareFragment
 import com.yang.module_square.ui.fragment.SquareItemFragment
 import dagger.Component
@@ -39,5 +40,5 @@ interface SquareComponent {
 //
 //    fun inject(inject: MineUserInfoActivity)
 //
-//    fun inject(inject: MineChangeUserInfoActivity)
+    fun inject(inject: DynamicDetailActivity)
 }

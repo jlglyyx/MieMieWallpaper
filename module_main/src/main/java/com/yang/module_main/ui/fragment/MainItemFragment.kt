@@ -102,6 +102,11 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMo
 
     override fun initData() {
         onRefresh(mViewBinding.smartRefreshLayout)
+
+
+        mainViewModel.mWallpaperData.observe(this) {
+            mViewBinding.smartRefreshLayout.smartRefreshLayoutData(it,mAdapter,mainViewModel)
+        }
     }
 
     private fun initBanner() {
@@ -194,9 +199,7 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMo
 
         InjectViewModelProxy.inject(this)
 
-        mainViewModel.mWallpaperData.observe(this) {
-            mViewBinding.smartRefreshLayout.smartRefreshLayoutData(it,mAdapter,mainViewModel)
-        }
+
 
     }
 

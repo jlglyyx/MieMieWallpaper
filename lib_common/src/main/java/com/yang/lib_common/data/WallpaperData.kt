@@ -42,3 +42,17 @@ data class WallpaperTypeData(
     var name:String?,//类型
 )
 
+data class WallpaperDynamicData(
+    var id:String?,
+    var userId:String? = null,
+    var userName: String?,
+    var userImage: String?,
+    var userVipLevel: Int = 0 ,
+    var isAttention: Boolean = false,
+    var dynamicContent:String?,
+    var dynamicLikeNum:Int = 0,
+    var dynamicCommentNum:Int = 0,
+    var dynamicForwardNum:Int = 0,
+    var wallList:MutableList<WallpaperData>
+)
+

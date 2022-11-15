@@ -33,7 +33,7 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_1"
-                android:layout_marginTop="@dimen/dp_100"
+                android:layout_marginTop="@dimen/dp_130"
                 app:layout_constraintTop_toTopOf="@+id/iv_bg" />
 
             <com.hjq.shape.layout.ShapeConstraintLayout

@@ -33,6 +33,7 @@ data class UserInfoData(
     var userSign: Int?,
     var userIsSign: Boolean = false ,
     var userExtension: String?,
+    var isAttention: Boolean = false,
     var updateTime: String?,
     var createTime: String?,
     var userExtraInfo: String?

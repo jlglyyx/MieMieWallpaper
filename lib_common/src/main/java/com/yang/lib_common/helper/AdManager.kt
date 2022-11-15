@@ -106,7 +106,7 @@ class AdManager {
             override fun onClose() {}
             override fun onShowError(i: Int, s: String) {}
         })
-        val slot = DCloudAdSlot.Builder().adpid("2507000689").build()
+        val slot = DCloudAdSlot.Builder().adpid("1377300887").build()
         rewardAd.load(slot, object : DCRewardAdLoadListener {
             override fun onRewardAdLoad() {
                 rewardAd.show(context)

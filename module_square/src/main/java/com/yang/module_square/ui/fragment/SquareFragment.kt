@@ -16,6 +16,7 @@ import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.TabAndViewPagerFragmentAdapter
 import com.yang.lib_common.adapter.TabMoreAdapter
 import com.yang.lib_common.base.ui.fragment.BaseFragment
+import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.databinding.ViewCustomTopTabBinding
@@ -34,7 +35,7 @@ import com.yang.module_square.viewmodel.SquareViewModel
  * @Date: 2022/9/30 16:31
  */
 @Route(path = AppConstant.RoutePath.SQUARE_FRAGMENT)
-class SquareFragment : BaseFragment<FraSquareBinding>() {
+class SquareFragment : BaseLazyFragment<FraSquareBinding>() {
 
     @InjectViewModel(true)
     lateinit var squareViewModel: SquareViewModel
@@ -100,6 +101,39 @@ class SquareFragment : BaseFragment<FraSquareBinding>() {
         squareViewModel.wallType = arguments?.getInt(AppConstant.Constant.WALL_TYPE)?:squareViewModel.wallType
         mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
         squareViewModel.getTabs()
+
+
+        squareViewModel.mWallpaperTabData.observe(this) {
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.NORMAL
+            it.mapIndexed { index, wallpaperTabData ->
+                mFragments.add(
+                    buildARouter(AppConstant.RoutePath.SQUARE_ITEM_FRAGMENT)
+                        .withInt(AppConstant.Constant.TYPE, index)
+                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
+                        .withInt(AppConstant.Constant.WALL_TYPE, squareViewModel.wallType)
+                        .navigation() as Fragment
+                )
+
+                // TODO:  删除
+                mFragments.add(
+                    buildARouter(AppConstant.RoutePath.SQUARE_ITEM_FRAGMENT)
+                        .withInt(AppConstant.Constant.TYPE, index)
+                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
+                        .withInt(AppConstant.Constant.WALL_TYPE, squareViewModel.wallType)
+                        .navigation() as Fragment
+                )
+                wallpaperTabData.name
+            }.apply {
+                mTitles.addAll(this as MutableList<String>)
+                // TODO:  删除
+                mTitles.addAll(this as MutableList<String>)
+            }
+            initViewPager()
+            initTabLayout()
+        }
+        squareViewModel.uC.requestFailEvent.observe(this){
+            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.ERROR
+        }
     }
 
 
@@ -162,37 +196,7 @@ class SquareFragment : BaseFragment<FraSquareBinding>() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
-        squareViewModel.mWallpaperTabData.observe(this) {
-            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.NORMAL
-            it.mapIndexed { index, wallpaperTabData ->
-                mFragments.add(
-                    buildARouter(AppConstant.RoutePath.SQUARE_ITEM_FRAGMENT)
-                        .withInt(AppConstant.Constant.TYPE, index)
-                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
-                        .withInt(AppConstant.Constant.WALL_TYPE, squareViewModel.wallType)
-                        .navigation() as Fragment
-                )
 
-                // TODO:  删除
-                mFragments.add(
-                    buildARouter(AppConstant.RoutePath.SQUARE_ITEM_FRAGMENT)
-                        .withInt(AppConstant.Constant.TYPE, index)
-                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
-                        .withInt(AppConstant.Constant.WALL_TYPE, squareViewModel.wallType)
-                        .navigation() as Fragment
-                )
-                wallpaperTabData.name
-            }.apply {
-                mTitles.addAll(this as MutableList<String>)
-                // TODO:  删除
-                mTitles.addAll(this as MutableList<String>)
-            }
-            initViewPager()
-            initTabLayout()
-        }
-        squareViewModel.uC.requestFailEvent.observe(this){
-            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.ERROR
-        }
 
     }
 

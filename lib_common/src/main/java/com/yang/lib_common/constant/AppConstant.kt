@@ -1,5 +1,7 @@
 package com.yang.lib_common.constant
 
+import com.kuaishou.weapon.p0.jni.A
+
 interface AppConstant {
 
     object ClientInfo {
@@ -139,6 +141,9 @@ interface AppConstant {
         const val SQUARE_ITEM_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/SquareItemFragment"
 
 
+        const val DYNAMIC_DETAIL_ACTIVITY= "/$MODULE_VIDEO/$ACTIVITY/DynamicDetailActivity"
+
+
 //        const val ADVERTISEMENT_VIDEO_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
 //        const val VIDEO_MAIN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/MainActivity"
 //
@@ -265,6 +270,10 @@ interface AppConstant {
         const val INDEX = "index"
 
         const val IS_COLLECTION = "isCollection"
+
+        const val TO_LOAD = "toLoad"
+
+        const val OPEN_COMMENT = "open_comment"
 
         const val CONTENT = "content"
 

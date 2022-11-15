@@ -78,7 +78,7 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
             }
         }
         mViewBinding.ivBg.imageUrl =
-            "https://img1.baidu.com/it/u=1251916380,3661111139&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=800"
+            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F26%2F20200626112703_lipuj.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1670404916&t=38727bed25bebdc8c93e1f66a3c599c9"
         lifecycle.addObserver(mViewBinding.ivBg)
 
         mViewBinding.ivBg.clicks().subscribe {

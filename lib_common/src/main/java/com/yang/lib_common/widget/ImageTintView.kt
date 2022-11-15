@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.graphics.drawable.DrawableCompat
+import com.yang.lib_common.R
 
 /**
  * @ClassName: ImageTintView
@@ -21,6 +22,10 @@ class ImageTintView : AppCompatImageView {
         field = value
         setImageTint(field)
     }
+
+    var normalTint = Color.parseColor("#999999")
+
+    var clickTint = Color.RED
 
 //    var block : (view: View) -> Unit = {}
 
@@ -40,9 +45,9 @@ class ImageTintView : AppCompatImageView {
 
     private fun setImageTint(tint:Boolean){
         if (tint){
-            DrawableCompat.setTintList(drawable, ColorStateList.valueOf(Color.RED))
+            DrawableCompat.setTintList(drawable, ColorStateList.valueOf(clickTint))
         }else{
-            DrawableCompat.setTintList(drawable, ColorStateList.valueOf(Color.WHITE))
+            DrawableCompat.setTintList(drawable, ColorStateList.valueOf(normalTint))
         }
     }
 }

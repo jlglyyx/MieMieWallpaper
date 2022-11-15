@@ -99,6 +99,7 @@ class MineChangeUserInfoActivity : BaseActivity<ActChangeUserInfoBinding>() {
                     10,
                     true,
                     "",
+                    true,
                     "",
                     "",
                     ""

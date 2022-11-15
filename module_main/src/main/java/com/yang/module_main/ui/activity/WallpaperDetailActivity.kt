@@ -1,5 +1,6 @@
 package com.yang.module_main.ui.activity
 
+import android.graphics.Color
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -41,17 +42,48 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
 
     private lateinit var mWallpaperViewPagerAdapter: WallpaperViewPagerAdapter
 
+
+    /**
+     * 带进来所有的数据
+     */
     private var mWallpaperDataList: MutableList<WallpaperData>? = null
 
+
+    /**
+     * 带进来选中的数据
+     */
     private var mWallpaperData: WallpaperData? = null
 
+
+    /**
+     * 带进来的排序规则
+     */
     private var order = 0
 
+
+    /**
+     * 带进来的第几个数据
+     */
     private var index = -1
 
+
+    /**
+     * 搜索关键字
+     */
     private var keyword = ""
 
+
+    /**
+     * 是否是收藏数据
+     */
     private var isCollection = false
+
+
+    /**
+     * 是否加载更多数据
+     */
+    private var toLoad = true
+
 
     override fun initViewBinding(): ActWallpaperDetailBinding {
         return bind(ActWallpaperDetailBinding::inflate)
@@ -73,9 +105,20 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         isCollection =
             intent.getBooleanExtra(AppConstant.Constant.IS_COLLECTION, isCollection)
 
+
+
         keyword = intent.getStringExtra(AppConstant.Constant.KEYWORD)?:keyword
 
+
+
+        toLoad = intent.getBooleanExtra(AppConstant.Constant.TO_LOAD, toLoad)
+
+
+        mViewBinding.smartRefreshLayout.setEnableLoadMore(toLoad)
+
         mWallpaperDataList?.apply {
+
+
             if (index != -1) {
                 mWallpaperData = this[index]
                 mViewBinding.commonToolBar.centerContent = mWallpaperData?.title
@@ -83,8 +126,11 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                     if (it.imageName!!.isImage()) {
                         preload(this@WallpaperDetailActivity,it.imageUrl)
                     }
-                    mainViewModel.order = order
-                    mainViewModel.getWallpaper(it.tabId,keyword,isCollection)
+                    if (toLoad){
+                        //加载数据
+                        mainViewModel.order = order
+                        mainViewModel.getWallpaper(it.tabId,keyword,isCollection)
+                    }
                     mWallpaperViewPagerAdapter.addDataAll(this)
                     mViewBinding.viewPager.setCurrentItem(index,false)
 
@@ -201,7 +247,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                 holder.stvAttention.visibility = View.INVISIBLE
             }
 
-
+            holder.iivLikeNum.mViewItemImageBinding.ivImage.normalTint = Color.WHITE
             holder.iivLikeNum.setOnClickListener {
                 holder.iivLikeNum.mViewItemImageBinding.ivImage.tintClick = !holder.iivLikeNum.mViewItemImageBinding.ivImage.tintClick
             }

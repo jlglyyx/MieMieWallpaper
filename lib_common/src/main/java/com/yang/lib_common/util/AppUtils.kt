@@ -707,6 +707,32 @@ fun TextView.changeTypeface(path: String = "font/font_1.otf") {
 }
 
 
+
+/**
+ * @return 格式化文件大小格式
+ */
+fun formatNumUnit(num: Int): String {
+
+    Log.i(APP_UTILS_TAG, "formatSize: $num")
+
+    val fNum = num.toFloat()
+    return if (fNum / 10000 < 1){
+        num.toString()
+    }else if (fNum / 10000 < 1000){
+        DecimalFormat("0.00万").format(fNum / 10000)
+    }else if (fNum / 10000000 < 10){
+        DecimalFormat("0.00千万").format(fNum / 10000000)
+    }else{
+        DecimalFormat("0.00亿").format(fNum / 100000000)
+    }
+
+}
+
+
+
+
+
+
 fun <T> SmartRefreshLayout.smartRefreshLayoutData(
     data: MutableList<T>?,
     adapter: BaseQuickAdapter<T, BaseViewHolder>,

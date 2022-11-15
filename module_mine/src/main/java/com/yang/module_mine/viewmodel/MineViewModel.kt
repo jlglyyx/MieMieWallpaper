@@ -89,6 +89,7 @@ class MineViewModel @Inject constructor(
                 10,
                 true,
                 "",
+                true,
                 "",
                 "",
                 ""
@@ -123,6 +124,7 @@ class MineViewModel @Inject constructor(
                 10,
                 true,
                 "",
+                true,
                 "",
                 "",
                 ""
