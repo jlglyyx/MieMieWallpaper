@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:layout_marginEnd="@dimen/dp_6"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.yang.lib_common.widget.ImageTintView
+        android:layout_width="@dimen/sp_25"
+        android:layout_height="@dimen/sp_25"
+        android:layout_marginEnd="@dimen/dp_3"
+        android:padding="@dimen/dp_3"
+        android:id="@+id/iv_pay_type"
+        app:normalTint="@color/textColor_999999"
+        app:clickTint="@color/appColor"
+        android:src="@drawable/iv_we_chat"/>
+
+    <TextView
+        android:text="微信支付"
+        android:textSize="@dimen/sp_15"
+        android:id="@+id/tv_pay_type"
+        android:gravity="center"
+        android:textColor="@color/textColor_999999"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

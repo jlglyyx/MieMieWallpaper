@@ -43,26 +43,22 @@ class LoginActivity : BaseActivity<ActLoginBinding>() {
 
     override fun initView() {
         lifecycle.addObserver(mViewBinding.imageScrollView)
-        mViewBinding.imageScrollView.imageUrl =
-            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F26%2F20200626112703_lipuj.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1670404916&t=38727bed25bebdc8c93e1f66a3c599c9"
-
-
+        mViewBinding.imageScrollView.imageUrl = "${AppConstant.ClientInfo.IMAGE_MODULE}image/login.png"
         mViewBinding.tvLoginType.setOnClickListener {
             if (mainViewModel.loginType == 0) {
-                mViewBinding.clTime.visibility = View.INVISIBLE
+                mViewBinding.clTime.visibility = View.GONE
                 mViewBinding.etPassword.visibility = View.VISIBLE
                 mainViewModel.loginType = 1
                 mainViewModel.verificationText = ""
                 mViewBinding.etPassword.setText("")
-
-                mViewBinding.tvLoginType.setText(getString(R.string.string_login_verification_code))
+                mViewBinding.tvLoginType.text = getString(R.string.string_login_verification_code)
             } else {
                 mViewBinding.clTime.visibility = View.VISIBLE
-                mViewBinding.etPassword.visibility = View.INVISIBLE
+                mViewBinding.etPassword.visibility = View.GONE
                 mainViewModel.loginType = 0
                 mainViewModel.passwordText = ""
                 mViewBinding.etVerificationCode.setText("")
-                mViewBinding.tvLoginType.setText(getString(R.string.string_login_account_password))
+                mViewBinding.tvLoginType.text = getString(R.string.string_login_account_password)
             }
         }
 

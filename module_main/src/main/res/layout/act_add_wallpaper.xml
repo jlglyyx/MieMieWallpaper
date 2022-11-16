@@ -68,6 +68,14 @@
                     android:textSize="@dimen/sp_12"
                     android:text="添加地点"/>
             </LinearLayout>
+           <com.hjq.shape.view.ShapeTextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="@dimen/dp_10"
+               android:textSize="@dimen/sp_14"
+               android:textColor="@color/textColor_666666"
+               android:text="@string/string_upload_regulations"/>
+
         </LinearLayout>
 
 

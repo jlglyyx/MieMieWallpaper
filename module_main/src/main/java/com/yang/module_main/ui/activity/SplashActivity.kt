@@ -16,6 +16,7 @@ import com.huawei.hms.mlsdk.common.MLApplicationSetting.BundleKeyConstants.AppIn
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.lxj.xpopup.interfaces.OnConfirmListener
+import com.tencent.bugly.crashreport.CrashReport
 import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
@@ -41,9 +42,9 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
                 isGrantAll = isGrantAll and item.value
             }
             if (isGrantAll) {
-                createAppId(getAppId(path = obbDir.absolutePath))
+//                createAppId(getAppId(path = obbDir.absolutePath))
 
-                AdManager.instance.splashAd(this, mViewBinding.container) {
+//                AdManager.instance.splashAd(this, mViewBinding.container) {
                     buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY)
                         .withOptionsCompat(
                             ActivityOptionsCompat.makeCustomAnimation(
@@ -67,7 +68,7 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
                             }
 
                         })
-                }
+//                }
             } else {
                 initDialog()
             }
@@ -78,7 +79,6 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
     }
 
     override fun initData() {
-
     }
 
     override fun initView() {

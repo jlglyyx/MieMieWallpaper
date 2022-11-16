@@ -23,9 +23,9 @@ class ImageTintView : AppCompatImageView {
         setImageTint(field)
     }
 
-    var normalTint = Color.parseColor("#999999")
+    private var normalTint = Color.parseColor("#999999")
 
-    var clickTint = Color.RED
+    private var clickTint = Color.RED
 
 //    var block : (view: View) -> Unit = {}
 
@@ -41,6 +41,19 @@ class ImageTintView : AppCompatImageView {
 ////            tintClick = !tintClick
 //            block(it)
 //        }
+        val obtainStyledAttributes = context.obtainStyledAttributes(attrs,R.styleable.ImageTintView)
+        val normalTintColor = obtainStyledAttributes.getResourceId(R.styleable.ImageTintView_normalTint,0)
+        val clickTintColor = obtainStyledAttributes.getResourceId(R.styleable.ImageTintView_clickTint,0)
+        if (normalTintColor != 0){
+            normalTint = getContext().getColor(normalTintColor)
+        }
+        if (clickTintColor != 0){
+            clickTint = getContext().getColor(clickTintColor)
+        }
+
+
+        obtainStyledAttributes.recycle()
+
     }
 
     private fun setImageTint(tint:Boolean){

@@ -1,5 +1,6 @@
 package com.yang.module_square.di.component
 
+import com.kwad.sdk.core.config.d.ui
 import com.yang.lib_common.remote.di.component.RemoteComponent
 import com.yang.lib_common.scope.ActivityScope
 import com.yang.module_square.di.factory.SquareViewModelFactory
@@ -38,7 +39,6 @@ interface SquareComponent {
 //
 //    fun inject(inject: MineChangePhoneActivity)
 //
-//    fun inject(inject: MineUserInfoActivity)
-//
+
     fun inject(inject: DynamicDetailActivity)
 }

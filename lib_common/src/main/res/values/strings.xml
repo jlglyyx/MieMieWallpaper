@@ -19,7 +19,7 @@
     <string name="string_lost_password">忘记密码</string>
     <string name="string_register_content">未注册号码将自动注册</string>
     <string name="string_get_verification">获取验证码</string>
-    <string name="string_service_agreement">已阅读并同意<font color="#ffa500">《咩咩壁纸服务协议》</font></string>
+    <string name="string_service_agreement">已阅读并同意<font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font></string>
     <string name="string_to_login">立即登录</string>
     <string name="staring_close">关闭</string>
     <string name="string_confirm">确定</string>
@@ -61,6 +61,7 @@
 
     <string name="string_fans_attention_num"><Data><![CDATA[粉丝 <font color="#ffa500"><b>%1$s</b></font> 人 关注 <font color="#ffa500"><b>%2$s</b></font> 人]]></Data></string>
     <string name="string_vip_level"><Data><![CDATA[等级：<font color="#ff0000"><b>VIP%1$s</b></font>]]></Data></string>
+    <string name="string_upload_regulations">上传要求：\n&#160;&#160;1.清晰无水印，分辨率不得低于480*480；\n&#160;&#160;2.确认上传内容是原创内容或者获得他人授予权限内容；\n&#160;&#160;3.严禁上传色情、反动等违反中国法律条例内容，\n&#160;&#160;&#160;&#160;违者封禁账号并追究法律责任；</string>
 
 
 </resources>

@@ -48,6 +48,7 @@ interface AppConstant {
         const val MODULE_PICTURE = "module_picture"
         const val MODULE_LOGIN = "module_login"
         const val MODULE_TASK = "module_task"
+        const val MODULE_SQUARE = "module_square"
 
         /**
          * main
@@ -137,11 +138,12 @@ interface AppConstant {
         /**
          * square
          */
-        const val SQUARE_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/SquareFragment"
-        const val SQUARE_ITEM_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/SquareItemFragment"
+        const val SQUARE_FRAGMENT = "/$MODULE_SQUARE/$FRAGMENT/SquareFragment"
+        const val SQUARE_ITEM_FRAGMENT = "/$MODULE_SQUARE/$FRAGMENT/SquareItemFragment"
 
 
-        const val DYNAMIC_DETAIL_ACTIVITY= "/$MODULE_VIDEO/$ACTIVITY/DynamicDetailActivity"
+        const val DYNAMIC_DETAIL_ACTIVITY= "/$MODULE_SQUARE/$ACTIVITY/DynamicDetailActivity"
+
 
 
 //        const val ADVERTISEMENT_VIDEO_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
@@ -214,6 +216,10 @@ interface AppConstant {
         const val MINE_MY_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyInfoActivity"
 
         const val MINE_TASK_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/TaskHistoryActivity"
+
+        const val MINE_SQUARE_ACTIVITY= "/$MODULE_MINE/$ACTIVITY/MineSquareActivity"
+
+
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 

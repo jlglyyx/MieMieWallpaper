@@ -86,7 +86,7 @@ class MainActivity : BaseActivity<ActMainBinding>() {
             val await = async.await()
             withContext(Dispatchers.Main) {
                 if (await) {
-                    initPermission()
+//                    initPermission()
                     initViewPager()
                     initTabLayout()
                 }

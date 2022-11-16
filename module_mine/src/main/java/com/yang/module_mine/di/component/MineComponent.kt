@@ -41,4 +41,6 @@ interface MineComponent {
     fun inject(inject: MineUserInfoActivity)
 
     fun inject(inject: MineChangeUserInfoActivity)
+
+    fun inject(inject: MineSquareActivity)
 }

@@ -13,6 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/iv_image"
         android:src="@drawable/iv_down"
+        app:normalTint="@color/white"
         app:tint="@color/white" />
     <ImageView
         android:id="@+id/iv_tip"

@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository
 ) : BaseViewModel(application) {
 
-    var loginType = 0
+    var loginType = 1
 
     var phoneText = ""
 
@@ -65,21 +65,6 @@ class MainViewModel @Inject constructor(
 //
 //
     fun login() {
-        if (TextUtils.isEmpty(phoneText)) {
-            showShort("请输入手机号")
-            return
-        }
-        if (loginType == 1) {
-            if (TextUtils.isEmpty(passwordText)) {
-                showShort("请输入密码")
-                return
-            }
-        } else {
-            if (TextUtils.isEmpty(verificationText)) {
-                showShort("请输入验证码")
-                return
-            }
-        }
         if (!checkStatus) {
             showShort("请勾选协议")
             return

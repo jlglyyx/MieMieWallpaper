@@ -87,7 +87,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
 
         }
         mViewBinding.icvMyWork.clicks().subscribe {
-
+            buildARouter(AppConstant.RoutePath.MINE_SQUARE_ACTIVITY).withString(AppConstant.Constant.ID,UserInfoHold.userId).navigation()
         }
         mViewBinding.icvMyRights.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_MY_RIGHTS_ACTIVITY).navigation()

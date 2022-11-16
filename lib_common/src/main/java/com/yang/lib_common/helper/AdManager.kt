@@ -38,6 +38,7 @@ class AdManager {
 
 
     fun splashAd(context: Activity,container:RelativeLayout,finish:() -> Unit){
+        var isClose = false
         val splashAd = DCSplashAd(context)
         // 宽高必传，默认为屏幕宽高
 
@@ -55,12 +56,19 @@ class AdManager {
 
             override fun onSkip() {
                 Log.i(TAG, "onSkip: ")
-                finish()
+                if (!isClose){
+                    finish()
+                    isClose = true
+                }
             }
 
             override fun onClose() {
+
                 Log.i(TAG, "onClose: ")
-                finish()
+                if (!isClose){
+                    finish()
+                    isClose = true
+                }
             }
 
             override fun onShowError(i: Int, s: String) {

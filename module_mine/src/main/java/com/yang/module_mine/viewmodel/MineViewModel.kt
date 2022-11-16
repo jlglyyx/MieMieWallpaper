@@ -153,6 +153,26 @@ class MineViewModel @Inject constructor(
 
 
 
+    /** todo test
+     * 关键字查询 收藏查询 tab查询
+     */
+    fun getWallpaper(tabId:String?){
+        launch({
+            params[AppConstant.Constant.ORDER] = 0
+            params[AppConstant.Constant.TAB_ID] = tabId
+            params[AppConstant.Constant.WALL_TYPE] = 0
+            params[AppConstant.Constant.PAGE_NUMBER] = pageNum
+            params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
+            mineRepository.getWallpaper(params)
+        },{
+            mWallpaperData.postValue(it.data.list)
+        },{
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
+        },errorDialog = false)
+    }
+
+
 
     /**
      * 获取收藏壁纸

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.shape.layout.ShapeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:shape_strokeDisabledColor="@color/appColor"
+    app:shape_strokeWidth="@dimen/dp_2"
+    app:shape_solidColor="@color/white"
+    app:shape_solidDisabledColor="@color/appColor_30"
+    android:orientation="vertical"
+    app:shape_radius="@dimen/dp_6"
+    android:paddingBottom="@dimen/dp_4"
+    android:layout_marginVertical="@dimen/dp_3"
+    android:gravity="center_horizontal"
+    android:layout_marginEnd="@dimen/dp_10"
+    app:shape_strokeColor="@color/color_EEEEEE">
+
+    <com.hjq.shape.view.ShapeTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="限时特惠"
+        android:id="@+id/stv_desc"
+        app:shape_topLeftRadius="@dimen/dp_6"
+        app:shape_topRightRadius="@dimen/dp_6"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        android:paddingVertical="@dimen/dp_6"
+        app:shape_solidColor="@color/red" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/textColor_666666"
+        android:layout_marginTop="@dimen/dp_10"
+        android:id="@+id/tv_time"
+        android:text="1个月"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginHorizontal="@dimen/dp_30"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/textColor"
+            android:gravity="bottom"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/dp_6"
+            android:text="￥"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/sp_32"
+            android:textStyle="bold"
+            android:id="@+id/tv_price"
+            android:textColor="@color/textColor"
+            android:text="9.9"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:id="@+id/tv_original_price"
+        android:layout_marginTop="@dimen/dp_6"
+        android:textColor="@color/textColor_999999"
+        android:text="原价15"/>
+
+</com.hjq.shape.layout.ShapeLinearLayout>

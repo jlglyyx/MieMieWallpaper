@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/smartRefreshLayout"
     android:layout_width="match_parent"
+    android:background="@color/color_68228B"
     android:layout_height="match_parent">
 
     <com.scwang.smart.refresh.header.MaterialHeader
@@ -25,19 +26,18 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentScrim="@color/white"
+                app:contentScrim="@color/color_68228B"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-
 
 
                 <com.hjq.shape.layout.ShapeLinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_collapseMode="parallax"
-                    android:paddingTop="@dimen/dp_90"
-                    app:shape_startColor="@color/palegoldenrod"
-                    app:shape_endColor="@color/darkkhaki"
+                    android:paddingTop="@dimen/dp_70"
+                    app:shape_angle="90"
+                    app:shape_startColor="@color/color_68228B"
+                    app:shape_endColor="@color/color_5D478B"
                     android:orientation="vertical">
 
 
@@ -56,7 +56,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="￥ "
-                                android:textColor="@color/textColor"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/sp_16"
                                 android:textStyle="bold" />
 
@@ -64,7 +64,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="100"
-                                android:textColor="@color/textColor"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/sp_38"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -89,7 +89,7 @@
                                 android:id="@+id/tv_integral"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/textColor"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/sp_18"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -99,6 +99,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="@dimen/sp_16"
+                                android:textColor="@color/white"
                                 app:layout_constraintStart_toStartOf="@+id/tv_integral"
                                 app:layout_constraintEnd_toEndOf="@+id/tv_integral"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_integral"
@@ -125,7 +126,7 @@
                                 android:id="@+id/tv_ad_ticket"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/textColor"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/sp_18"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -139,6 +140,7 @@
                                 app:layout_constraintEnd_toEndOf="@+id/tv_ad_ticket"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_ad_ticket"
                                 android:layout_marginTop="@dimen/dp_2"
+                                android:textColor="@color/white"
                                 android:text="我的广告券"/>
                             <ImageView
                                 android:layout_width="@dimen/dp_20"
@@ -166,9 +168,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:centerContent="我的余额"
-                    app:rightContent="立即提现"
-                    app:rightContentVisible="true"
                     android:id="@id/commonToolBar"
+                    app:mTitleTextColor="@color/white"
                     app:toolbarBg="@android:color/transparent" />
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -186,6 +187,9 @@
             <com.hjq.shape.layout.ShapeLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:shape_topRightRadius="@dimen/dp_20"
+                app:shape_topLeftRadius="@dimen/dp_20"
+                app:shape_solidColor="@color/white"
                 android:orientation="vertical">
 
 

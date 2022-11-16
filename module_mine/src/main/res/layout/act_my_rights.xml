@@ -1,11 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+    <com.hjq.shape.layout.ShapeLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:shape_angle="90"
+        app:shape_startColor="@color/color_5D478B"
+        app:shape_endColor="@color/color_68228B">
     <com.yang.lib_common.widget.CommonToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:centerContent="我的权益"/>
+        app:toolbarBg="@android:color/transparent"
+        app:mTitleTextColor="@color/white"
+        app:centerContent="我的会员" />
+    </com.hjq.shape.layout.ShapeLinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:background="@color/white"
+        android:fillViewport="false">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <com.hjq.shape.layout.ShapeConstraintLayout
+                android:id="@+id/scl_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/dp_12"
+                android:paddingTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_50"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shape_angle="90"
+                app:shape_startColor="@color/color_68228B"
+                app:shape_endColor="@color/color_5D478B">
+
+                <com.hjq.shape.view.ShapeTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="立即续费"
+                    android:visibility="gone"
+                    android:id="@+id/stv_attention"
+                    android:textSize="@dimen/sp_14"
+                    app:shape_radius="@dimen/dp_12"
+                    android:textColor="@color/white"
+                    app:shape_solidColor="@color/appColor"
+                    android:paddingHorizontal="@dimen/dp_8"
+                    android:paddingVertical="@dimen/dp_3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/dp_15"
+                    app:layout_constraintTop_toTopOf="@+id/siv_img"/>
+
+                <ImageView
+                    android:id="@+id/siv_img"
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="@dimen/dp_60"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/iv_attr"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:text="修改一下昵称吧"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toRightOf="@+id/siv_img"
+                    app:layout_constraintTop_toTopOf="@+id/siv_img" />
+
+
+
+
+                <TextView
+                    android:id="@+id/tv_vip_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:text="暂未开通会员"
+                    android:textColor="@color/white10"
+                    android:textSize="@dimen/sp_14"
+                    app:layout_constraintLeft_toRightOf="@+id/siv_img"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+
+
+            </com.hjq.shape.layout.ShapeConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/view"
+                android:layout_marginBottom="@dimen/dp_20"
+                app:layout_constraintBottom_toBottomOf="@+id/scl_head"/>
+
+            <com.hjq.shape.layout.ShapeLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:shape_solidColor="@color/white"
+                android:paddingHorizontal="@dimen/dp_10"
+                android:paddingVertical="@dimen/dp_15"
+                app:shape_topLeftRadius="@dimen/dp_20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view"
+                app:shape_topRightRadius="@dimen/dp_20">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="请选择会员套餐"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColor"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:id="@+id/vipRecyclerView"/>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:id="@+id/payRecyclerView"/>
+                <com.hjq.shape.view.ShapeTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    app:shape_radius="@dimen/dp_20"
+                    android:paddingVertical="@dimen/dp_10"
+                    app:shape_startColor="#FFD02C"
+                    app:shape_endColor="#FF9E04"
+                    android:text="立即开通"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="会员专属权益"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColor"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/dp_20"
+                    app:spanCount="3"
+                    tools:itemCount="10"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    android:id="@+id/rightsRecyclerView"/>
+
+
+
+            </com.hjq.shape.layout.ShapeLinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

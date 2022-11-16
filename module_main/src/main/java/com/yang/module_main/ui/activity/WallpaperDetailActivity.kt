@@ -247,7 +247,6 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                 holder.stvAttention.visibility = View.INVISIBLE
             }
 
-            holder.iivLikeNum.mViewItemImageBinding.ivImage.normalTint = Color.WHITE
             holder.iivLikeNum.setOnClickListener {
                 holder.iivLikeNum.mViewItemImageBinding.ivImage.tintClick = !holder.iivLikeNum.mViewItemImageBinding.ivImage.tintClick
             }

@@ -1,9 +1,17 @@
 package com.yang.module_mine.ui.activity
 
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
-import com.yang.module_mine.databinding.ActMyBalanceBinding
+import com.yang.module_mine.adapter.PayTypeAdapter
+import com.yang.module_mine.adapter.VipPackageAdapter
+import com.yang.module_mine.adapter.VipRightsAdapter
+import com.yang.module_mine.data.PayTypeData
+import com.yang.module_mine.data.VipPackageData
+import com.yang.module_mine.data.VipRightsData
 import com.yang.module_mine.databinding.ActMyRightsBinding
 
 /**
@@ -14,6 +22,11 @@ import com.yang.module_mine.databinding.ActMyRightsBinding
  */
 @Route(path = AppConstant.RoutePath.MINE_MY_RIGHTS_ACTIVITY)
 class MyRightsActivity : BaseActivity<ActMyRightsBinding>() {
+
+    lateinit var mVipPackageAdapter: VipPackageAdapter
+    lateinit var mPayTypeAdapter: PayTypeAdapter
+    lateinit var mVipRightsAdapter: VipRightsAdapter
+
     override fun initViewBinding(): ActMyRightsBinding {
         return bind(ActMyRightsBinding::inflate)
     }
@@ -23,10 +36,82 @@ class MyRightsActivity : BaseActivity<ActMyRightsBinding>() {
     }
 
     override fun initView() {
-
+        initVipRecyclerView()
+        initPayRecyclerView()
+        initRightsRecyclerView()
     }
 
     override fun initViewModel() {
 
+    }
+
+
+    private fun initVipRecyclerView() {
+        mVipPackageAdapter = VipPackageAdapter()
+        mViewBinding.vipRecyclerView.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        mViewBinding.vipRecyclerView.adapter = mVipPackageAdapter
+
+        val list = mutableListOf<VipPackageData>().apply {
+            add(VipPackageData("0", "限时5折", "1年", "90", "180", true))
+            add(VipPackageData("1", "超值低价", "3个月", "27", "45"))
+            add(VipPackageData("2", "最划算", "1个月", "9.9", "15"))
+
+
+        }
+        mVipPackageAdapter.setNewData(list)
+        mVipPackageAdapter.setOnItemClickListener { adapter, view, position ->
+            val item = mVipPackageAdapter.getItem(position)
+            item?.let {
+                if (!it.isSelect) {
+                    mVipPackageAdapter.data.forEach { find ->
+                        find.isSelect = false
+                    }
+                    it.isSelect = true
+                    mVipPackageAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    private fun initPayRecyclerView() {
+        mPayTypeAdapter = PayTypeAdapter()
+        mViewBinding.payRecyclerView.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, true)
+        mViewBinding.payRecyclerView.adapter = mPayTypeAdapter
+
+        val list = mutableListOf<PayTypeData>().apply {
+            add(PayTypeData("0", "支付宝", R.drawable.iv_we_chat, "",false))
+            add(PayTypeData("1", "微信", R.drawable.iv_we_chat, "",false))
+            add(PayTypeData("2", "余额", R.drawable.iv_we_chat, "20.23",true))
+        }
+        mPayTypeAdapter.setNewData(list)
+
+        mPayTypeAdapter.setOnItemClickListener { adapter, view, position ->
+            val item = mPayTypeAdapter.getItem(position)
+            item?.let {
+                if (!it.isSelect) {
+                    mPayTypeAdapter.data.forEach { find ->
+                        find.isSelect = false
+                    }
+                    it.isSelect = true
+                    mPayTypeAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+
+    }
+
+    private fun initRightsRecyclerView() {
+        mVipRightsAdapter = VipRightsAdapter()
+        mViewBinding.rightsRecyclerView.adapter = mVipRightsAdapter
+
+        val list = mutableListOf<VipRightsData>().apply {
+            add(VipRightsData(R.drawable.iv_kf,"非任务功能免广告"))
+            add(VipRightsData(R.drawable.iv_kf,"会员专属标识"))
+            add(VipRightsData(R.drawable.iv_down,"壁纸无限下载"))
+            add(VipRightsData(R.drawable.iv_kf,"专属客服"))
+        }
+        mVipRightsAdapter.setNewData(list)
     }
 }
