@@ -63,12 +63,12 @@ fun loadImage(mContext: Context, resourceId: Int, imageView: ImageView) {
         .into(imageView)
 }
 
-fun loadCircle(mContext: Context, url: String?, imageView: ImageView,placeholder:Int? = R.drawable.iv_image_placeholder ,error:Int? = R.drawable.iv_image_error) {
+fun loadCircle(mContext: Context, url: String?, imageView: ImageView,placeholder:Int = R.drawable.iv_image_placeholder ,error:Int = R.drawable.iv_image_error) {
     val options = RequestOptions.circleCropTransform()
     Glide.with(mContext).asBitmap()
         .load(getRealUrl(url))
-        .placeholder(R.drawable.iv_image_placeholder)
-        .error(R.drawable.iv_image_error)
+        .placeholder(placeholder)
+        .error(error)
         .apply(options)
         .into(imageView)
 }
@@ -76,11 +76,6 @@ fun loadCircle(mContext: Context, url: String?, imageView: ImageView,placeholder
 fun loadRadius(mContext: Context, url: String?,radius:Float, imageView: ImageView) {
 
     val options = RequestOptions.bitmapTransform(RoundedCorners(radius.toInt()))
-    val shapeDrawable = ShapeDrawable()
-    shapeDrawable.apply {
-        shape = RoundRectShape(FloatArray(8){radius.dip2px(mContext).toFloat()}, null, null)
-        paint.color = getRandomColor()
-    }
     var width = 0
     var height = 0
     Glide.with(mContext).asBitmap()
@@ -93,12 +88,11 @@ fun loadRadius(mContext: Context, url: String?,radius:Float, imageView: ImageVie
                 height = resource.height
             }
         })
-    imageView.background = shapeDrawable
     Glide.with(mContext).asBitmap()
         .load(getRealUrl(url))
         .dontAnimate()
-        .placeholder(shapeDrawable)
-        .error(shapeDrawable)
+        .placeholder(R.drawable.iv_image_placeholder)
+        .error(R.drawable.iv_image_error)
         .fitCenter()
         .apply(options)
         .override(width,height)
@@ -155,7 +149,7 @@ fun ImageView.loadImage(mContext: Context, url: String?){
 fun ImageView.loadImage(mContext: Context, resourceId: Int){
     loadImage(mContext,resourceId,this)
 }
-fun ImageView.loadCircle(mContext: Context, url: String?,placeholder:Int? = R.drawable.iv_image_placeholder ,error:Int? = R.drawable.iv_image_error){
+fun ImageView.loadCircle(mContext: Context, url: String?,placeholder:Int = R.drawable.iv_image_placeholder ,error:Int = R.drawable.iv_image_error){
     loadCircle(mContext,url,this,placeholder,error)
 }
 fun ImageView.loadRadius(mContext: Context,radius:Float, url: String?){

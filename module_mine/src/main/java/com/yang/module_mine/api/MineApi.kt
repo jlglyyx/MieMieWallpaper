@@ -6,6 +6,7 @@ import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.room.entity.UserInfoData
+import com.yang.module_mine.data.WeChatInfoData
 import okhttp3.RequestBody
 import retrofit2.http.*
 
@@ -40,6 +41,16 @@ interface MineApi {
 
     @POST("user/changeUserInfo")
     suspend fun changeUserInfo(@Body userInfoData: UserInfoData): MResult<UserInfoData>
+
+
+    @POST
+    suspend fun getWeChatToken(@QueryMap params:MutableMap<String,Any?>,@Url url:String = "https://api.weixin.qq.com/sns/oauth2/access_token"): WeChatInfoData
+
+    @POST
+    suspend fun refreshWeChatToken(@QueryMap params:MutableMap<String,Any?>,@Url url:String = "https://api.weixin.qq.com/sns/oauth2/refresh_token"): WeChatInfoData
+
+
+
 
 
 

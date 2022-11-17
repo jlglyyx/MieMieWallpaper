@@ -21,18 +21,18 @@ import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.module_mine.R
-import com.yang.module_mine.databinding.FraMyFansBinding
+import com.yang.module_mine.databinding.FraMineFansBinding
 import com.yang.module_mine.viewmodel.MineViewModel
 
 
 /**
- * @ClassName: MainItemFragment
+ * @ClassName: MineFansFragment
  * @Description:
  * @Author: yxy
  * @Date: 2022/9/30 16:31
  */
 @Route(path = AppConstant.RoutePath.MINE_FANS_FRAGMENT)
-class MyFansFragment : BaseLazyFragment<FraMyFansBinding>() ,OnRefreshLoadMoreListener{
+class MineFansFragment : BaseLazyFragment<FraMineFansBinding>() ,OnRefreshLoadMoreListener{
 
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
@@ -41,8 +41,8 @@ class MyFansFragment : BaseLazyFragment<FraMyFansBinding>() ,OnRefreshLoadMoreLi
 
     private var fanType = 0
 
-    override fun initViewBinding(): FraMyFansBinding {
-        return bind(FraMyFansBinding::inflate)
+    override fun initViewBinding(): FraMineFansBinding {
+        return bind(FraMineFansBinding::inflate)
     }
 
     override fun initView() {

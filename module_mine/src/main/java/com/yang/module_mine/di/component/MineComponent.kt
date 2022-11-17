@@ -6,9 +6,9 @@ import com.yang.module_mine.di.factory.MineViewModelFactory
 import com.yang.module_mine.di.module.MineModule
 import com.yang.module_mine.ui.activity.*
 import com.yang.module_mine.ui.fragment.MineFragment
-import com.yang.module_mine.ui.fragment.MyCollectionFragment
-import com.yang.module_mine.ui.fragment.MyDownFragment
-import com.yang.module_mine.ui.fragment.MyFansFragment
+import com.yang.module_mine.ui.fragment.MineCollectionFragment
+import com.yang.module_mine.ui.fragment.MineDownFragment
+import com.yang.module_mine.ui.fragment.MineFansFragment
 import dagger.Component
 
 /**
@@ -26,11 +26,11 @@ interface MineComponent {
 
     fun inject(inject: MineFragment)
 
-    fun inject(inject: MyFansFragment)
+    fun inject(inject: MineFansFragment)
 
-    fun inject(inject: MyCollectionFragment)
+    fun inject(inject: MineCollectionFragment)
 
-    fun inject(inject: MyDownFragment)
+    fun inject(inject: MineDownFragment)
 
     fun inject(inject: MineSettingActivity)
 
@@ -43,4 +43,6 @@ interface MineComponent {
     fun inject(inject: MineChangeUserInfoActivity)
 
     fun inject(inject: MineSquareActivity)
+
+    fun inject(inject: MineWalletDetailActivity)
 }

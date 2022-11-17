@@ -16,20 +16,20 @@
             android:name=".ui.activity.TaskHistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.MyBalanceActivity"
+            android:name=".ui.activity.MineBalanceActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.MyRightsActivity"
+            android:name=".ui.activity.MineRightsActivity"
             android:exported="false" />
 
         <activity
             android:name=".ui.activity.MineUserInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.MyFansActivity"
+            android:name=".ui.activity.MineFansActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.MyCollectionActivity"
+            android:name=".ui.activity.MineCollectionActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.SuggestionActivity"
@@ -40,5 +40,11 @@
         <activity
             android:name=".ui.activity.MineSquareActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.activity.MineWalletDetailActivity"
+            android:exported="false" />
+
+        <activity android:name=".wxapi.WXEntryActivity"
+            android:exported="true"/>
     </application>
 </manifest>

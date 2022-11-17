@@ -6,6 +6,7 @@ import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.module_mine.api.MineApi
+import com.yang.module_mine.data.WeChatInfoData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.RequestBody
@@ -58,6 +59,20 @@ class MineRepository @Inject constructor(private val mineApi: MineApi) :BaseRepo
     suspend fun changeUserInfo(userInfoData: UserInfoData): MResult<UserInfoData> {
         return withContextIO{
             mineApi.changeUserInfo(userInfoData)
+        }
+    }
+
+
+    suspend fun getWeChatToken(params:MutableMap<String,Any?>): WeChatInfoData {
+
+        return withContext(Dispatchers.IO) {
+            mineApi.getWeChatToken(params)
+        }
+
+    }
+    suspend fun refreshWeChatToken(params:MutableMap<String,Any?>): WeChatInfoData {
+        return withContext(Dispatchers.IO) {
+            mineApi.refreshWeChatToken(params)
         }
     }
 }

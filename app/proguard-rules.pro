@@ -76,6 +76,23 @@
 -keep class com.pgl.sys.ces.* {*;}
 
 
+
+#微信支付
+-keep class com.tencent.mm.opensdk.** {
+    *;
+}
+
+-keep class com.tencent.wxop.** {
+    *;
+}
+
+-keep class com.tencent.mm.sdk.** {
+    *;
+}
+
+
+
+
 #------app混淆配置------#
 #-printmapping mapping.txt
 -obfuscationdictionary ./dictionary.txt         #引用第三方字典

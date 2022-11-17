@@ -10,4 +10,7 @@
 
     </application>
 
+    <queries>
+        <package android:name="com.tencent.mm" />
+    </queries>
 </manifest>

@@ -1,7 +1,5 @@
 package com.yang.module_mine.ui.activity
 
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -10,24 +8,24 @@ import com.google.android.material.appbar.AppBarLayout
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.module_mine.R
-import com.yang.module_mine.databinding.ActMyBalanceBinding
+import com.yang.module_mine.databinding.ActMineBalanceBinding
 import kotlin.math.abs
 
 /**
- * @ClassName: MyBalanceActivity
+ * @ClassName: MineBalanceActivity
  * @Description:
  * @Author: yxy
  * @Date: 2022/8/4 17:09
  */
-@Route(path = AppConstant.RoutePath.MINE_MY_BALANCE_ACTIVITY)
-class MyBalanceActivity : BaseActivity<ActMyBalanceBinding>() {
+@Route(path = AppConstant.RoutePath.MINE_BALANCE_ACTIVITY)
+class MineBalanceActivity : BaseActivity<ActMineBalanceBinding>() {
 
     lateinit var mAdapter: BaseQuickAdapter<String, BaseViewHolder>
 
     private var alphaPercent = 0f
 
-    override fun initViewBinding(): ActMyBalanceBinding {
-        return bind(ActMyBalanceBinding::inflate)
+    override fun initViewBinding(): ActMineBalanceBinding {
+        return bind(ActMineBalanceBinding::inflate)
     }
 
     override fun initData() {

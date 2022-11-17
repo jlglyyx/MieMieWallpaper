@@ -14,6 +14,8 @@ import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.*
 import com.yang.lib_common.R
+import com.yang.lib_common.remote.di.response.MResult
+import com.yang.module_mine.data.WeChatInfoData
 import com.yang.module_mine.repository.MineRepository
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -43,6 +45,17 @@ class MineViewModel @Inject constructor(
     val mCollectionWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
 
     val mDownWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
+
+    var mUserInfoData = MutableLiveData<UserInfoData>()
+
+    var pictureListLiveData = MutableLiveData<MutableList<String>>()
+
+
+    var mTTRewardMineTaskAd = MutableLiveData<TTRewardVideoAd>()
+
+
+    var mWeChatInfoData = MutableLiveData<WeChatInfoData>()
+
 
     fun getA() {
         launch({
@@ -223,12 +236,6 @@ class MineViewModel @Inject constructor(
 
 
 
-    var mUserInfoData = MutableLiveData<UserInfoData>()
-
-    var pictureListLiveData = MutableLiveData<MutableList<String>>()
-
-
-    var mTTRewardMineTaskAd = MutableLiveData<TTRewardVideoAd>()
 
 
 
@@ -261,6 +268,36 @@ class MineViewModel @Inject constructor(
             mineRepository.changeUserInfo(userInfoData)
         }, {
             mUserInfoData.postValue(it.data)
+        }, messages = arrayOf(getString(R.string.string_requesting)))
+    }
+
+
+
+
+
+    fun getWeChatToken(code:String) {
+        params[AppConstant.WeChatConstant.APP_ID] = AppConstant.WeChatConstant.WECHAT_PAY_ID
+        params[AppConstant.WeChatConstant.SECRET] = AppConstant.WeChatConstant.SECRET_ID
+        params[AppConstant.WeChatConstant.CODE] = code
+        params[AppConstant.WeChatConstant.GRANT_TYPE] = AppConstant.WeChatConstant.AUTHORIZATION_CODE
+        launch({
+            mineRepository.getWeChatToken(params)
+        }, {
+            Log.i("TAG", "getWeChatToken: "+it.toJson())
+            setMMKVValue(AppConstant.WeChatConstant.WECHAT_TOKEN,it.toString())
+            mWeChatInfoData.postValue(it)
+        }, messages = arrayOf(getString(R.string.string_requesting)))
+    }
+
+    fun refreshWeChatToken(refreshToken:String) {
+        params[AppConstant.WeChatConstant.APP_ID] = AppConstant.WeChatConstant.WECHAT_PAY_ID
+        params[AppConstant.WeChatConstant.REFRESH_TOKEN] = refreshToken
+        params[AppConstant.WeChatConstant.GRANT_TYPE] = AppConstant.WeChatConstant.REFRESH_TOKEN
+        launch({
+            mineRepository.refreshWeChatToken(params)
+        }, {
+            setMMKVValue(AppConstant.WeChatConstant.WECHAT_TOKEN,it.toString())
+            mWeChatInfoData.postValue(it)
         }, messages = arrayOf(getString(R.string.string_requesting)))
     }
 

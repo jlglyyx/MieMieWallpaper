@@ -8,6 +8,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.yang.lib_common.R
 import com.yang.lib_common.data.BannerBean
+import com.yang.lib_common.util.loadImage
+import com.yang.lib_common.util.loadRadius
 import com.yang.lib_common.util.showShort
 import com.youth.banner.adapter.BannerAdapter
 
@@ -44,10 +46,12 @@ class MBannerAdapter(mData: MutableList<BannerBean>) : BannerAdapter<BannerBean,
         holder.shapeAbleImageView.setOnClickListener {
             showShort("$position ${data.url}")
         }
-        Glide.with(holder.shapeAbleImageView).load(data.url)
-            .error(R.drawable.iv_image_error)
-            .placeholder(R.drawable.iv_image_placeholder)
-            .into(holder.shapeAbleImageView)
+
+        holder.shapeAbleImageView.loadImage(holder.shapeAbleImageView.context,data.url)
+//        Glide.with(holder.shapeAbleImageView).load(data.url)
+//            .error(R.drawable.iv_image_error)
+//            .placeholder(R.drawable.iv_image_placeholder)
+//            .into(holder.shapeAbleImageView)
     }
 
 

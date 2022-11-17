@@ -26,4 +26,11 @@ object UserInfoHold {
     val userName: String?
         get() = getMMKVValue(AppConstant.Constant.USER_INFO, "")
             ?.fromJson<UserInfoData>()?.userName
+
+    val userWeChatCode: String?
+        get() = getMMKVValue(AppConstant.WeChatConstant.CODE, "")
+
+    val userWeChatToken: String?
+        get() = getMMKVValue(AppConstant.WeChatConstant.WECHAT_TOKEN, "")
+
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginStart="@dimen/dp_2"
+    android:background="@color/white"
+    android:padding="@dimen/dp_6"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:id="@+id/iv_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_title"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/textColor"
+        tools:text="开通一个月会员"
+        android:layout_marginHorizontal="@dimen/dp_8"
+        app:layout_constraintEnd_toStartOf="@+id/tv_price"
+        app:layout_constraintStart_toEndOf="@+id/iv_image"
+        app:layout_constraintTop_toTopOf="@+id/iv_image"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_price"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold"
+        tools:text="-9.9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_name"
+        tools:text="余额支付"
+        android:textSize="@dimen/sp_12"
+        android:textColor="@color/textColor_666666"
+        android:paddingVertical="@dimen/dp_4"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_time"
+        android:textSize="@dimen/sp_12"
+        android:paddingVertical="@dimen/dp_3"
+        tools:text="2022-10-11 12:10:21"
+        android:textColor="@color/textColor_666666"
+        app:layout_constraintStart_toStartOf="@+id/tv_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

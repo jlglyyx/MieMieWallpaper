@@ -1,15 +1,10 @@
 package com.yang.module_mine.ui.fragment
 
 import android.graphics.Bitmap
-import android.graphics.drawable.RippleDrawable
 import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.google.android.material.ripple.RippleDrawableCompat
-import com.google.android.material.ripple.RippleUtils
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.lxj.xpopup.XPopup
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -81,16 +76,17 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(AppConstant.Constant.ID,UserInfoHold.userId).navigation()
         }
         mViewBinding.llWallet.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_MY_BALANCE_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_BALANCE_ACTIVITY).navigation()
         }
         mViewBinding.tvWalletDetail.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_WALLET_DETAIL_ACTIVITY).navigation()
 
         }
         mViewBinding.icvMyWork.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_SQUARE_ACTIVITY).withString(AppConstant.Constant.ID,UserInfoHold.userId).navigation()
         }
         mViewBinding.icvMyRights.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_MY_RIGHTS_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_RIGHTS_ACTIVITY).navigation()
         }
         mViewBinding.icvTaskHistory.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_TASK_HISTORY_ACTIVITY).navigation()
@@ -147,16 +143,16 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             }
         }
         mViewBinding.llAttention.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY).withInt(AppConstant.Constant.INDEX,0).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_FANS_ACTIVITY).withInt(AppConstant.Constant.INDEX,0).navigation()
         }
         mViewBinding.llFan.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY).withInt(AppConstant.Constant.INDEX,1).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_FANS_ACTIVITY).withInt(AppConstant.Constant.INDEX,1).navigation()
         }
         mViewBinding.icvMyCollection.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_MY_COLLECTION_ACTIVITY).withInt(AppConstant.Constant.INDEX,0).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_COLLECTION_ACTIVITY).withInt(AppConstant.Constant.INDEX,0).navigation()
         }
         mViewBinding.icvMyDown.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_MY_COLLECTION_ACTIVITY).withInt(AppConstant.Constant.INDEX,1).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_COLLECTION_ACTIVITY).withInt(AppConstant.Constant.INDEX,1).navigation()
         }
 
 
@@ -173,6 +169,10 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
         }
         LiveDataBus.instance.with(AppConstant.Constant.REFRESH).observe(this) {
             onRefresh(mViewBinding.smartRefreshLayout)
+        }
+        LiveDataBus.instance.with(AppConstant.WeChatConstant.CODE).observe(this) {
+            setMMKVValue(AppConstant.WeChatConstant.CODE,it.toString())
+            mineViewModel.getWeChatToken(it.toString())
         }
     }
 
@@ -273,6 +273,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
                 add(BannerBean("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201607%2F29%2F20160729224352_rVhZA.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660986299&t=326f6993d0c1ee5c0048b33fe9f0a6dc"))
                 add(BannerBean("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201508%2F15%2F20150815231707_JWQjx.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660986299&t=e3951129e167261b3f4c7c739becc463"))
             }), true)
+            .setBannerRound(20f)
             .isAutoLoop(true)
             .indicator = CircleIndicator(requireContext())
     }

@@ -18,6 +18,8 @@ class FilterDialog(context: Context) : PartShadowPopupView(context) {
     }
 
     var block : (mViewBinding:DialogFilterBinding) -> Unit = {}
+    var showBlock : (mViewBinding:DialogFilterBinding) -> Unit = {}
+    var dismissBlock : (mViewBinding:DialogFilterBinding) -> Unit = {}
 
     override fun onCreate() {
         super.onCreate()
@@ -26,6 +28,16 @@ class FilterDialog(context: Context) : PartShadowPopupView(context) {
 
     override fun getImplLayoutId(): Int {
         return R.layout.dialog_filter
+    }
+
+    override fun onShow() {
+        super.onShow()
+        showBlock(mViewBinding)
+    }
+
+    override fun onDismiss() {
+        super.onDismiss()
+        dismissBlock(mViewBinding)
     }
 
 

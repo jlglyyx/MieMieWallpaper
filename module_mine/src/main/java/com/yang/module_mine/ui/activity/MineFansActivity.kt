@@ -2,11 +2,8 @@ package com.yang.module_mine.ui.activity
 
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -16,18 +13,16 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.databinding.ViewCustomTopTabBinding
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
-import com.yang.module_mine.databinding.ActMyBalanceBinding
-import com.yang.module_mine.databinding.ActMyFansBinding
-import com.yang.module_mine.databinding.ActMyRightsBinding
+import com.yang.module_mine.databinding.ActMineFansBinding
 
 /**
- * @ClassName: MyFansActivity
+ * @ClassName: MineFansActivity
  * @Description:
  * @Author: yxy
  * @Date: 2022/8/4 17:09
  */
-@Route(path = AppConstant.RoutePath.MINE_MY_FANS_ACTIVITY)
-class MyFansActivity : BaseActivity<ActMyFansBinding>() {
+@Route(path = AppConstant.RoutePath.MINE_FANS_ACTIVITY)
+class MineFansActivity : BaseActivity<ActMineFansBinding>() {
 
     private var index = 0
 
@@ -38,8 +33,8 @@ class MyFansActivity : BaseActivity<ActMyFansBinding>() {
 
     private lateinit var mFragments: MutableList<Fragment>
 
-    override fun initViewBinding(): ActMyFansBinding {
-        return bind(ActMyFansBinding::inflate)
+    override fun initViewBinding(): ActMineFansBinding {
+        return bind(ActMineFansBinding::inflate)
     }
 
     override fun initData() {

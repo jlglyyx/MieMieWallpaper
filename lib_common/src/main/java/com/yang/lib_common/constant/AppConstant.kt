@@ -205,13 +205,13 @@ interface AppConstant {
 
         const val MINE_SUGGESTION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/SuggestionActivity"
 
-        const val MINE_MY_BALANCE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyBalanceActivity"
+        const val MINE_BALANCE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineBalanceActivity"
 
-        const val MINE_MY_RIGHTS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyRightsActivity"
+        const val MINE_RIGHTS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineRightsActivity"
 
-        const val MINE_MY_FANS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyFansActivity"
+        const val MINE_FANS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineFansActivity"
 
-        const val MINE_MY_COLLECTION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyCollectionActivity"
+        const val MINE_COLLECTION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineCollectionActivity"
 
         const val MINE_MY_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MyInfoActivity"
 
@@ -219,15 +219,17 @@ interface AppConstant {
 
         const val MINE_SQUARE_ACTIVITY= "/$MODULE_MINE/$ACTIVITY/MineSquareActivity"
 
+        const val MINE_WALLET_DETAIL_ACTIVITY= "/$MODULE_MINE/$ACTIVITY/MineWalletDetailActivity"
+
 
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
-        const val MINE_FANS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MyFansFragment"
+        const val MINE_FANS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFansFragment"
 
-        const val MINE_COLLECTION_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MyCollectionFragment"
+        const val MINE_COLLECTION_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineCollectionFragment"
 
-        const val MINE_DOWN_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MyDownFragment"
+        const val MINE_DOWN_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineDownFragment"
 
         const val MINE_EXCHANGE_STATUS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
 
@@ -237,6 +239,8 @@ interface AppConstant {
     }
 
     object Constant {
+
+
 
         const val LOGIN_STATUS = "login_status"
 
@@ -396,5 +400,29 @@ interface AppConstant {
 
     object NoticeChannel{
         const val DOWNLOAD = "download"
+    }
+
+    object WeChatConstant{
+
+        const val WECHAT_PAY_ID = "wx28d9126dc8ad997e"
+//        const val WECHAT_PAY_ID = "wxd930ea5d5a258f4f"
+
+        const val SECRET_ID = "1d6d1d57a3dd063b36d917bc0b44d964"
+
+        const val CODE = "code"
+
+        const val WECHAT_TOKEN = "wechat_token"
+
+        const val APP_ID = "appid"
+
+        const val REFRESH_TOKEN = "refresh_token"
+
+        const val GRANT_TYPE = "grant_type"
+
+        const val AUTHORIZATION_CODE = "authorization_code"
+
+        const val SECRET = "secret"
+
+
     }
 }

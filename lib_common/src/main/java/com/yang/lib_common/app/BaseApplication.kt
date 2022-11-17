@@ -4,18 +4,20 @@ import android.app.Activity
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.ComponentCallbacks2
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.net.ConnectivityManager
 import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
+import android.provider.UserDictionary.Words.APP_ID
 import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.tencent.bugly.crashreport.CrashReport
+import com.tencent.mm.opensdk.constants.ConstantsAPI
+import com.tencent.mm.opensdk.openapi.IWXAPI
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.QbSdk.PreInitCallback
@@ -26,7 +28,6 @@ import com.yang.lib_common.helper.getRemoteComponent
 import com.yang.lib_common.service.DaemonRemoteService
 import com.yang.lib_common.service.DaemonService
 import com.yang.lib_common.util.NetworkUtil
-import com.yang.lib_common.util.createAppId
 import io.dcloud.ads.core.DCloudAdManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -57,12 +58,16 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         initVideo()
 //        initWebView()
         initAd()
+        initWeChatPay()
     }
 
     companion object {
         private const val TAG = "BaseApplication"
 
         lateinit var baseApplication: BaseApplication
+
+        lateinit var weChatApi: IWXAPI
+
     }
 
     private fun initService() {
@@ -186,6 +191,21 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         //config.setAppId("__UNI__HelloUNIAD").adId = "129530020804"
 //        config.setAppId("__UNI__D955F27").adId = createAppId(path = obbDir.absolutePath)
         DCloudAdManager.init(this, config)
+    }
+
+    private fun initWeChatPay(){
+        // 通过 WXAPIFactory 工厂，获取 IWXAPI 的实例
+        weChatApi = WXAPIFactory.createWXAPI(this, AppConstant.WeChatConstant.WECHAT_PAY_ID, true)
+        // 将应用的 appId 注册到微信
+        weChatApi.registerApp(AppConstant.WeChatConstant.WECHAT_PAY_ID)
+//        //建议动态监听微信启动广播进行注册到微信
+//        registerReceiver(object : BroadcastReceiver() {
+//            override fun onReceive(context: Context, intent: Intent) {
+//
+//                // 将该 app 注册到微信
+//                api.registerApp(Constants.APP_ID)
+//            }
+//        }, IntentFilter(ConstantsAPI.ACTION_REFRESH_WXAPP))
     }
 
 
