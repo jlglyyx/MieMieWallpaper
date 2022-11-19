@@ -36,6 +36,8 @@
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/dialog_filter.xml" value="0.23385416666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/dialog_image_viewpager.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/dialog_image_viewpager_item.xml" value="0.24947916666666667" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/dialog_permission.xml" value="0.176" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/dialog_privacy_agreement.xml" value="0.1" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/empty_control_video.xml" value="0.2484375" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/item_child_comment.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/item_child_reply_comment.xml" value="0.264" />
@@ -59,7 +61,7 @@
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/view_v_line_05dp.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/xml/custom_wallpaper.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_add_wallpaper.xml" value="0.264" />
-        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_login.xml" value="0.264" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_login.xml" value="0.2" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_main.xml" value="0.2" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_search_wallpaper.xml" value="0.264" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_splash.xml" value="0.24947916666666667" />
@@ -93,6 +95,7 @@
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/act_my_rights.xml" value="0.1" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/act_suggestion.xml" value="0.176" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/act_task_history.xml" value="0.1" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/act_web.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/fra_mine.xml" value="0.2" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/fra_mine_1.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/fra_mine_fans.xml" value="0.2" />
@@ -107,7 +110,7 @@
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_pay_type.xml" value="0.1953125" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_vip_package.xml" value="0.1" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_vip_rights.xml" value="0.1" />
-        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_wallet_detail.xml" value="0.2484375" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_wallet_detail.xml" value="0.2" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_wallet_detail_filter.xml" value="0.264" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_wallpaper_dynamic.xml" value="0.1" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_square/src/main/res/layout/act_dynamic_detail.xml" value="0.2" />

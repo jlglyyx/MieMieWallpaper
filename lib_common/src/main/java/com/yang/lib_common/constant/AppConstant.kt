@@ -20,6 +20,20 @@ interface AppConstant {
 
         const val IMAGE_MODULE = "http://www.yyxjlgl.tk/module-main/"
 
+        /**
+         * 隐私政策
+         */
+        const val PRIVACY_AGREEMENT = "file:///android_asset/privacy_agreement.html"
+
+
+        /**
+         * 服务协议
+         */
+        // TODO: 替换网页
+        const val SERVICE_AGREEMENT = "file:///android_asset/service_agreement.html"
+
+        const val PRIVACY_AND_SERVICE_AGREEMENT = "file:///android_asset/privacy_and_service_agreement.html"
+
 
         const val TAG = "RemoteModule"
 
@@ -364,6 +378,8 @@ interface AppConstant {
 
         const val LAST_TIME = "last_time"
 
+        const val PRIVACY_AGREEMENT = "privacy_agreement"
+
         const val ITEM_CONTENT = 0
         const val ITEM_AD = 1
 
@@ -404,6 +420,8 @@ interface AppConstant {
 
     object WeChatConstant{
 
+        const val BUG_LY_ID = "2c33e69788"
+
         const val WECHAT_PAY_ID = "wx28d9126dc8ad997e"
 //        const val WECHAT_PAY_ID = "wxd930ea5d5a258f4f"
 
@@ -423,6 +441,22 @@ interface AppConstant {
 
         const val SECRET = "secret"
 
+
+    }
+    object UniADConstant{
+
+        const val UNI_ID = "__UNI__D955F27"
+
+        const val UNI_AD_ID = "121276090510"
+
+    }
+    object UMConstant{
+
+        const val UM_APP_ID = "6376166005844627b583b504"
+
+        const val UM_APP_CHANNEL = "MIE_MIE_APP"
+
+        const val UM_APP_MESSAGE_SECRET = "712c75fbb9d7fc0490f3c94ce6f2dd72"
 
     }
 }

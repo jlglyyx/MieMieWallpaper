@@ -14,13 +14,12 @@ import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
-import com.tencent.bugly.crashreport.CrashReport
-import com.tencent.mm.opensdk.constants.ConstantsAPI
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.QbSdk.PreInitCallback
+import com.umeng.commonsdk.UMConfigure
 import com.yang.lib_common.BuildConfig
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.handle.CrashHandle
@@ -59,6 +58,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
 //        initWebView()
         initAd()
         initWeChatPay()
+        initUM(baseApplication)
     }
 
     companion object {
@@ -99,10 +99,10 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         val measureTimeMillis = measureTimeMillis {
             CoroutineScope(Dispatchers.IO).launch {
                 delay(3000)
-                CrashReport.initCrashReport(application, "2c33e69788", BuildConfig.DEBUG)
+                //CrashReport.initCrashReport(application, AppConstant.WeChatConstant.BUG_LY_ID, BuildConfig.DEBUG)
                 createNotificationChannel()
             }
-            Thread.setDefaultUncaughtExceptionHandler(CrashHandle.instance)
+            Thread.setDefaultUncaughtExceptionHandler(CrashHandle(this))
         }
         Log.i(TAG, "initCrashReport: ==>${measureTimeMillis}")
     }
@@ -187,7 +187,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
 
     private fun initAd(){
         val config = DCloudAdManager.InitConfig()
-        config.setAppId("__UNI__D955F27").adId = "121276090510"
+        config.setAppId(AppConstant.UniADConstant.UNI_ID).adId =  AppConstant.UniADConstant.UNI_AD_ID
         //config.setAppId("__UNI__HelloUNIAD").adId = "129530020804"
 //        config.setAppId("__UNI__D955F27").adId = createAppId(path = obbDir.absolutePath)
         DCloudAdManager.init(this, config)
@@ -206,6 +206,14 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
 //                api.registerApp(Constants.APP_ID)
 //            }
 //        }, IntentFilter(ConstantsAPI.ACTION_REFRESH_WXAPP))
+    }
+
+    /**
+     * 初始化友盟
+     */
+    private fun initUM(application: BaseApplication){
+        UMConfigure.preInit(application.applicationContext,AppConstant.UMConstant.UM_APP_ID,AppConstant.UMConstant.UM_APP_CHANNEL)
+        UMConfigure.setLogEnabled(BuildConfig.DEBUG)
     }
 
 

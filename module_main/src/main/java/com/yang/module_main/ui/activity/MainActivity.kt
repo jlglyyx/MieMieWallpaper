@@ -17,14 +17,20 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tbruyelle.rxpermissions3.RxPermissions
+import com.umeng.analytics.MobclickAgent
+import com.umeng.commonsdk.UMConfigure
+import com.umeng.message.PushAgent
+import com.umeng.message.api.UPushRegisterCallback
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.*
 import com.yang.lib_common.adapter.TabAndViewPagerAdapter
+import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.databinding.ViewCustomTabBinding
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.getMMKVValue
 import com.yang.lib_common.util.px2dip
 import com.yang.lib_common.util.showShort
 import com.yang.module_main.databinding.ActMainBinding
@@ -39,10 +45,7 @@ import io.dcloud.ads.core.v2.interstitial.DCInterstitialAdLoadListener
 import io.dcloud.ads.core.v2.reward.DCRewardAd
 import io.dcloud.ads.core.v2.reward.DCRewardAdListener
 import io.dcloud.ads.core.v2.reward.DCRewardAdLoadListener
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 import org.json.JSONArray
 import org.json.JSONObject
@@ -70,6 +73,9 @@ class MainActivity : BaseActivity<ActMainBinding>() {
     }
 
     override fun initData() {
+        initUM()
+
+
         lifecycleScope.launch {
             val async = async(Dispatchers.IO) {
                 mFragments = mutableListOf<Fragment>().apply {
@@ -350,7 +356,39 @@ class MainActivity : BaseActivity<ActMainBinding>() {
             lastTime = currentTimeMillis
             showShort(getString(R.string.string_close_application))
         } else {
+            MobclickAgent.onKillProcess(this)
             moveTaskToBack(true)
         }
+    }
+
+    private fun initUM(){
+        lifecycleScope.launch(Dispatchers.IO) {
+            val privacyAgreement = getMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT, false)
+//            UMConfigure.submitPolicyGrantResult(BaseApplication.baseApplication.applicationContext, privacyAgreement)
+            if (privacyAgreement){
+                UMConfigure.init(BaseApplication.baseApplication.applicationContext,AppConstant.UMConstant.UM_APP_ID,AppConstant.UMConstant.UM_APP_CHANNEL,
+                    UMConfigure.DEVICE_TYPE_PHONE, AppConstant.UMConstant.UM_APP_MESSAGE_SECRET)
+                PushAgent.getInstance(this@MainActivity).register(object : UPushRegisterCallback{
+                    override fun onSuccess(deviceToken: String?) {
+                        //注册成功后返回deviceToken，deviceToken是推送消息的唯一标志
+                        Log.i(TAG, "注册成功 deviceToken:" + deviceToken);
+                    }
+
+                    override fun onFailure(errCode: String?, errDesc: String?) {
+                        Log.e(TAG, "注册失败 " + "code:" + errCode + ", desc:" + errDesc);
+                    }
+
+                })
+
+                PushAgent.getInstance(this@MainActivity).onAppStart()
+                Log.i(TAG, "initUM=====: ${PushAgent.getInstance(this@MainActivity).registrationId}")
+
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycleScope.cancel()
     }
 }

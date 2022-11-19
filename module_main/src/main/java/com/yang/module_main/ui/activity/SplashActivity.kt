@@ -4,24 +4,22 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.alibaba.android.arouter.facade.Postcard
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.facade.callback.NavigationCallback
-import com.huawei.hms.mlsdk.common.MLApplicationSetting.BundleKeyConstants.AppInfo.packageName
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
-import com.lxj.xpopup.interfaces.OnConfirmListener
-import com.tencent.bugly.crashreport.CrashReport
 import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.helper.AdManager
-import com.yang.lib_common.util.*
+import com.yang.lib_common.dialog.PermissionDialog
+import com.yang.lib_common.dialog.PrivacyAgreementDialog
+import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.getMMKVValue
+import com.yang.lib_common.util.isNextDay
+import com.yang.lib_common.util.setMMKVValue
 import com.yang.module_main.databinding.ActSplashBinding
 
 /**
@@ -34,6 +32,10 @@ import com.yang.module_main.databinding.ActSplashBinding
 class SplashActivity : BaseActivity<ActSplashBinding>() {
 
     private var basePopupView: BasePopupView? = null
+
+    private var basePrivacyPopupView: BasePopupView? = null
+
+    private var basePermissionPopupView: BasePopupView? = null
 
     private val registerForActivityResult =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
@@ -92,16 +94,16 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
             arrayOf(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_PHONE_STATE
             )
         )
     }
 
     private fun initDialog() {
         if (null == basePopupView) {
-            basePopupView = XPopup.Builder(this).dismissOnTouchOutside(false)
-                .asConfirm("提示", "不授权文件存储权限，将无法下载图片哦~", "", "去设置",
+            basePopupView = XPopup.Builder(this)
+                .dismissOnTouchOutside(false)
+                .dismissOnBackPressed(false)
+                .asConfirm("提示", "不授与权限，将无法下和上传载图片哦~", "", "去设置",
                     {
                         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                         intent.data = Uri.fromParts("package", packageName, null)
@@ -115,6 +117,52 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
             }
         }
     }
+    private fun initPermissionDialog() {
+        if (null == basePermissionPopupView) {
+            basePermissionPopupView = XPopup.Builder(this)
+                .dismissOnTouchOutside(false)
+                .dismissOnBackPressed(false)
+                .asCustom(PermissionDialog(this).apply {
+                    onCancel = {
+                        dismiss()
+                        finish()
+                    }
+                    onConfirm = {
+                        dismiss()
+                        setMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT,true)
+                        initPermission()
+                    }
+                })
+                .show()
+        } else {
+            if (!basePermissionPopupView!!.isShow) {
+                basePermissionPopupView!!.show()
+            }
+        }
+    }
+    private fun initPrivacyDialog() {
+        if (null == basePrivacyPopupView) {
+            basePrivacyPopupView = XPopup.Builder(this)
+                .dismissOnTouchOutside(false)
+                .dismissOnBackPressed(false)
+                .asCustom(PrivacyAgreementDialog(this).apply {
+                    onCancel = {
+                        dismiss()
+                        finish()
+                    }
+                    onConfirm = {
+                        dismiss()
+                        setMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT,true)
+                        initPermission()
+                        //initPermissionDialog()
+                    }
+                } ).show()
+        } else {
+            if (!basePrivacyPopupView!!.isShow) {
+                basePrivacyPopupView!!.show()
+            }
+        }
+    }
 
     override fun initViewModel() {
 
@@ -123,6 +171,12 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
 
     override fun onStart() {
         super.onStart()
-        initPermission()
+//        setMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT,false)
+        val privacyAgreement = getMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT, false)
+        if (privacyAgreement){
+            initPermission()
+        }else{
+            initPrivacyDialog()
+        }
     }
 }

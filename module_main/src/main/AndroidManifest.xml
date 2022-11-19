@@ -15,12 +15,24 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                <data android:scheme="6376166005844627b583b504" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".ui.activity.MainActivity"
-            android:exported="false"
-            android:theme="@style/WhiteActivity"
-            />
+            android:exported="true"
+            android:theme="@style/WhiteActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="6376166005844627b583b504" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.WallpaperDetailActivity"
             android:theme="@style/FullActivity"

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/dp_5"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_marginHorizontal="@dimen/dp_45"
+    android:layout_gravity="center"
+    android:background="@drawable/shape_remote_message_dialog_bg">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_title"
+        android:textSize="@dimen/sp_20"
+        android:textColor="@color/textColor"
+        android:textStyle="bold"
+        android:padding="@dimen/dp_10"
+        android:gravity="center"
+        android:text="咩咩壁纸服务协议与隐私协议"/>
+    <com.tencent.smtt.sdk.WebView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:padding="@dimen/dp_2"
+        android:id="@+id/webView"/>
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tv_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_16"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/dp_15"
+        android:paddingVertical="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textColor="@color/white"
+        app:shape_solidColor="@color/appColor"
+        app:shape_radius="@dimen/dp_20"
+        android:text="@string/string_read_and_agree"/>
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
+        android:textColor="@color/textColor_999999"
+        android:layout_marginTop="@dimen/dp_5"
+        android:text="@string/string_no_agree"/>
+
+</LinearLayout>

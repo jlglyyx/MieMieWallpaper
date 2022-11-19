@@ -59,7 +59,7 @@ fun setMMKVValue(key:String,value : Any){
  * @param key
  * @defaultValue key
  */
-fun <T> getMMKVValue(key:String,defaultValue:T):T?{
+fun <T> getMMKVValue(key:String,defaultValue:T):T{
 
     when (defaultValue ){
         is Boolean ->

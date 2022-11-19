@@ -50,7 +50,7 @@ class AboutActivity : BaseActivity<ActAboutBinding>() {
                     "服务协议"
                 ).withString(
                     AppConstant.Constant.URL,
-                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/about/serviceProtocol"
+                    AppConstant.ClientInfo.SERVICE_AGREEMENT
                 ).navigation()
             }
             icvPrivacyPolicy.clicks().subscribe {
@@ -59,7 +59,7 @@ class AboutActivity : BaseActivity<ActAboutBinding>() {
                     "隐私政策"
                 ).withString(
                     AppConstant.Constant.URL,
-                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/about/privacyPolicy"
+                    AppConstant.ClientInfo.PRIVACY_AGREEMENT
                 ).navigation()
             }
         }

@@ -2,6 +2,7 @@
 
 package com.yang.lib_common.util
 
+import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -11,20 +12,24 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.*
 import com.blankj.utilcode.util.ImageUtils.getImageType
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
 import com.huawei.hms.ads.kb
+import com.huawei.hms.mlsdk.common.MLApplicationSetting.BundleKeyConstants.AppInfo.packageName
 import com.jakewharton.rxbinding4.view.clicks
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
@@ -34,7 +39,9 @@ import com.luck.picture.lib.style.AlbumWindowStyle
 import com.luck.picture.lib.style.PictureSelectorStyle
 import com.luck.picture.lib.style.SelectMainStyle
 import com.luck.picture.lib.style.TitleBarStyle
+import com.lxj.xpopup.XPopup
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.tbruyelle.rxpermissions3.RxPermissions
 import com.yang.lib_common.R
 import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.viewmodel.BaseViewModel
@@ -726,6 +733,42 @@ fun formatNumUnit(num: Int): String {
         DecimalFormat("0.00亿").format(fNum / 100000000)
     }
 
+}
+
+
+fun FragmentActivity.requestPermission(vararg permissions:String,granted:() ->Unit,error:() ->Unit = {}){
+        RxPermissions(this).requestEachCombined(
+            *permissions
+        )
+            .subscribe {
+                when {
+                    it.granted -> {
+                        granted()
+                    }
+
+                    it.shouldShowRequestPermissionRationale -> {
+                        error()
+                        showNoPermissionDialog(this)
+                    }
+                    else -> {
+                        error()
+                        showNoPermissionDialog(this)
+                    }
+                }
+            }
+}
+
+fun showNoPermissionDialog(context: Context){
+    XPopup.Builder(context)
+        .dismissOnTouchOutside(false)
+        .asConfirm("提示", "不授与权限，将无法下和上传载图片哦~", "", "去设置",
+            {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.fromParts("package", packageName, null)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(intent)
+            }, null, true
+        ).show()
 }
 
 

@@ -20,9 +20,13 @@
     <string name="string_register_content">未注册号码将自动注册</string>
     <string name="string_get_verification">获取验证码</string>
     <string name="string_service_agreement">已阅读并同意<font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font></string>
+    <string name="string_privacy_agreement"><font color="#ffa500">《<u>隐私政策</u>》</font></string>
     <string name="string_to_login">立即登录</string>
     <string name="staring_close">关闭</string>
     <string name="string_confirm">确定</string>
+
+    <string name="string_read_and_agree">已阅读并同意</string>
+    <string name="string_no_agree">不同意</string>
 
 
     <string name="string_requesting">请求中…</string>
@@ -63,5 +67,6 @@
     <string name="string_vip_level"><Data><![CDATA[等级：<font color="#ff0000"><b>VIP%1$s</b></font>]]></Data></string>
     <string name="string_upload_regulations">上传要求：\n&#160;&#160;1.清晰无水印，分辨率不得低于480*480；\n&#160;&#160;2.确认上传内容是原创内容或者获得他人授予权限内容；\n&#160;&#160;3.严禁上传色情、反动等违反中国法律条例内容，\n&#160;&#160;&#160;&#160;违者封禁账号并追究法律责任；</string>
 
-
+    <string name="string_privacy_agreement_and_service_agreement"><p> &#160;&#160;&#160;&#160;感谢您使用咩咩壁纸，在您使用本软件过程中，我们可能会对您的部分个人信息进行收集、使用和共享。请您仔细阅读<a href="./example.pdf"><font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font></a>与<a href="../power_statement.html"><font color="#ffa500">《<u>隐私政策</u>》</font></a>，并确定完全了解我们对您个人信息的处理规则。如您同意<font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font>与<font color="#ffa500">《<u>隐私政策</u>》</font>，请点击“已阅读并同意”开始使用咩咩壁纸，我们会尽全力保护您的个人信息安全。</p></string>
+<!--    <string name="string_privacy_agreement_and_service_agreement">&#160;&#160;&#160;&#160;感谢您使用咩咩壁纸，在您使用本软件过程中，我们可能会对您的部分个人信息进行收集、使用和共享。请您仔细阅读<font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font>与<font color="#ffa500">《<u>隐私政策</u>》</font>，并确定完全了解我们对您个人信息的处理规则。如您同意<font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font>与<font color="#ffa500">《<u>隐私政策</u>》</font>，请点击“已阅读并同意”开始使用咩咩壁纸，我们会尽全力保护您的个人信息安全。</string>-->
 </resources>

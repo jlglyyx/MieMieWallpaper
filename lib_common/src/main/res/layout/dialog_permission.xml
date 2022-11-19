@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/dp_5"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_marginHorizontal="@dimen/dp_45"
+    android:layout_gravity="center"
+    android:background="@drawable/shape_remote_message_dialog_bg">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_title"
+        android:textSize="@dimen/sp_20"
+        android:textColor="@color/textColor"
+        android:textStyle="bold"
+        android:padding="@dimen/dp_10"
+        android:gravity="center"
+        android:text="授予权限"/>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
+        android:gravity="center"
+        android:padding="@dimen/dp_8"
+        android:scrollbars="vertical"
+        android:overScrollMode="never"
+        android:layout_marginTop="@dimen/dp_6">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_content"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/textColor"
+            android:lineSpacingExtra="@dimen/dp_5"
+            android:text="为保证app正常使用,需要您提供: \n拍照与录制视频权限（用于上传壁纸）\n读取文件和写入文件权限（用于下载保存壁纸）"/>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tv_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_16"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/dp_55"
+        android:paddingVertical="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textColor="@color/white"
+        app:shape_solidColor="@color/appColor"
+        app:shape_radius="@dimen/dp_20"
+        android:text="好的"/>
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
+        android:textColor="@color/textColor_999999"
+        android:layout_marginTop="@dimen/dp_5"
+        android:text="用到再说"/>
+
+</LinearLayout>

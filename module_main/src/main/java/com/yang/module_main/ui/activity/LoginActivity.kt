@@ -97,15 +97,28 @@ class LoginActivity : BaseActivity<ActLoginBinding>() {
             cbServiceAgreement.setOnCheckedChangeListener { buttonView, isChecked ->
                 mainViewModel.checkStatus = isChecked
             }
+
             tvServiceAgreement.clicks().subscribe {
                 buildARouter(AppConstant.RoutePath.MINE_WEB_ACTIVITY).withString(
                     AppConstant.Constant.TITLE,
                     "服务协议"
                 ).withString(
                     AppConstant.Constant.URL,
-                    AppConstant.ClientInfo.BASE_WEB_URL + "/pages/about/privacyPolicy"
+                    AppConstant.ClientInfo.SERVICE_AGREEMENT
                 ).navigation()
             }
+            tvPrivacyAgreement.clicks().subscribe {
+                buildARouter(AppConstant.RoutePath.MINE_WEB_ACTIVITY).withString(
+                    AppConstant.Constant.TITLE,
+                    "隐私政策"
+                ).withString(
+                    AppConstant.Constant.URL,
+                    AppConstant.ClientInfo.PRIVACY_AGREEMENT
+                ).navigation()
+            }
+
+
+
             tvLostPassword.clicks().subscribe {
                 buildARouter(AppConstant.RoutePath.MINE_CHANGE_PASSWORD_ACTIVITY).navigation()
             }

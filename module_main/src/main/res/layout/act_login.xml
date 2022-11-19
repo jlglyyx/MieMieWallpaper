@@ -185,6 +185,21 @@
                 android:id="@+id/tv_service_agreement"
                 android:text="@string/string_service_agreement"
                 app:layout_constraintBottom_toBottomOf="parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="与"
+                app:layout_constraintBottom_toBottomOf="parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:id="@+id/tv_privacy_agreement"
+                android:text="@string/string_privacy_agreement"
+                app:layout_constraintBottom_toBottomOf="parent" />
         </LinearLayout>
 
 

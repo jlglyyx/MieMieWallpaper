@@ -1,7 +1,10 @@
 package com.yang.lib_common.handle
 
+import android.content.Context
 import android.util.Log
+import com.umeng.analytics.MobclickAgent
 import com.yang.lib_common.app.BaseApplication
+import com.yang.lib_common.service.CustomWallpaperService.Companion.context
 import com.yang.lib_common.util.simpleDateFormat
 import java.io.File
 import java.io.FileOutputStream
@@ -16,7 +19,7 @@ import java.util.*
  * @Description
  * @Date 2021/8/4 17:04
  */
-class CrashHandle : Thread.UncaughtExceptionHandler {
+class CrashHandle(val context:Context) : Thread.UncaughtExceptionHandler {
 
     private val uncaughtExceptionHandler: Thread.UncaughtExceptionHandler? =
         Thread.getDefaultUncaughtExceptionHandler()
@@ -24,12 +27,15 @@ class CrashHandle : Thread.UncaughtExceptionHandler {
     companion object {
         private const val TAG = "CrashHandle"
 
-        val instance: CrashHandle by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-            CrashHandle()
-        }
     }
 
     override fun uncaughtException(t: Thread, e: Throwable) {
+        try {
+            MobclickAgent.onKillProcess(context)
+        }catch (e:java.lang.Exception){
+            e.printStackTrace()
+        }
+
         writeErrorMessage(e)
         uncaughtExceptionHandler?.uncaughtException(t, e)
     }
