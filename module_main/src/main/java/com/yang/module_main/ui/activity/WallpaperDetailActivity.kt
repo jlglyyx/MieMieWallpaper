@@ -21,6 +21,7 @@ import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.lib_common.data.WallpaperData
+import com.yang.lib_common.helper.AdManager
 import com.yang.module_main.databinding.ActWallpaperDetailBinding
 import com.yang.module_main.databinding.ViewWallpaperDetailBinding
 import com.yang.module_main.viewmodel.MainViewModel
@@ -260,12 +261,16 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                 holder.clControl.visibility = View.GONE
             }
             holder.stvSetWallpaper.clicks().subscribe {
-                data[position].imageName = "${System.currentTimeMillis()}.jpg"
-                downAndSetWallpaper(data[position].imageUrl?:"", data[position].imageName?:"")
+                AdManager.instance.showReward(this@WallpaperDetailActivity){
+                    data[position].imageName = "${System.currentTimeMillis()}.jpg"
+                    downAndSetWallpaper(data[position].imageUrl?:"", data[position].imageName?:"")
+                }
             }
             holder.iivDown.clicks().subscribe {
-                data[position].imageName = "${System.currentTimeMillis()}.jpg"
-                downAndSetWallpaper(data[position].imageUrl?:"", data[position].imageName?:"", true)
+                AdManager.instance.showReward(this@WallpaperDetailActivity){
+                    data[position].imageName = "${System.currentTimeMillis()}.jpg"
+                    downAndSetWallpaper(data[position].imageUrl?:"", data[position].imageName?:"", true)
+                }
             }
             try {
                 if (data[position + 1].imageName!!.isVideo()) {

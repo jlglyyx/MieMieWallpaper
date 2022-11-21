@@ -5,6 +5,8 @@ if (isModule.toBoolean()) {
 }
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply from: '../MobSDK.gradle'
+
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
@@ -74,6 +76,11 @@ android {
 //        implementation project(path: ':apt-annotation')
 //        implementation project(path: ':apt-processor')
     }
+
+
+
+
+
 
 }
 

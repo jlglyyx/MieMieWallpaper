@@ -15,6 +15,7 @@
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/drawable/layer_list_account_input.xml" value="0.1695" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/drawable/layer_list_splash.xml" value="0.16" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/drawable/layer_list_tab_indicator.xml" value="0.1455" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/drawable/selector_circle_check.xml" value="0.165" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/drawable/selector_commit_button_bg.xml" value="0.1575" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/drawable/shape_bottom_dialog_bg.xml" value="0.1895" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/drawable/shape_circle_32cd32_bg.xml" value="0.178" />
@@ -61,7 +62,7 @@
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/layout/view_v_line_05dp.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/lib_common/src/main/res/xml/custom_wallpaper.xml" value="0.24947916666666667" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_add_wallpaper.xml" value="0.264" />
-        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_login.xml" value="0.2" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_login.xml" value="0.1" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_main.xml" value="0.2" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_search_wallpaper.xml" value="0.264" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_main/src/main/res/layout/act_splash.xml" value="0.24947916666666667" />
@@ -107,7 +108,7 @@
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_fans.xml" value="0.2" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_image.xml" value="0.2" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_mine_more_function.xml" value="0.22604166666666667" />
-        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_pay_type.xml" value="0.1953125" />
+        <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_pay_type.xml" value="0.264" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_vip_package.xml" value="0.1" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_vip_rights.xml" value="0.1" />
         <entry key="..\:/TestWorkSpace/MieMieWallpaper/module_mine/src/main/res/layout/item_wallet_detail.xml" value="0.2" />

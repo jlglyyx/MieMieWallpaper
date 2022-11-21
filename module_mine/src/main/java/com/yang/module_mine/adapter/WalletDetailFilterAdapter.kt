@@ -10,7 +10,7 @@ import com.yang.module_mine.R
  * @Author: yxy
  * @Date: 2022/11/14 15:28
  */
-class WalletDetailFilterAdapter: BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_wallet_detail) {
+class WalletDetailFilterAdapter: BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_wallet_detail_filter) {
 
     override fun convert(helper: BaseViewHolder, item: String) {
         helper.setText(R.id.tv_title, item)

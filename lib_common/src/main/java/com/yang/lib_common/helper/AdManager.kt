@@ -102,17 +102,24 @@ class AdManager {
 
 
     fun showReward(context: Activity,finish:() -> Unit) {
+        var isSuccess = false
         val rewardAd = DCRewardAd(context)
         rewardAd.setRewardAdListener(object : DCRewardAdListener {
             override fun onReward(jsonObject: JSONObject) {
-                finish()
+                isSuccess = true
             }
             override fun onShow() {}
             override fun onClick() {}
             override fun onVideoPlayEnd() {}
             override fun onSkip() {}
-            override fun onClose() {}
-            override fun onShowError(i: Int, s: String) {}
+            override fun onClose() {
+                if (isSuccess){
+                    finish()
+                }
+            }
+            override fun onShowError(i: Int, s: String) {
+                finish()
+            }
         })
         val slot = DCloudAdSlot.Builder().adpid("1377300887").build()
         rewardAd.load(slot, object : DCRewardAdLoadListener {

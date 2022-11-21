@@ -4,8 +4,14 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import cn.sharesdk.framework.Platform
+import cn.sharesdk.framework.PlatformActionListener
+import cn.sharesdk.framework.ShareSDK
+import cn.sharesdk.tencent.qq.QQ
+import cn.sharesdk.wechat.friends.Wechat
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bytedance.msdk.adapter.util.UIUtils.setOnClickListener
 import com.jakewharton.rxbinding4.view.clicks
@@ -43,7 +49,8 @@ class LoginActivity : BaseActivity<ActLoginBinding>() {
 
     override fun initView() {
         lifecycle.addObserver(mViewBinding.imageScrollView)
-        mViewBinding.imageScrollView.imageUrl = "${AppConstant.ClientInfo.IMAGE_MODULE}image/login.png"
+        mViewBinding.imageScrollView.imageUrl =
+            "${AppConstant.ClientInfo.IMAGE_MODULE}image/login.png"
         mViewBinding.tvLoginType.setOnClickListener {
             if (mainViewModel.loginType == 0) {
                 mViewBinding.clTime.visibility = View.GONE
@@ -72,28 +79,26 @@ class LoginActivity : BaseActivity<ActLoginBinding>() {
             mainViewModel.login()
         }
         mViewBinding.tvOtherToLogin.clicks().subscribe {
-//            //设置授权登录的平台
-//            val plat = ShareSDK.getPlatform(QQ.NAME)
-//            //授权回调监听，监听oncomplete，onerror，oncancel三种状态
-//            plat.platformActionListener = object : PlatformActionListener{
-//                override fun onComplete(p0: Platform?, p1: Int, p2: HashMap<String, Any>?) {
-//                }
-//
-//                override fun onError(p0: Platform?, p1: Int, p2: Throwable?) {
-//                }
-//
-//                override fun onCancel(p0: Platform?, p1: Int) {
-//                }
-//
-//            }
-//            //抖音登录适配安卓9.0
-//            //ShareSDK.setActivity(MainActivity.this);
-//            plat.showUser(null)
-//            //plat.authorize();
+
 
         }
 
+
+
+
         mViewBinding.apply {
+
+            ivQqLogin.clicks().subscribe {
+
+                initOtherLogin(QQ.NAME)
+            }
+
+            ivWechatLogin.clicks().subscribe {
+                initOtherLogin(Wechat.NAME)
+            }
+
+
+
             cbServiceAgreement.setOnCheckedChangeListener { buttonView, isChecked ->
                 mainViewModel.checkStatus = isChecked
             }
@@ -132,11 +137,6 @@ class LoginActivity : BaseActivity<ActLoginBinding>() {
         }
 
 
-
-
-
-
-
         initTextChangedListener()
     }
 
@@ -156,6 +156,46 @@ class LoginActivity : BaseActivity<ActLoginBinding>() {
 
         }
 
+    }
+
+
+    private fun initOtherLogin(name:String) {
+        //设置授权登录的平台
+        val plat = ShareSDK.getPlatform(name)
+
+        //判定客户端是否可用
+        if (!plat.isClientValid){
+            showShort("请先安装第三方登录客户端")
+            return
+        }
+        if (plat.isAuthValid){
+            plat.removeAccount(true)
+        }
+
+
+        //授权回调监听，监听oncomplete，onerror，oncancel三种状态
+        plat.platformActionListener = object : PlatformActionListener {
+            override fun onComplete(platform: Platform, p1: Int, p2: HashMap<String, Any>?) {
+                Log.d("ShareSDK", "onComplete ---->  登录成功" + platform.getDb().exportData());
+                platform.getDb().getUserId();
+            }
+
+            override fun onError(p0: Platform?, p1: Int, throwable: Throwable) {
+                Log.d("ShareSDK", "onError ---->  登录失败" + throwable.toString());
+                Log.d("ShareSDK", "onError ---->  登录失败" + throwable.getStackTrace().toString());
+                Log.d("ShareSDK", "onError ---->  登录失败" + throwable.message);
+            }
+
+            override fun onCancel(p0: Platform?, p1: Int) {
+                Log.d("ShareSDK", "onCancel ---->  登录取消");
+            }
+
+        }
+        //抖音登录适配安卓9.0
+        //ShareSDK.setActivity(MainActivity.this);
+        plat.SSOSetting(false)
+        plat.showUser(null)
+        //plat.authorize();
     }
 
     private fun initTextChangedListener() {

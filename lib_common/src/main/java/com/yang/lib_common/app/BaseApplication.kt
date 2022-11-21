@@ -4,12 +4,13 @@ import android.app.Activity
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.*
+import android.content.ComponentCallbacks2
+import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
-import android.provider.UserDictionary.Words.APP_ID
 import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
@@ -23,10 +24,12 @@ import com.umeng.commonsdk.UMConfigure
 import com.yang.lib_common.BuildConfig
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.handle.CrashHandle
+import com.yang.lib_common.helper.PushHelper
 import com.yang.lib_common.helper.getRemoteComponent
 import com.yang.lib_common.service.DaemonRemoteService
 import com.yang.lib_common.service.DaemonService
 import com.yang.lib_common.util.NetworkUtil
+import com.yang.lib_common.util.getMMKVValue
 import io.dcloud.ads.core.DCloudAdManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,12 +39,13 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import kotlin.system.measureTimeMillis
 
 
-class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
+class BaseApplication : Application(), Application.ActivityLifecycleCallbacks {
 
     private var isFirstActivity = true
 
     override fun onCreate() {
         super.onCreate()
+        initUM()
         registerActivityLifecycleCallbacks(this)
     }
 
@@ -58,7 +62,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
 //        initWebView()
         initAd()
         initWeChatPay()
-        initUM(baseApplication)
+
     }
 
     companion object {
@@ -74,7 +78,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            startForegroundService(Intent(this, DaemonRemoteService::class.java))
 //            startForegroundService(Intent(this, DaemonService::class.java))
-        }else{
+        } else {
             startService(Intent(this, DaemonRemoteService::class.java))
             startService(Intent(this, DaemonService::class.java))
         }
@@ -185,15 +189,15 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
 
     }
 
-    private fun initAd(){
+    private fun initAd() {
         val config = DCloudAdManager.InitConfig()
-        config.setAppId(AppConstant.UniADConstant.UNI_ID).adId =  AppConstant.UniADConstant.UNI_AD_ID
+        config.setAppId(AppConstant.UniADConstant.UNI_ID).adId = AppConstant.UniADConstant.UNI_AD_ID
         //config.setAppId("__UNI__HelloUNIAD").adId = "129530020804"
 //        config.setAppId("__UNI__D955F27").adId = createAppId(path = obbDir.absolutePath)
         DCloudAdManager.init(this, config)
     }
 
-    private fun initWeChatPay(){
+    private fun initWeChatPay() {
         // 通过 WXAPIFactory 工厂，获取 IWXAPI 的实例
         weChatApi = WXAPIFactory.createWXAPI(this, AppConstant.WeChatConstant.WECHAT_PAY_ID, true)
         // 将应用的 appId 注册到微信
@@ -211,11 +215,17 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
     /**
      * 初始化友盟
      */
-    private fun initUM(application: BaseApplication){
-        UMConfigure.preInit(application.applicationContext,AppConstant.UMConstant.UM_APP_ID,AppConstant.UMConstant.UM_APP_CHANNEL)
+    private fun initUM() {
+        PushHelper.preInit(this)
         UMConfigure.setLogEnabled(BuildConfig.DEBUG)
-    }
+        CoroutineScope(Dispatchers.IO).launch {
+            val privacyAgreement = getMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT, false)
+            if (privacyAgreement) {
+                PushHelper.init(this@BaseApplication)
 
+            }
+        }
+    }
 
 
     override fun onTrimMemory(level: Int) {
@@ -237,7 +247,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
 
     override fun onActivityStarted(activity: Activity) {
         Log.i(TAG, "onActivityStarted: ")
-        if (isFirstActivity){
+        if (isFirstActivity) {
             initService()
             isFirstActivity = false
             unregisterActivityLifecycleCallbacks(this)

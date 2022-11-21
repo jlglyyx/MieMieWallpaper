@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.mob.MobSDK
 import com.tbruyelle.rxpermissions3.RxPermissions
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
@@ -26,6 +27,7 @@ import com.yang.lib_common.*
 import com.yang.lib_common.adapter.TabAndViewPagerAdapter
 import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.databinding.ViewCustomTabBinding
 import com.yang.lib_common.proxy.InjectViewModelProxy
@@ -73,9 +75,8 @@ class MainActivity : BaseActivity<ActMainBinding>() {
     }
 
     override fun initData() {
+
         initUM()
-
-
         lifecycleScope.launch {
             val async = async(Dispatchers.IO) {
                 mFragments = mutableListOf<Fragment>().apply {
@@ -362,28 +363,16 @@ class MainActivity : BaseActivity<ActMainBinding>() {
     }
 
     private fun initUM(){
+
         lifecycleScope.launch(Dispatchers.IO) {
             val privacyAgreement = getMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT, false)
-//            UMConfigure.submitPolicyGrantResult(BaseApplication.baseApplication.applicationContext, privacyAgreement)
             if (privacyAgreement){
-                UMConfigure.init(BaseApplication.baseApplication.applicationContext,AppConstant.UMConstant.UM_APP_ID,AppConstant.UMConstant.UM_APP_CHANNEL,
-                    UMConfigure.DEVICE_TYPE_PHONE, AppConstant.UMConstant.UM_APP_MESSAGE_SECRET)
-                PushAgent.getInstance(this@MainActivity).register(object : UPushRegisterCallback{
-                    override fun onSuccess(deviceToken: String?) {
-                        //注册成功后返回deviceToken，deviceToken是推送消息的唯一标志
-                        Log.i(TAG, "注册成功 deviceToken:" + deviceToken);
-                    }
-
-                    override fun onFailure(errCode: String?, errDesc: String?) {
-                        Log.e(TAG, "注册失败 " + "code:" + errCode + ", desc:" + errDesc);
-                    }
-
-                })
-
+                MobSDK.submitPolicyGrantResult(privacyAgreement)
                 PushAgent.getInstance(this@MainActivity).onAppStart()
-                Log.i(TAG, "initUM=====: ${PushAgent.getInstance(this@MainActivity).registrationId}")
-
             }
+        }
+        LiveDataBus.instance.with(AppConstant.UMConstant.DEVICE_TOKEN).observe(this){
+            mainViewModel.insertDeviceToken(it.toString())
         }
     }
 

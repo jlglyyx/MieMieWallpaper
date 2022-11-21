@@ -614,7 +614,7 @@
                         android:paddingHorizontal="@dimen/dp_8"
                         android:paddingVertical="@dimen/dp_5"
                         android:singleLine="true"
-                        android:text="签到天数0/3"
+                        android:text="每日签到0/1"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp_12"
                         app:shape_radius="@dimen/dp_20"

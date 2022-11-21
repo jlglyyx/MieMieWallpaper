@@ -3,6 +3,7 @@ package com.yang.module_main.viewmodel
 import android.app.Application
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
+import com.umeng.analytics.MobclickAgent
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
@@ -35,7 +36,7 @@ class MainViewModel @Inject constructor(
 
     var verificationText = ""
 
-    var checkStatus = true
+    var checkStatus = false
 
     var pageNum = 1
 
@@ -85,6 +86,10 @@ class MainViewModel @Inject constructor(
             updateUserInfo(it.data)
             setMMKVValue(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
             LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_SUCCESS)
+//            //当用户使用自有账号登录时，可以这样统计：
+//            MobclickAgent.onProfileSignIn("userID");
+////当用户使用第三方账号（如新浪微博）登录时，可以这样统计：
+//            MobclickAgent.onProfileSignIn("WB"，"userID");
             finishActivity()
         },{
 
@@ -138,6 +143,20 @@ class MainViewModel @Inject constructor(
             mainRepository.getWallpaper(params)
         },{
             mWallpaperData.postValue(it.data.list)
+        },{
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
+        },errorDialog = false)
+    }
+    /**
+     * 关键字查询 收藏查询 tab查询
+     */
+    fun insertDeviceToken(deviceToken:String?){
+        launch({
+            params[AppConstant.Constant.WALL_TYPE] = deviceToken
+            mainRepository.insertDeviceToken(params)
+        },{
+
         },{
             cancelRefreshLoadMore()
             showRecyclerViewErrorEvent()

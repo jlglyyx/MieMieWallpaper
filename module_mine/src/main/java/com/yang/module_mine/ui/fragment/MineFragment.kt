@@ -1,9 +1,18 @@
 package com.yang.module_mine.ui.fragment
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import cn.sharesdk.framework.Platform
+import cn.sharesdk.framework.PlatformActionListener
+import cn.sharesdk.framework.ShareSDK
+import cn.sharesdk.tencent.qq.QQ
+import cn.sharesdk.wechat.friends.Wechat
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.lxj.xpopup.XPopup
@@ -28,6 +37,7 @@ import com.yang.module_mine.data.MoreFunctionData
 import com.yang.module_mine.databinding.FraMineBinding
 import com.yang.module_mine.viewmodel.MineViewModel
 import com.youth.banner.indicator.CircleIndicator
+import java.util.HashMap
 
 
 /**
@@ -103,29 +113,47 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
                     }
 
                     override fun onConfirmClickListener(type: Int) {
-//                        when(type){
-//                            0 ->{
-//                                val platform = ShareSDK.getPlatform(QQ.NAME)
-//                                val shareParams = ShareParams()
-//                                shareParams.shareType = Platform.SHARE_TEXT
-//                                shareParams.title = "测试分享的标题"
-//                                shareParams.text = "测试文本"
-//                                platform.share(shareParams)
-//                            }
-//                            1 ->{
-//                                val platform = ShareSDK.getPlatform(Wechat.NAME)
-//                                val shareParams = ShareParams()
-//                                shareParams.shareType = Platform.SHARE_TEXT
-//                                shareParams.title = "测试分享的标题"
-//                                shareParams.text = "测试文本"
-//                                platform.share(shareParams)
-//                            }
-//                            2 ->{
-//                                val mClipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-//                                mClipboardManager.setPrimaryClip(ClipData.newPlainText(null, "复制复制复制"))
-//                                showShort("复制成功!")
-//                            }
-//                        }
+                        when(type){
+                            0 ->{
+                                val platform = ShareSDK.getPlatform(QQ.NAME)
+                                val shareParams = Platform.ShareParams()
+                                shareParams.shareType = Platform.SHARE_TEXT
+                                shareParams.title = "测试分享的标题"
+                                shareParams.text = "测试文本"
+                                platform.platformActionListener = object : PlatformActionListener{
+                                    override fun onComplete(
+                                        p0: Platform?,
+                                        p1: Int,
+                                        p2: HashMap<String, Any>?
+                                    ) {
+                                        Log.i(TAG, "onComplete:$p0 $p1  $p2 ")
+                                    }
+
+                                    override fun onError(p0: Platform?, p1: Int, p2: Throwable?) {
+                                        Log.i(TAG, "onError: $p0 $p1  $p2")
+                                    }
+
+                                    override fun onCancel(p0: Platform?, p1: Int) {
+                                        Log.i(TAG, "onCancel:$p0 $p1  ")
+                                    }
+
+                                }
+                                platform.share(shareParams)
+                            }
+                            1 ->{
+                                val platform = ShareSDK.getPlatform(Wechat.NAME)
+                                val shareParams = Platform.ShareParams()
+                                shareParams.shareType = Platform.SHARE_TEXT
+                                shareParams.title = "测试分享的标题"
+                                shareParams.text = "测试文本"
+                                platform.share(shareParams)
+                            }
+                            2 ->{
+                                val mClipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                mClipboardManager.setPrimaryClip(ClipData.newPlainText(null, "复制复制复制"))
+                                showShort("复制成功!")
+                            }
+                        }
                     }
 
                 }
@@ -138,9 +166,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             }
         }
         mViewBinding.stvAwardAd.clicks().subscribe {
-            AdManager.instance.showReward(requireActivity()){
-                mViewBinding.stvAwardAd.text = "签到天数1/3"
-            }
+            mViewBinding.stvAwardAd.text = "领取奖励"
         }
         mViewBinding.llAttention.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_FANS_ACTIVITY).withInt(AppConstant.Constant.INDEX,0).navigation()

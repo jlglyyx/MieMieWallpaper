@@ -4,7 +4,9 @@ import android.app.Application
 import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.blankj.utilcode.util.ActivityUtils.finishActivity
 import com.bytedance.sdk.openadsdk.*
+import com.umeng.analytics.MobclickAgent
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
@@ -154,6 +156,7 @@ class MineViewModel @Inject constructor(
             clearAllMMKV()
             LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS)
                 .postValue(AppConstant.Constant.LOGIN_FAIL)
+            MobclickAgent.onProfileSignOff()
             finishActivity()
         }, {
             clearAllMMKV()

@@ -119,19 +119,19 @@ class MineWalletDetailActivity:BaseActivity<ActMineWalletDetailBinding>(), OnRef
         mWalletDetailAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mWalletDetailAdapter.getItem(position)
             item?.let {
-                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
-                    .withOptionsCompat(
-                        ActivityOptionsCompat.makeCustomAnimation(
-                            this@MineWalletDetailActivity,
-                            R.anim.fade_in,
-                            R.anim.fade_out
-                        )
-                    )
-                    .withString(AppConstant.Constant.DATA, mWalletDetailAdapter.data.toJson())
-                    .withBoolean(AppConstant.Constant.IS_COLLECTION, true)
-                    .withInt(AppConstant.Constant.INDEX, position)
-                    .withInt(AppConstant.Constant.PAGE_NUMBER, mineViewModel.pageNum)
-                    .navigation()
+//                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
+//                    .withOptionsCompat(
+//                        ActivityOptionsCompat.makeCustomAnimation(
+//                            this@MineWalletDetailActivity,
+//                            R.anim.fade_in,
+//                            R.anim.fade_out
+//                        )
+//                    )
+//                    .withString(AppConstant.Constant.DATA, mWalletDetailAdapter.data.toJson())
+//                    .withBoolean(AppConstant.Constant.IS_COLLECTION, true)
+//                    .withInt(AppConstant.Constant.INDEX, position)
+//                    .withInt(AppConstant.Constant.PAGE_NUMBER, mineViewModel.pageNum)
+//                    .navigation()
             }
         }
 

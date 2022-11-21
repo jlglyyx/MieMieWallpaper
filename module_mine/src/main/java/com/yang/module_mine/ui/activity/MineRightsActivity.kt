@@ -112,7 +112,7 @@ class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
         mViewBinding.payRecyclerView.adapter = mPayTypeAdapter
 
         val list = mutableListOf<PayTypeData>().apply {
-            add(PayTypeData("0", "支付宝", R.drawable.iv_we_chat, "",false))
+            add(PayTypeData("0", "支付宝", R.drawable.iv_alipay, "",false))
             add(PayTypeData("1", "微信", R.drawable.iv_we_chat, "",false))
             add(PayTypeData("2", "余额", R.drawable.iv_we_chat, "20.23",true))
         }

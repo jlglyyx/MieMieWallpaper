@@ -21,7 +21,7 @@ class PayTypeAdapter : BaseQuickAdapter<PayTypeData, BaseViewHolder>(R.layout.it
 
         helper.setText(R.id.tv_pay_type,if (TextUtils.equals(item.id , "2")) "${item.desc} (${item.balance}元)" else item.desc)
             .setImageResource(R.id.iv_pay_type,item.imgResourceId)
-        ivPayType.tintClick = item.isSelect
+//        ivPayType.tintClick = item.isSelect
         if (item.isSelect){
             helper.setTextColor(R.id.tv_pay_type,mContext.getColor(com.yang.lib_common.R.color.appColor))
         }else{

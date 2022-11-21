@@ -60,6 +60,11 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) :BaseRepo
             mainApi.getSearchFind(params)
         }
     }
+    suspend fun insertDeviceToken(params:MutableMap<String,Any?>): MResult<MListResult<String>> {
+        return withContextIO {
+            mainApi.insertDeviceToken(params)
+        }
+    }
 
 //    suspend fun insertTask(taskData: TaskData): MResult<String> {
 //        return withContextIO {

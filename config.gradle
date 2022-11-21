@@ -95,8 +95,9 @@ ext {
             "umsdk-common"                 : "com.umeng.umsdk:common:9.5.0",
             "umsdk-asms"                   : "com.umeng.umsdk:asms:1.4.1",
             "umsdk-apm"                    : "com.umeng.umsdk:apm:1.7.0",
-            "umsdk-push"                    : "com.umeng.umsdk:push:6.5.5",
-            "umsdk-union"                    : "com.umeng.umsdk:union:1.4.0",
+            "umsdk-push"                   : "com.umeng.umsdk:push:6.5.5",
+            "umsdk-union"                  : "com.umeng.umsdk:union:1.4.0",
+            "autosize"                     : "com.github.JessYanCoding:AndroidAutoSize:v1.2.1",
 
 
     ]

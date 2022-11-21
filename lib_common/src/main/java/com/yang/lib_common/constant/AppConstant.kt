@@ -456,6 +456,8 @@ interface AppConstant {
 
         const val UM_APP_CHANNEL = "MIE_MIE_APP"
 
+        const val DEVICE_TOKEN = "deviceToken"
+
         const val UM_APP_MESSAGE_SECRET = "712c75fbb9d7fc0490f3c94ce6f2dd72"
 
     }

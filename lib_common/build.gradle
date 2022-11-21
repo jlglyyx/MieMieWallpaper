@@ -41,16 +41,35 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword '19981201'
+            storeFile file('../appKey.jks')
+            storePassword '19981201'
+        }
+        debug {
+            keyAlias 'key0'
+            keyPassword '19981201'
+            storeFile file('../appKey.jks')
+            storePassword '19981201'
+        }
+    }
+
 
     buildTypes {
         /*key_password 19981201*/
         release {
             minifyEnabled true
+            zipAlignEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
 }

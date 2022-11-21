@@ -58,4 +58,8 @@ interface MainApi {
     @POST("api/main/querySearchFind")
     suspend fun getSearchFind(@Body params:MutableMap<String,Any?>):MResult<MListResult<SearchFindData>>
 
+
+    @POST("api/main/insertDeviceToken")
+    suspend fun insertDeviceToken(@Body params:MutableMap<String,Any?>):MResult<MListResult<String>>
+
 }
