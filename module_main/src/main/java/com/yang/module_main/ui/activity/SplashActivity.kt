@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
@@ -14,8 +13,6 @@ import com.alibaba.android.arouter.facade.callback.NavigationCallback
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.mob.MobSDK
-import com.umeng.commonsdk.UMConfigure
-import com.umeng.message.PushAgent
 import com.yang.lib_common.R
 import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.ui.activity.BaseActivity
@@ -28,9 +25,11 @@ import com.yang.lib_common.util.getMMKVValue
 import com.yang.lib_common.util.isNextDay
 import com.yang.lib_common.util.setMMKVValue
 import com.yang.module_main.databinding.ActSplashBinding
+import io.rong.imlib.RongIMClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+
 
 /**
  * @ClassName: SplashActivity
@@ -165,9 +164,7 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
                     }
                     onConfirm = {
                         dismiss()
-                        setMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT, true)
-                        MobSDK.submitPolicyGrantResult(true)
-                        initUM()
+                        initPrivacy()
                         initPermission()
                         //initPermissionDialog()
                     }
@@ -196,9 +193,16 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
     }
 
 
-    private fun initUM() {
+    private fun initPrivacy() {
+        setMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT, true)
+
         lifecycleScope.launch(Dispatchers.IO) {
+            //第三方分享 登录
+            MobSDK.submitPolicyGrantResult(true)
+            //友盟统计推送
             PushHelper.init(BaseApplication.baseApplication.applicationContext)
+            //融云单聊
+            RongIMClient.init(BaseApplication.baseApplication.applicationContext, AppConstant.RIMConstant.APP_KEY)
         }
     }
 

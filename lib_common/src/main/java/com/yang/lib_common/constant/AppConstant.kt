@@ -235,6 +235,8 @@ interface AppConstant {
 
         const val MINE_WALLET_DETAIL_ACTIVITY= "/$MODULE_MINE/$ACTIVITY/MineWalletDetailActivity"
 
+        const val MINE_SEND_MESSAGE_ACTIVITY= "/$MODULE_MINE/$ACTIVITY/MineSendMessageActivity"
+
 
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
@@ -459,6 +461,15 @@ interface AppConstant {
         const val DEVICE_TOKEN = "deviceToken"
 
         const val UM_APP_MESSAGE_SECRET = "712c75fbb9d7fc0490f3c94ce6f2dd72"
+
+    }
+    object RIMConstant{
+
+        const val APP_KEY = "0vnjpoad0mshz"
+
+        const val RIM_TOKEN = "rim_token"
+
+
 
     }
 }

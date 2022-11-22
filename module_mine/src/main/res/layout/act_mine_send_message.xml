@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.yang.lib_common.widget.CommonToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@id/commonToolBar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/ll_bottom"
+        app:layout_constraintTop_toBottomOf="@+id/commonToolBar"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:overScrollMode="never" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingVertical="@dimen/dp_8"
+        android:paddingHorizontal="@dimen/dp_5"
+        android:gravity="center"
+        android:id="@+id/ll_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:src="@drawable/iv_attr"/>
+
+        <com.hjq.shape.view.ShapeEditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="@dimen/dp_10"
+            android:background="@null"
+            android:maxLines="4"
+            android:textSize="@dimen/sp_16"
+            android:id="@+id/et_message"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/dp_6"
+            android:paddingVertical="@dimen/dp_10"
+            app:shape_radius="@dimen/dp_18"
+            android:imeOptions="actionSearch"
+            app:shape_solidColor="@color/grey_1f"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:src="@drawable/iv_attr"/>
+
+        <com.hjq.shape.view.ShapeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:shape_solidColor="@color/appColor"
+            app:shape_radius="@dimen/dp_20"
+            android:paddingVertical="@dimen/dp_5"
+            android:paddingHorizontal="@dimen/dp_15"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            android:id="@+id/stv_send_message"
+            android:text="发送"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

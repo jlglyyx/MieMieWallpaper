@@ -73,6 +73,7 @@
                     app:layout_constraintStart_toStartOf="@+id/stv_attention"
                     android:textSize="@dimen/sp_15"
                     app:shape_radius="@dimen/dp_12"
+                    android:id="@+id/stv_send_message"
                     android:textColor="@color/white"
                     app:shape_solidColor="@color/orange"
                     android:paddingVertical="@dimen/dp_2"

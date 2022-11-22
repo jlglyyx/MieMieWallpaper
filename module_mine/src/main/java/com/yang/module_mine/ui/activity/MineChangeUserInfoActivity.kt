@@ -74,6 +74,7 @@ class MineChangeUserInfoActivity : BaseActivity<ActChangeUserInfoBinding>() {
                 val userInfoData = UserInfoData(
                     "0",
                     "sahk",
+                    "",
                     mViewBinding.etName.text.toString(),
                     0,
                     10,

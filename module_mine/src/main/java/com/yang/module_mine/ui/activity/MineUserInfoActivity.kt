@@ -8,8 +8,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.hjq.shape.view.ShapeImageView
-import com.huawei.hms.ads.id
-import com.kuaishou.weapon.p0.WeaponHI.mContext
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
@@ -123,6 +121,14 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
 
             llMore.clicks().subscribe {
                 buildARouter(AppConstant.RoutePath.MINE_SQUARE_ACTIVITY).withString(
+                    AppConstant.Constant.ID,
+                    userId
+                ).navigation()
+            }
+
+
+            stvSendMessage.clicks().subscribe {
+                buildARouter(AppConstant.RoutePath.MINE_SEND_MESSAGE_ACTIVITY).withString(
                     AppConstant.Constant.ID,
                     userId
                 ).navigation()

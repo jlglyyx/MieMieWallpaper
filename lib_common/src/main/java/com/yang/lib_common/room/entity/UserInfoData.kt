@@ -8,6 +8,7 @@ data class UserInfoData(
     @PrimaryKey
     var id: String,
     var token: String?,
+    var rimToken: String?,
     var userName: String?,
     var userSex: Int = 0,
     var userAge: Int?,

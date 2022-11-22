@@ -134,6 +134,7 @@ class LoginActivity : BaseActivity<ActLoginBinding>() {
             etPhone.setRadius(6f)
             etPassword.setRadius(6f)
             etVerificationCode.setRadius(6f)
+
         }
 
 

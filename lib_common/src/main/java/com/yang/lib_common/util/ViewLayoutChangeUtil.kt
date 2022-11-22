@@ -1,6 +1,7 @@
 package com.yang.lib_common.util
 
 import android.graphics.Rect
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 
@@ -12,21 +13,26 @@ import android.view.ViewGroup
  */
 class ViewLayoutChangeUtil {
 
+    private var isFirst = true
     var currentHeight = 0
 
     lateinit var layoutParams:ViewGroup.LayoutParams
 
-    fun add(rootView: View){
+    fun add(rootView: View,onChange:(open:Boolean) -> Unit ={}){
         val rect = Rect()
         rootView.viewTreeObserver.addOnGlobalLayoutListener {
-            rootView.getWindowVisibleDisplayFrame(rect)
-            if (currentHeight != rect.bottom){
-                layoutParams.height = rect.bottom
-                rootView.requestLayout()
-                currentHeight = rect.bottom
+            if (!isFirst){
+                rootView.getWindowVisibleDisplayFrame(rect)
+                if (currentHeight != rect.bottom){
+                    layoutParams.height = rect.bottom
+                    rootView.requestLayout()
+                    onChange(currentHeight > rect.bottom)
+                    currentHeight = rect.bottom
+                }
             }
         }
         layoutParams = rootView.layoutParams
+        isFirst = false
     }
 
 }

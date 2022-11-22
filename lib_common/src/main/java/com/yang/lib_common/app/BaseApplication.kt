@@ -31,6 +31,7 @@ import com.yang.lib_common.service.DaemonService
 import com.yang.lib_common.util.NetworkUtil
 import com.yang.lib_common.util.getMMKVValue
 import io.dcloud.ads.core.DCloudAdManager
+import io.rong.imlib.RongIMClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -45,7 +46,8 @@ class BaseApplication : Application(), Application.ActivityLifecycleCallbacks {
 
     override fun onCreate() {
         super.onCreate()
-        initUM()
+        initMMKV(baseApplication)
+
         registerActivityLifecycleCallbacks(this)
     }
 
@@ -56,7 +58,6 @@ class BaseApplication : Application(), Application.ActivityLifecycleCallbacks {
         initCrashReport(baseApplication)
         initARouter(baseApplication)
         initGlide(baseApplication)
-        initMMKV(baseApplication)
         initNetworkStatusListener(baseApplication)
         initVideo()
 //        initWebView()
@@ -130,6 +131,7 @@ class BaseApplication : Application(), Application.ActivityLifecycleCallbacks {
             CoroutineScope(Dispatchers.IO).launch {
                 val initialize = MMKV.initialize(application)
                 Log.i("TAG", "initMMKV: $initialize")
+                initUM()
             }
         }
         Log.i(TAG, "initMMKV: ==>${measureTimeMillis}")
@@ -222,7 +224,7 @@ class BaseApplication : Application(), Application.ActivityLifecycleCallbacks {
             val privacyAgreement = getMMKVValue(AppConstant.Constant.PRIVACY_AGREEMENT, false)
             if (privacyAgreement) {
                 PushHelper.init(this@BaseApplication)
-
+                RongIMClient.init(baseApplication.applicationContext, AppConstant.RIMConstant.APP_KEY)
             }
         }
     }

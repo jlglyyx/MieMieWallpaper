@@ -98,6 +98,7 @@ ext {
             "umsdk-push"                   : "com.umeng.umsdk:push:6.5.5",
             "umsdk-union"                  : "com.umeng.umsdk:union:1.4.0",
             "autosize"                     : "com.github.JessYanCoding:AndroidAutoSize:v1.2.1",
+            "rongcloud"                     : "cn.rongcloud.sdk:im_lib:5.1.5",
 
 
     ]

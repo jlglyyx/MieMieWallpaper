@@ -79,6 +79,7 @@ class MineViewModel @Inject constructor(
             val userInfoData1 = UserInfoData(
                 "0",
                 "sahk",
+                "",
                 null,
                 0,
                 10,
@@ -114,6 +115,7 @@ class MineViewModel @Inject constructor(
             val userInfoData1 = UserInfoData(
                 "0",
                 "sahk",
+                "",
                 "游客———",
                 0,
                 10,
