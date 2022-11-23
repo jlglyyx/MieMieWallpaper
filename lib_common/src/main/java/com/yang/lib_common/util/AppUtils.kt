@@ -17,6 +17,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
@@ -437,10 +438,14 @@ fun toCloseAd(vipLevel: Int): Boolean {
  * @param context
  * @param window
  */
-fun hideSoftInput(context: Context, view: View) {
+fun hideSoftInput(context: Context, view: View,show:Boolean = false) {
     val inputMethodManager =
         context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    if (show){
+        inputMethodManager.showSoftInput(view,0)
+    }else{
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }
 
 /**

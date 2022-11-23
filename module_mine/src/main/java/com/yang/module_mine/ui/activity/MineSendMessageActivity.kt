@@ -1,20 +1,20 @@
 package com.yang.module_mine.ui.activity
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
-import com.jakewharton.rxbinding4.view.clicks
 import com.yang.apt_annotation.annotain.InjectViewModel
+import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.UserInfoHold.userId
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.util.ViewLayoutChangeUtil
-import com.yang.lib_common.util.showShort
-import com.yang.lib_common.util.toJson
+import com.yang.lib_common.util.*
 import com.yang.module_mine.adapter.SendMessageAdapter
+import com.yang.module_mine.adapter.VipRightsAdapter
+import com.yang.module_mine.data.VipRightsData
 import com.yang.module_mine.databinding.ActMineSendMessageBinding
 import com.yang.module_mine.viewmodel.MineViewModel
 import io.rong.imlib.IRongCallback
@@ -27,7 +27,6 @@ import io.rong.imlib.model.ReceivedProfile
 import io.rong.message.TextMessage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
 
 /**
  * @ClassName: MineSendMessageActivity
@@ -43,13 +42,19 @@ class MineSendMessageActivity : BaseActivity<ActMineSendMessageBinding>() {
 
     private lateinit var mSendMessageAdapter: SendMessageAdapter
 
+    private lateinit var mVipRightsAdapter: VipRightsAdapter
+
     private var isFirst = true
 
-//    var userId = "222222"
-//    var rimToken = "vJ4LJVJ12Prl4UzX+k7XertTs5KC1FdiMUJM4xRPAEM=@hr57.cn.rongnav.com;hr57.cn.rongcfg.com"
+    private var isOpen = false
 
-    var userId = "111111"
-    var rimToken = "fesDNxPWA+PXoQoBJaSVX7tTs5KC1Fdir792t8e0Kxw=@hr57.cn.rongnav.com;hr57.cn.rongcfg.com"
+    private var isClickOpen = false
+
+    private val userId = "222222"
+    private val rimToken = "vJ4LJVJ12Prl4UzX+k7XertTs5KC1FdiMUJM4xRPAEM=@hr57.cn.rongnav.com;hr57.cn.rongcfg.com"
+
+//    var userId = "111111"
+//    var rimToken = "fesDNxPWA+PXoQoBJaSVX7tTs5KC1Fdir792t8e0Kxw=@hr57.cn.rongnav.com;hr57.cn.rongcfg.com"
 
     private var oldestMessageId = -1
 
@@ -93,7 +98,7 @@ class MineSendMessageActivity : BaseActivity<ActMineSendMessageBinding>() {
                 //showShort("收到${message.toJson()}    ${p1.toJson()} ")
                 lifecycleScope.launch {
                     mSendMessageAdapter.addData(message)
-                    mViewBinding.recyclerView.scrollToPosition(mSendMessageAdapter.data.size - 1)
+                    onOpenSoftInput()
                 }
 
             }
@@ -104,12 +109,51 @@ class MineSendMessageActivity : BaseActivity<ActMineSendMessageBinding>() {
     }
 
     override fun initView() {
-        ViewLayoutChangeUtil().add(findViewById(android.R.id.content)){
-            if (it && mSendMessageAdapter.data.size > 0){
-                mViewBinding.recyclerView.scrollToPosition(mSendMessageAdapter.data.size - 1)
+
+        mViewBinding.menuRecyclerView.minimumHeight = getMMKVValue(AppConstant.Constant.SOFT_INPUT_HEIGHT,837)
+
+        ViewLayoutChangeUtil().add(findViewById(android.R.id.content),false){open,height ->
+            showShort("$height")
+            isOpen = open
+            if (open){
+                mViewBinding.menuRecyclerView.minimumHeight = height
+                if (!isClickOpen){
+                    mViewBinding.menuRecyclerView.visibility = View.INVISIBLE
+                }
+                isClickOpen = false
+            }else{
+                if (!isClickOpen){
+                    mViewBinding.menuRecyclerView.visibility = View.GONE
+                }
+                isClickOpen = false
+            }
+            onOpenSoftInput()
+        }
+
+
+        mViewBinding.apply {
+            
+//            etMessage.isFocusable = true
+//            etMessage.requestFocus()
+//            onOpenSoftInput()
+//            ivMenu.loadImage(this@MineSendMessageActivity,"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.dtstatic.com%2Fuploads%2Fblog%2F202102%2F17%2F20210217200025_1047e.thumb.1000_0.jpg&refer=http%3A%2F%2Fc-ssl.dtstatic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1671786003&t=c40ef7107222af28da31df1b23fb0974")
+
+            ivMenu.setOnClickListener {
+                menuRecyclerView.visibility = View.VISIBLE
+                isClickOpen = true
+//                if (isOpen){
+                    hideSoftInput(this@MineSendMessageActivity,etMessage)
+//                }else{
+//                    hideSoftInput(this@MineSendMessageActivity,etMessage,true)
+//                }
+                onOpenSoftInput()
             }
         }
+
+
+
         initRecyclerView()
+        initBottomRecyclerView()
         mViewBinding.apply {
             stvSendMessage.setOnClickListener {
                 if (etMessage.text.isNullOrEmpty()){
@@ -127,7 +171,7 @@ class MineSendMessageActivity : BaseActivity<ActMineSendMessageBinding>() {
                         override fun onSuccess(message: Message) {
                             mSendMessageAdapter.addData(message)
                             etMessage.setText("")
-                            recyclerView.scrollToPosition(mSendMessageAdapter.data.size - 1)
+                            onOpenSoftInput()
                         }
 
                         override fun onError(p0: Message?, p1: RongIMClient.ErrorCode?) {
@@ -136,6 +180,8 @@ class MineSendMessageActivity : BaseActivity<ActMineSendMessageBinding>() {
                     })
             }
         }
+
+
     }
 
     private fun initRecyclerView() {
@@ -145,17 +191,22 @@ class MineSendMessageActivity : BaseActivity<ActMineSendMessageBinding>() {
         mViewBinding.recyclerView.itemAnimator = null
         mViewBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                Log.i(TAG, "onScrollStateChanged: $newState")
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     Glide.with(this@MineSendMessageActivity).resumeRequests()
                 } else {
                     Glide.with(this@MineSendMessageActivity).pauseRequests()
+//                    isClickOpen = false
+
+                    hideSoftInput(this@MineSendMessageActivity,mViewBinding.etMessage)
+                    mViewBinding.menuRecyclerView.visibility = View.GONE
                 }
             }
         })
         mViewBinding.recyclerView.adapter = mSendMessageAdapter
 
 
-        mSendMessageAdapter.setOnItemChildClickListener { adapter, view, position ->
+        mSendMessageAdapter.setOnItemChildClickListener { _, _, position ->
             val item = mSendMessageAdapter.getItem(position)
             item?.let {
 
@@ -165,7 +216,7 @@ class MineSendMessageActivity : BaseActivity<ActMineSendMessageBinding>() {
 
 
 
-        mSendMessageAdapter.setOnItemClickListener { adapter, view, position ->
+        mSendMessageAdapter.setOnItemClickListener { _, _, position ->
             val item = mSendMessageAdapter.getItem(position)
             item?.let {
 
@@ -224,6 +275,27 @@ class MineSendMessageActivity : BaseActivity<ActMineSendMessageBinding>() {
                 }
             })
 
+    }
+
+
+    private fun initBottomRecyclerView() {
+        mVipRightsAdapter = VipRightsAdapter()
+        mViewBinding.menuRecyclerView.adapter = mVipRightsAdapter
+        val list = mutableListOf<VipRightsData>().apply {
+            add(VipRightsData(R.drawable.iv_kf,"非任务功能免广告"))
+            add(VipRightsData(R.drawable.iv_kf,"会员专属标识"))
+            add(VipRightsData(R.drawable.iv_down,"壁纸无限下载"))
+            add(VipRightsData(R.drawable.iv_kf,"专属客服"))
+        }
+        mVipRightsAdapter.setNewData(list)
+
+    }
+
+
+    private fun onOpenSoftInput(){
+        if (mSendMessageAdapter.data.size > 0){
+            mViewBinding.recyclerView.scrollToPosition(mSendMessageAdapter.data.size - 1)
+        }
     }
 
 

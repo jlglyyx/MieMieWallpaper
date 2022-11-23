@@ -385,6 +385,9 @@ interface AppConstant {
         const val ITEM_CONTENT = 0
         const val ITEM_AD = 1
 
+
+        const val SOFT_INPUT_HEIGHT = "soft_input_height"
+
         const val ITEM_MAIN_TITLE = 0
         const val ITEM_MAIN_CONTENT_TEXT = 1
         const val ITEM_MAIN_CONTENT_IMAGE = 2

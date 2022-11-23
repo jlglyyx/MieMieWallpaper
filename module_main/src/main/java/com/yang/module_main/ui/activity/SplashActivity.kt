@@ -56,6 +56,7 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
 //                createAppId(getAppId(path = obbDir.absolutePath))
 
                 //AdManager.instance.splashAd(this, mViewBinding.container) {
+//                buildARouter(AppConstant.RoutePath.MINE_SEND_MESSAGE_ACTIVITY)
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY)
                     .withOptionsCompat(
                         ActivityOptionsCompat.makeCustomAnimation(

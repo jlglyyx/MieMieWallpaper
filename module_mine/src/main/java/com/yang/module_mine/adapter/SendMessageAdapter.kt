@@ -24,7 +24,7 @@ class SendMessageAdapter : BaseQuickAdapter<Message, BaseViewHolder>(R.layout.it
     override fun convert(helper: BaseViewHolder, item: Message) {
 
         Log.i("sssssssssssssss", "convert: ${item.senderUserId}")
-        val isMine = TextUtils.equals(item.senderUserId, "222222")
+        val isMine = TextUtils.equals(item.senderUserId, "111111")
         helper.setGone(R.id.cl_message, !isMine)
             .setGone(R.id.cl_message_right, isMine)
             .setGone(R.id.tv_time,item.receivedTime != 0L)

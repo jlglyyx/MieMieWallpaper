@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import com.yang.lib_common.constant.AppConstant
 
 /**
  * @ClassName: ViewLayoutChangeUtil
@@ -18,15 +19,21 @@ class ViewLayoutChangeUtil {
 
     lateinit var layoutParams:ViewGroup.LayoutParams
 
-    fun add(rootView: View,onChange:(open:Boolean) -> Unit ={}){
+    fun add(rootView: View,requestLayout:Boolean = true,onChange:(open:Boolean,height:Int) -> Unit ={_,_ ->}){
         val rect = Rect()
         rootView.viewTreeObserver.addOnGlobalLayoutListener {
             if (!isFirst){
                 rootView.getWindowVisibleDisplayFrame(rect)
                 if (currentHeight != rect.bottom){
-                    layoutParams.height = rect.bottom
-                    rootView.requestLayout()
-                    onChange(currentHeight > rect.bottom)
+                    if (requestLayout){
+                        layoutParams.height = rect.bottom
+                        rootView.requestLayout()
+                    }
+                    val height = currentHeight - rect.bottom
+                    if (height > 0){
+                        setMMKVValue(AppConstant.Constant.SOFT_INPUT_HEIGHT,height)
+                    }
+                    onChange(currentHeight > rect.bottom, height)
                     currentHeight = rect.bottom
                 }
             }

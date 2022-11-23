@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.yang.lib_common.widget.CommonToolBar
@@ -23,15 +24,24 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:overScrollMode="never" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingVertical="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_8"
         android:paddingHorizontal="@dimen/dp_5"
         android:gravity="center"
         android:id="@+id/ll_bottom"
+        android:animateLayoutChanges="true"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/dp_8"
         android:orientation="horizontal">
 
         <ImageView
@@ -55,11 +65,12 @@
             app:shape_solidColor="@color/grey_1f"
             android:layout_height="wrap_content"/>
 
-        <ImageView
+        <com.yang.lib_common.widget.CircleImageView
             android:layout_width="@dimen/dp_30"
             android:layout_height="@dimen/dp_30"
             android:layout_marginEnd="@dimen/dp_5"
-            android:src="@drawable/iv_attr"/>
+            android:id="@+id/iv_menu"
+            android:src="@drawable/iv_add"/>
 
         <com.hjq.shape.view.ShapeTextView
             android:layout_width="wrap_content"
@@ -73,5 +84,14 @@
             android:id="@+id/stv_send_message"
             android:text="发送"/>
 
+    </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/menu_recyclerView"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:itemCount="5"
+            android:visibility="gone"
+            app:spanCount="4"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
