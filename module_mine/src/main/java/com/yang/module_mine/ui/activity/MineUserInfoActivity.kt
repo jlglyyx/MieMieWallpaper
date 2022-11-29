@@ -49,22 +49,22 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
 
     override fun initData() {
         mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
-        mineViewModel.getWallpaper("1")
-        userId = intent.getStringExtra(AppConstant.Constant.ID).toString()
+        userId = intent.getStringExtra(AppConstant.Constant.USER_ID).toString()
+        mineViewModel.getWallpaper(userId)
         UserInfoHold.userInfo?.apply {
-            if (userImage.isNullOrEmpty()) {
+            if (userAttr.isNullOrEmpty()) {
                 mViewBinding.sivImg.loadImage(
                     this@MineUserInfoActivity,
                     com.yang.lib_common.R.drawable.iv_attr
                 )
             } else {
-                mViewBinding.sivImg.loadCircle(this@MineUserInfoActivity, userImage)
+                mViewBinding.sivImg.loadCircle(this@MineUserInfoActivity, userAttr)
             }
             if (!TextUtils.equals(userId, this.id)) {
                 mViewBinding.commonToolBar.rightContentVisible = false
             }
             mViewBinding.tvName.text = userName
-            mViewBinding.tvAccount.text = "账号：${userAccount}"
+            mViewBinding.tvAccount.text = "账号：${userPhone}"
             if (userVipLevel == 0) {
                 mViewBinding.tvVipLevel.text = "暂未开通会员"
                 mViewBinding.tvVipLevel.setTextColor(getColor(com.yang.lib_common.R.color.textColor_999999))
@@ -83,8 +83,8 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
                     userAttention
                 ), Html.FROM_HTML_OPTION_USE_CSS_COLORS
             )
-            mViewBinding.tvInfo.text = sexArray[userSex]
-            mViewBinding.ivSex.setImageResource(sexIconArray[userSex])
+            mViewBinding.tvInfo.text = sexArray[userSex!!]
+            mViewBinding.ivSex.setImageResource(sexIconArray[userSex!!])
             mViewBinding.tvDesc.text = userDescribe ?: "人生在世总要留点什么吧..."
         }
     }
@@ -115,7 +115,7 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
 
             errorReLoadView.onClick = {
                 errorReLoadView.status = ErrorReLoadView.Status.LOADING
-                mineViewModel.getWallpaper()
+                mineViewModel.getWallpaper(userId)
             }
 
 
@@ -143,8 +143,8 @@ class MineUserInfoActivity : BaseActivity<ActMineUserInfoBinding>() {
             BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_collection_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                loadSpaceRadius(mContext, item.imageUrl, 8f, imageView, 3, 15f)
-                helper.setText(R.id.tv_title, item.title)
+                loadSpaceRadius(mContext, item.wallUrl, 8f, imageView, 3, 15f)
+                helper.setText(R.id.tv_title, item.wallName)
                     .setText(R.id.tv_like_num, "${item.likeNum}")
                     .setGone(R.id.stv_vip, false)
             }

@@ -29,4 +29,10 @@ class PayTypeAdapter : BaseQuickAdapter<PayTypeData, BaseViewHolder>(R.layout.it
         }
     }
 
+    fun getSelectItem():PayTypeData?{
+       return data.findLast {
+            it.isSelect
+        }
+    }
+
 }

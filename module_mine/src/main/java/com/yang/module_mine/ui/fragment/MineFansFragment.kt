@@ -59,7 +59,6 @@ class MineFansFragment : BaseLazyFragment<FraMineFansBinding>() ,OnRefreshLoadMo
     private fun initRecyclerView() {
 
         mAdapter = object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_fans) {
-            @SuppressLint("ClickableViewAccessibility")
             override fun convert(helper: BaseViewHolder, item: String) {
                 val imageView = helper.getView<ImageView>(R.id.iv_image)
                 imageView.loadCircle(mContext,"https://img1.baidu.com/it/u=1924711271,453761707&fm=253&fmt=auto&app=138&f=JPG?w=500&h=500")

@@ -1,5 +1,6 @@
 package com.yang.lib_common.base.repository
 
+import com.yang.lib_common.handle.HttpErrorException
 import com.yang.lib_common.remote.di.response.MResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,7 +15,7 @@ open class BaseRepository {
 
     private fun <T : MResult<*>> T.isSuccess(): T {
         if (!this.success) {
-            throw Exception(this.message)
+            throw HttpErrorException(this.message,this.code)
         }
         return this
     }

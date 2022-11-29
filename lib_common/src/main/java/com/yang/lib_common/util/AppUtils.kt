@@ -423,10 +423,10 @@ fun toCloseAd(vipLevel: Int): Boolean {
     val userInfo = UserInfoHold.userInfo
     userInfo?.let {
         /*如果过期了返回*/
-        if (it.userVipExpired) {
+        if (it.userVipExpired!!) {
             return false
         }
-        if (it.userVipLevel >= vipLevel) {
+        if (it.userVipLevel!! >= vipLevel) {
             return true
         }
     }
@@ -723,13 +723,13 @@ fun TextView.changeTypeface(path: String = "font/font_1.otf") {
 /**
  * @return 格式化文件大小格式
  */
-fun formatNumUnit(num: Int): String {
+fun Int.formatNumUnit(): String {
 
-    Log.i(APP_UTILS_TAG, "formatSize: $num")
+    Log.i(APP_UTILS_TAG, "formatSize: $this")
 
-    val fNum = num.toFloat()
+    val fNum = this.toFloat()
     return if (fNum / 10000 < 1){
-        num.toString()
+        this.toString()
     }else if (fNum / 10000 < 1000){
         DecimalFormat("0.00万").format(fNum / 10000)
     }else if (fNum / 10000000 < 10){

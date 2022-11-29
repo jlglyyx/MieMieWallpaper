@@ -128,8 +128,8 @@ class MainItemFragment : BaseLazyFragment<FraMainItemBinding>(), OnRefreshLoadMo
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                loadSpaceRadius(mContext, item.imageUrl, 10f, imageView, 2, 10f)
-                helper.setText(R.id.tv_title,item.title)
+                loadSpaceRadius(mContext, item.wallUrl, 10f, imageView, 2, 10f)
+                helper.setText(R.id.tv_title,item.wallName)
                 .setText(R.id.tv_like_num,"${item.likeNum}")
                     .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }

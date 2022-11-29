@@ -27,9 +27,9 @@ class MineRepository @Inject constructor(private val mineApi: MineApi) :BaseRepo
         }
     }
 
-    suspend fun getUserInfo(id:String): MResult<UserInfoData> {
+    suspend fun getUserInfo(params:MutableMap<String,Any?>): MResult<UserInfoData> {
         return withContextIO {
-            mineApi.getUserInfo(id)
+            mineApi.getUserInfo(params)
         }
     }
     suspend fun loginOut(): MResult<String> {
@@ -51,14 +51,20 @@ class MineRepository @Inject constructor(private val mineApi: MineApi) :BaseRepo
         }
     }
 
-    suspend fun changePassword(password: String): MResult<String> {
+
+    suspend fun updateUserInfo(userInfoData: UserInfoData): MResult<UserInfoData> {
         return withContextIO{
-            mineApi.changePassword(password)
+            mineApi.updateUserInfo(userInfoData)
         }
     }
-    suspend fun changeUserInfo(userInfoData: UserInfoData): MResult<UserInfoData> {
+    suspend fun sign(id: String): MResult<UserInfoData> {
         return withContextIO{
-            mineApi.changeUserInfo(userInfoData)
+            mineApi.sign(id)
+        }
+    }
+    suspend fun alipay(): MResult<Any> {
+        return withContextIO{
+            mineApi.alipay()
         }
     }
 

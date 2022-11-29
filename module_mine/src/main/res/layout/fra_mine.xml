@@ -100,6 +100,8 @@
                         app:layout_constraintTop_toTopOf="@+id/siv_head" />
 
 
+
+
                     <com.hjq.shape.layout.ShapeLinearLayout
                         android:id="@+id/ll_sign"
                         android:layout_width="wrap_content"
@@ -108,7 +110,7 @@
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:paddingHorizontal="@dimen/dp_5"
-                        android:paddingVertical="@dimen/dp_1"
+                        android:paddingVertical="@dimen/dp_3"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/siv_head"
                         app:shape_radius="@dimen/dp_10"
@@ -126,7 +128,7 @@
                             android:layout_marginStart="@dimen/dp_2"
                             android:text="签到"
                             android:textColor="@color/textColor"
-                            android:textSize="@dimen/sp_12" />
+                            android:textSize="@dimen/sp_13" />
                     </com.hjq.shape.layout.ShapeLinearLayout>
 
 

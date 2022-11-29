@@ -74,16 +74,23 @@ class FlowLayout : ViewGroup {
     }
 
 
+
+
+
     fun <T> addChildView(
         resource: Int,
         mutableList: MutableList<T>,
         block: (view: View, position: Int, item: T) -> Unit
     ) {
+        this.removeAllViews()
         mutableList.forEachIndexed { index, t ->
             val inflate = LayoutInflater.from(context).inflate(resource, this, false)
             this.addView(inflate)
             block(inflate, index, mutableList[index])
         }
     }
+
+
+
 
 }

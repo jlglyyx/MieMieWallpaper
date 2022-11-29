@@ -33,9 +33,9 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) :BaseRepo
             mainApi.login(params)
         }
     }
-    suspend fun getUserInfo(id:String): MResult<UserInfoData> {
+    suspend fun getUserInfo(): MResult<UserInfoData> {
         return withContextIO {
-            mainApi.getUserInfo(id)
+            mainApi.getUserInfo()
         }
     }
 
@@ -53,6 +53,11 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) :BaseRepo
     suspend fun getWallpaper(params:MutableMap<String,Any?>): MResult<MListResult<WallpaperData>> {
         return withContextIO {
             mainApi.getWallpaper(params)
+        }
+    }
+    suspend fun searchUser(params:MutableMap<String,Any?>): MResult<MListResult<UserInfoData>> {
+        return withContextIO {
+            mainApi.searchUser(params)
         }
     }
     suspend fun getSearchFind(params:MutableMap<String,Any?>): MResult<MListResult<SearchFindData>> {

@@ -21,7 +21,7 @@ class WallpaperDynamicAdapter: BaseQuickAdapter<WallpaperDynamicData, BaseViewHo
         helper.setGone(R.id.view_top, helper.bindingAdapterPosition == 0)
         val gridNinePictureView = helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
         gridNinePictureView.data = item.wallList.map {
-            getRealUrl(it.imageUrl).toString()
+            getRealUrl(it.wallUrl).toString()
         } as MutableList<String>
         gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback{
             override fun imageClickListener(position: Int) {
@@ -46,9 +46,9 @@ class WallpaperDynamicAdapter: BaseQuickAdapter<WallpaperDynamicData, BaseViewHo
         helper.setText(R.id.tv_name,item.userName)
             .setText(R.id.tv_attention,if (item.isAttention) "取消关注" else "+关注")
             .setText(R.id.tv_text,item.dynamicContent)
-            .setText(R.id.tv_fabulous_num, formatNumUnit(item.dynamicLikeNum))
-            .setText(R.id.tv_comment_num, formatNumUnit(item.dynamicCommentNum))
-            .setText(R.id.tv_forward_num, formatNumUnit(item.dynamicForwardNum))
+            .setText(R.id.tv_fabulous_num, item.dynamicLikeNum.formatNumUnit())
+            .setText(R.id.tv_comment_num, item.dynamicCommentNum.formatNumUnit())
+            .setText(R.id.tv_forward_num, item.dynamicForwardNum.formatNumUnit())
             .addOnClickListener(R.id.iv_image)
             .addOnClickListener(R.id.tv_attention)
             .addOnClickListener(R.id.tv_content)

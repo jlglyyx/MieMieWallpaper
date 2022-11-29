@@ -99,6 +99,7 @@ ext {
             "umsdk-union"                  : "com.umeng.umsdk:union:1.4.0",
             "autosize"                     : "com.github.JessYanCoding:AndroidAutoSize:v1.2.1",
             "rongcloud"                     : "cn.rongcloud.sdk:im_lib:5.1.5",
+            "alipaysdk"                     : "com.alipay.sdk:alipaysdk-android:+@aar",
 
 
     ]

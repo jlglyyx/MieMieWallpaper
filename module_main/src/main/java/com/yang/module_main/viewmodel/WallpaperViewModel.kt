@@ -6,6 +6,7 @@ import com.yang.lib_common.R
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.WallpaperData
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.module_main.data.SearchFindData
 import com.yang.module_main.repository.MainRepository
 import okhttp3.MediaType
@@ -33,6 +34,8 @@ class WallpaperViewModel @Inject constructor(
 
     val mWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
 
+    val mSearchUserInfoData = MutableLiveData<MutableList<UserInfoData>>()
+
     val mSearchFindData = MutableLiveData<MutableList<SearchFindData>>()
 
     var pictureListLiveData = MutableLiveData<MutableList<String>>()
@@ -54,10 +57,25 @@ class WallpaperViewModel @Inject constructor(
             showRecyclerViewErrorEvent()
         }, errorDialog = false)
     }
+    /**
+     * 关键字搜索用户
+     */
+    fun searchUser() {
+        launch({
+            params[AppConstant.Constant.KEYWORD] = keyword
+            params[AppConstant.Constant.PAGE_NUMBER] = pageNum
+            params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
+            mainRepository.searchUser(params)
+        }, {
+            mSearchUserInfoData.postValue(it.data.list)
+        }, {
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
+        }, errorDialog = false)
+    }
 
     fun getSearchFind() {
         launch({
-            params[AppConstant.Constant.KEYWORD] = keyword
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
             params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
             mainRepository.getSearchFind(params)

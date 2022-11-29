@@ -1,17 +1,22 @@
 package com.yang.module_mine.ui.activity
 
+import android.text.TextUtils
+import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.tencent.mm.opensdk.modelmsg.SendAuth
-import com.tencent.mm.opensdk.modelpay.PayReq
-import com.tencent.mm.opensdk.openapi.IWXAPI
-import com.tencent.mm.opensdk.openapi.WXAPIFactory
+import com.alipay.sdk.app.EnvUtils
+import com.alipay.sdk.app.PayTask
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.R
-import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.showShort
+import com.yang.lib_common.util.toJson
 import com.yang.module_mine.adapter.PayTypeAdapter
 import com.yang.module_mine.adapter.VipPackageAdapter
 import com.yang.module_mine.adapter.VipRightsAdapter
@@ -19,6 +24,10 @@ import com.yang.module_mine.data.PayTypeData
 import com.yang.module_mine.data.VipPackageData
 import com.yang.module_mine.data.VipRightsData
 import com.yang.module_mine.databinding.ActMineRightsBinding
+import com.yang.module_mine.viewmodel.MineViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /**
  * @ClassName: MineRightsActivity
@@ -28,6 +37,9 @@ import com.yang.module_mine.databinding.ActMineRightsBinding
  */
 @Route(path = AppConstant.RoutePath.MINE_RIGHTS_ACTIVITY)
 class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
+
+    @InjectViewModel
+    lateinit var mineViewModel:MineViewModel
 
     private lateinit var mVipPackageAdapter: VipPackageAdapter
     private lateinit var mPayTypeAdapter: PayTypeAdapter
@@ -39,6 +51,7 @@ class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
     }
 
     override fun initData() {
+        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX)
     }
 
     override fun initView() {
@@ -47,23 +60,69 @@ class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
         initRightsRecyclerView()
         mViewBinding.apply {
             stvPay.clicks().subscribe {
-                openWeChatPay()
+                openPay()
             }
         }
     }
 
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return mineViewModel.uC
+    }
+
     override fun initViewModel() {
 
+        InjectViewModelProxy.inject(this)
+        mineViewModel.body.observe(this){
+            lifecycleScope.launch {
+                val async = async(Dispatchers.IO) {
+                    val alipay = PayTask(this@MineRightsActivity)
+                    val payV2 = alipay.payV2(it, true)
+                    payV2
+                }
+                val await = async.await()
+                val resultStatus = await["resultStatus"]
+                val result = await["result"]
+
+                // 判断resultStatus 为9000则代表支付成功
+                if (TextUtils.equals(resultStatus, "9000")) {
+                    // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                    showShort("支付成功")
+                    Log.i(TAG, "initViewModel: ${result}")
+                } else {
+                    // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                    showShort("支付失败")
+                    Log.i(TAG, "initViewModel: ${result}")
+                }
+
+                Log.i(TAG, "openPay: ${await.toJson()}")
+            }
+        }
     }
 
 
 
-    private fun openWeChatPay(){
+    private fun openPay(){
 
-        val req = SendAuth.Req()
-        req.state = "miemie_${System.currentTimeMillis()}"
-        req.scope = "snsapi_userinfo"
-        BaseApplication.weChatApi.sendReq(req)
+        mPayTypeAdapter.getSelectItem()?.apply {
+            when(id){
+                "0" ->{
+                    //支付宝
+                    mineViewModel.alipay()
+
+                }
+                "1" ->{
+                    //微信
+                }
+                "2" ->{
+                    //余额
+                }
+            }
+        }
+
+//        val req = SendAuth.Req()
+//        req.state = "miemie_${System.currentTimeMillis()}"
+//        req.scope = "snsapi_userinfo"
+//        BaseApplication.weChatApi.sendReq(req)
 
 //        val request =  PayReq()
 //        request.appId = AppConstant.WeChatConstant.WECHAT_PAY_ID

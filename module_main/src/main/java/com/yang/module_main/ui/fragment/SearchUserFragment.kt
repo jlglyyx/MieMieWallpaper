@@ -1,6 +1,8 @@
 package com.yang.module_main.ui.fragment
 
+import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -16,6 +18,7 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.proxy.InjectViewModelProxy
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.*
 import com.yang.module_main.R
 import com.yang.module_main.databinding.FraSearchWallpaperBinding
@@ -29,26 +32,28 @@ import com.yang.module_main.viewmodel.WallpaperViewModel
  * @Date: 2022/9/30 16:31
  */
 @Route(path = AppConstant.RoutePath.SEARCH_USER_FRAGMENT)
-class SearchUserFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,OnRefreshLoadMoreListener{
+class SearchUserFragment : BaseLazyFragment<FraSearchWallpaperBinding>(),
+    OnRefreshLoadMoreListener {
 
     @InjectViewModel
     lateinit var wallpaperViewModel: WallpaperViewModel
 
-    private lateinit var mAdapter: BaseQuickAdapter<WallpaperData, BaseViewHolder>
+    private lateinit var mAdapter: BaseQuickAdapter<UserInfoData, BaseViewHolder>
 
     override fun initViewBinding(): FraSearchWallpaperBinding {
         return bind(FraSearchWallpaperBinding::inflate)
     }
 
     override fun initView() {
-        wallpaperViewModel.wallType = arguments?.getInt(AppConstant.Constant.WALL_TYPE) ?:wallpaperViewModel.wallType
+        wallpaperViewModel.wallType =
+            arguments?.getInt(AppConstant.Constant.WALL_TYPE) ?: wallpaperViewModel.wallType
         initRecyclerView()
         mViewBinding.smartRefreshLayout.setOnRefreshLoadMoreListener(this)
-        registerRefreshAndRecyclerView(mViewBinding.smartRefreshLayout,mAdapter)
+        registerRefreshAndRecyclerView(mViewBinding.smartRefreshLayout, mAdapter)
     }
 
     override fun initData() {
-        LiveDataBus.instance.with(AppConstant.Constant.KEYWORD).observe(this){
+        LiveDataBus.instance.with(AppConstant.Constant.KEYWORD).observe(this) {
             wallpaperViewModel.keyword = it.toString()
             onRefresh(mViewBinding.smartRefreshLayout)
         }
@@ -56,15 +61,20 @@ class SearchUserFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,OnRefr
 
     private fun initRecyclerView() {
 
-        mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
-            override fun convert(helper: BaseViewHolder, item: WallpaperData) {
-                val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                loadSpaceRadius(mContext,item.imageUrl,20f,imageView,3,30f)
-                helper.setText(R.id.tv_title,item.title)
-                    .setText(R.id.tv_like_num,"${item.likeNum}")
-                    .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
+        mAdapter = object : BaseQuickAdapter<UserInfoData, BaseViewHolder>(R.layout.item_fans) {
+            override fun convert(helper: BaseViewHolder, item: UserInfoData) {
+                val imageView = helper.getView<ImageView>(R.id.iv_image)
+                imageView.loadCircle(mContext, item.userAttr)
+                helper.setText(R.id.tv_name, item.userName)
+                    .setText(R.id.tv_desc, "粉丝：${item.userFan} 关注：${item.userAttention}")
+//                val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
+//                loadSpaceRadius(mContext,item.wallUrl,20f,imageView,3,30f)
+//                helper.setText(R.id.tv_title,item.wallName)
+//                    .setText(R.id.tv_like_num,"${item.likeNum}")
+//                    .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }
         }
+        mViewBinding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mViewBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -76,17 +86,17 @@ class SearchUserFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,OnRefr
             }
         })
         mViewBinding.recyclerView.adapter = mAdapter
-
+        mAdapter.notifyDataSetChanged()
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mAdapter.getItem(position)
             item?.let {
-                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
-                    .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(requireContext(), com.yang.lib_common.R.anim.fade_in, com.yang.lib_common.R.anim.fade_out))
-                    .withString(AppConstant.Constant.DATA,mAdapter.data.toJson())
-                    .withInt(AppConstant.Constant.INDEX,position)
-                    .withString(AppConstant.Constant.KEYWORD,wallpaperViewModel.keyword)
-                    .withInt(AppConstant.Constant.PAGE_NUMBER,wallpaperViewModel.pageNum)
-                    .navigation()
+//                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
+//                    .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(requireContext(), com.yang.lib_common.R.anim.fade_in, com.yang.lib_common.R.anim.fade_out))
+//                    .withString(AppConstant.Constant.DATA,mAdapter.data.toJson())
+//                    .withInt(AppConstant.Constant.INDEX,position)
+//                    .withString(AppConstant.Constant.KEYWORD,wallpaperViewModel.keyword)
+//                    .withInt(AppConstant.Constant.PAGE_NUMBER,wallpaperViewModel.pageNum)
+//                    .navigation()
 
             }
         }
@@ -97,8 +107,8 @@ class SearchUserFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,OnRefr
     override fun initViewModel() {
 
         InjectViewModelProxy.inject(this)
-        wallpaperViewModel.mWallpaperData.observe(this){
-            mViewBinding.smartRefreshLayout.smartRefreshLayoutData(it,mAdapter,wallpaperViewModel)
+        wallpaperViewModel.mSearchUserInfoData.observe(this) {
+            mViewBinding.smartRefreshLayout.smartRefreshLayoutData(it, mAdapter, wallpaperViewModel)
         }
 
     }
@@ -110,13 +120,13 @@ class SearchUserFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,OnRefr
     override fun onRefresh(refreshLayout: RefreshLayout) {
 
         wallpaperViewModel.pageNum = 1
-        wallpaperViewModel.getWallpaper()
+        wallpaperViewModel.searchUser()
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
 
         wallpaperViewModel.pageNum++
-        wallpaperViewModel.getWallpaper()
+        wallpaperViewModel.searchUser()
 
     }
 }

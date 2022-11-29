@@ -4,23 +4,24 @@ import android.app.Application
 import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.blankj.utilcode.util.ActivityUtils.finishActivity
 import com.bytedance.sdk.openadsdk.*
+import com.czhj.sdk.common.utils.Md5Util
+
+import com.huawei.hms.ads.id
 import com.umeng.analytics.MobclickAgent
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.data.WallpaperData
-import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.*
 import com.yang.lib_common.R
-import com.yang.lib_common.remote.di.response.MResult
 import com.yang.module_mine.data.WeChatInfoData
 import com.yang.module_mine.repository.MineRepository
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import org.json.JSONObject
 import java.io.File
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -36,7 +37,7 @@ class MineViewModel @Inject constructor(
     private val mineRepository: MineRepository
 ) : BaseViewModel(application) {
 
-    val userInfoData = MutableLiveData<UserInfoData>()
+    val mUserInfoData = MutableLiveData<UserInfoData>()
 
     var keyword = ""
 
@@ -48,7 +49,7 @@ class MineViewModel @Inject constructor(
 
     val mDownWallpaperData = MutableLiveData<MutableList<WallpaperData>>()
 
-    var mUserInfoData = MutableLiveData<UserInfoData>()
+//    var mUserInfoData = MutableLiveData<UserInfoData>()
 
     var pictureListLiveData = MutableLiveData<MutableList<String>>()
 
@@ -57,6 +58,8 @@ class MineViewModel @Inject constructor(
 
 
     var mWeChatInfoData = MutableLiveData<WeChatInfoData>()
+
+    var body = MutableLiveData<String>()
 
 
     fun getA() {
@@ -74,79 +77,12 @@ class MineViewModel @Inject constructor(
             return
         }
         launch({
-            mineRepository.getUserInfo(id)
+            params[AppConstant.Constant.ID] = id
+            mineRepository.getUserInfo(params)
         }, {
-            val userInfoData1 = UserInfoData(
-                "0",
-                "sahk",
-                "",
-                null,
-                0,
-                10,
-                null,
-                null,
-                "0",
-                "",
-                "",
-                0,
-                10,
-                20,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2F99689cbe5898812b3b1340545c08847a430d047f.jpg&refer=http%3A%2F%2Fi0.hdslb.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1661329266&t=3bd482aedc9184e4a91f252914b2291f",
-                0,
-                0,
-                true,
-                0,
-                "",
-                10,
-                true,
-                "",
-                true,
-                "",
-                "",
-                ""
-            )
-            userInfoData.postValue(userInfoData1)
+            mUserInfoData.postValue(it.data)
+            cancelRefresh()
         }, {
-            val userInfoData1 = UserInfoData(
-                "0",
-                "sahk",
-                "",
-                "游客———",
-                0,
-                10,
-                null,
-                "你以为你是她的唯一，你以为...",
-                "133*****124",
-                "",
-                "",
-                0,
-                10,
-                20,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2F99689cbe5898812b3b1340545c08847a430d047f.jpg&refer=http%3A%2F%2Fi0.hdslb.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1661329266&t=3bd482aedc9184e4a91f252914b2291f",
-                0,
-                0,
-                true,
-                0,
-                "",
-                10,
-                true,
-                "",
-                true,
-                "",
-                "",
-                ""
-            )
-            userInfoData.postValue(userInfoData1)
             cancelRefresh()
         }, errorDialog = false)
     }
@@ -171,50 +107,30 @@ class MineViewModel @Inject constructor(
 
 
 
-    /** todo test
-     * 关键字查询 收藏查询 tab查询
+    /**
+     * 关键字查询 收藏查询
      */
-    fun getWallpaper(tabId:String?){
+    fun getWallpaper(userId: String,keyword: String = "") {
         launch({
-            params[AppConstant.Constant.ORDER] = 0
-            params[AppConstant.Constant.TAB_ID] = tabId
-            params[AppConstant.Constant.WALL_TYPE] = 0
+            params[AppConstant.Constant.USER_ID] = userId
+            params[AppConstant.Constant.KEYWORD] = keyword
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
             params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
             mineRepository.getWallpaper(params)
-        },{
+        }, {
             mWallpaperData.postValue(it.data.list)
-        },{
-            cancelRefreshLoadMore()
-            showRecyclerViewErrorEvent()
-        },errorDialog = false)
-    }
-
-
-
-    /**
-     * 获取收藏壁纸
-     */
-    fun getWallpaper() {
-        launch({
-            params[AppConstant.Constant.USER_ID] = UserInfoHold.userId
-            params[AppConstant.Constant.PAGE_NUMBER] = pageNum
-            params[AppConstant.Constant.PAGE_SIZE] = 3
-            mineRepository.getWallpaper(params)
         }, {
-            mCollectionWallpaperData.postValue(it.data.list)
-        }, {
-            requestFail()
             cancelRefreshLoadMore()
             showRecyclerViewErrorEvent()
         }, errorDialog = false)
     }
 
+
     fun getDownWallpaper() {
         val filePath = getFilePath(getSaveAlbumPath(null, getApplication()))
         val data = filePath.map {
             val fromJson = "{}".fromJson<WallpaperData>()
-            fromJson.imageUrl = it
+            fromJson.wallUrl = it
             fromJson
         } as MutableList<WallpaperData>
         mDownWallpaperData.postValue(data)
@@ -262,18 +178,38 @@ class MineViewModel @Inject constructor(
 
     fun changePassword(password: String) {
         launch({
-            mineRepository.changePassword(password)
+            val userInfoData = "{}".fromJson<UserInfoData>()
+            userInfoData.userPassword = Md5Util.md5(password)
+            mineRepository.updateUserInfo(userInfoData)
         }, {
             requestSuccess()
         }, messages = arrayOf(getString(R.string.string_change_password_ing), getString(R.string.string_change_password_success), getString(R.string.string_change_password_fail)))
     }
 
-    fun changeUserInfo(userInfoData: UserInfoData) {
+    fun updateUserInfo(userInfoData: UserInfoData) {
         launch({
-            mineRepository.changeUserInfo(userInfoData)
+            mineRepository.updateUserInfo(userInfoData)
         }, {
             mUserInfoData.postValue(it.data)
         }, messages = arrayOf(getString(R.string.string_requesting)))
+    }
+    fun sign(id: String) {
+        launch({
+            mineRepository.sign(id)
+        }, {
+            showShort("签到成功")
+            getUserInfo(id)
+        })
+    }
+
+    fun alipay() {
+        launch({
+            mineRepository.alipay()
+        }, {
+            val jsonObject = JSONObject(it.data.toJson())
+            body.postValue(jsonObject.getString("body"))
+            showShort("签到成功")
+        })
     }
 
 

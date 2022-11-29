@@ -47,13 +47,13 @@ class MineChangeUserInfoActivity : BaseActivity<ActChangeUserInfoBinding>() {
         val userInfo = UserInfoHold.userInfo
 
         userInfo?.apply {
-            if (userImage.isNullOrEmpty()){
+            if (userAttr.isNullOrEmpty()){
                 mViewBinding.sivImage.loadImage(this@MineChangeUserInfoActivity, com.yang.lib_common.R.drawable.iv_attr)
             }else{
-                mViewBinding.sivImage.loadCircle(this@MineChangeUserInfoActivity,userImage)
+                mViewBinding.sivImage.loadCircle(this@MineChangeUserInfoActivity,userAttr)
             }
             mViewBinding.etName.setText(userName)
-            mViewBinding.tvSex.text = sexArray[userSex]
+            mViewBinding.tvSex.text = sexArray[userSex!!]
             mViewBinding.etDesc.setText(userDescribe)
         }
 
@@ -71,41 +71,10 @@ class MineChangeUserInfoActivity : BaseActivity<ActChangeUserInfoBinding>() {
         mViewBinding.commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
 
-                val userInfoData = UserInfoData(
-                    "0",
-                    "sahk",
-                    "",
-                    mViewBinding.etName.text.toString(),
-                    0,
-                    10,
-                    null,
-                    "你以为你是她的唯一，你以为...",
-                    "133*****124",
-                    "",
-                    "",
-                    0,
-                    10,
-                    20,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    url,
-                    0,
-                    0,
-                    true,
-                    0,
-                    "",
-                    10,
-                    true,
-                    "",
-                    true,
-                    "",
-                    "",
-                    ""
-                )
-                mineViewModel.changeUserInfo(userInfoData)
+                val userInfoData = "{}".fromJson<UserInfoData>().apply {
+                    userName = mViewBinding.etName.text.toString()
+                }
+                mineViewModel.updateUserInfo(userInfoData)
             }
 
         }

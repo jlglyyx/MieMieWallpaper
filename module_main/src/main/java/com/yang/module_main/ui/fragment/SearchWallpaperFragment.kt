@@ -41,7 +41,7 @@ class SearchWallpaperFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,O
     }
 
     override fun initView() {
-        wallpaperViewModel.wallType = arguments?.getInt(AppConstant.Constant.WALL_TYPE) ?:wallpaperViewModel.wallType
+        wallpaperViewModel.wallType = AppConstant.Constant.WALL_STATIC_TYPE
         initRecyclerView()
         mViewBinding.smartRefreshLayout.setOnRefreshLoadMoreListener(this)
         registerRefreshAndRecyclerView(mViewBinding.smartRefreshLayout,mAdapter)
@@ -59,8 +59,8 @@ class SearchWallpaperFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,O
         mAdapter = object : BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                loadSpaceRadius(mContext,item.imageUrl,20f,imageView,3,30f)
-                helper.setText(R.id.tv_title,item.title)
+                loadSpaceRadius(mContext,item.wallUrl,20f,imageView,3,30f)
+                helper.setText(R.id.tv_title,item.wallName)
                     .setText(R.id.tv_like_num,"${item.likeNum}")
                     .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }

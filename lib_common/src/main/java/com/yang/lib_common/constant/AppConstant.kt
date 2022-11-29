@@ -10,7 +10,8 @@ interface AppConstant {
 
         const val BASE_PORT = "20000"
 
-        const val BASE_URL = "http://www.yyxjlgl.tk/"
+        const val BASE_URL = "http://192.168.174.116:20000/"
+//        const val BASE_URL = "http://www.yyxjlgl.tk/"
 //        const val BASE_URL = "https://www.baidu.com/"
 //        const val BASE_URL = "https://www.wanandroid.com/"
 //        const val BASE_URL = "http://jlgl.free.idcfengye.com/"
@@ -18,7 +19,7 @@ interface AppConstant {
 
         const val BASE_WEB_URL = "http://192.168.174.197:8080/#"
 
-        const val IMAGE_MODULE = "http://www.yyxjlgl.tk/module-main/"
+        const val IMAGE_MODULE = "${BASE_URL}module-main/"
 
         /**
          * 隐私政策
@@ -384,6 +385,8 @@ interface AppConstant {
 
         const val ITEM_CONTENT = 0
         const val ITEM_AD = 1
+
+        const val SEARCH_WALLPAPER_HISTORY = "search_wallpaper_history"
 
 
         const val SOFT_INPUT_HEIGHT = "soft_input_height"

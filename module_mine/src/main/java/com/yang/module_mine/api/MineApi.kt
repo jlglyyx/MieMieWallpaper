@@ -21,13 +21,13 @@ interface MineApi {
     @GET("/")
     suspend fun getA():String
 
-    @POST("api/user/query/userInfo")
-    suspend fun getUserInfo(@Query(AppConstant.Constant.ID) id:String): MResult<UserInfoData>
+    @POST("api/user/getUserInfo")
+    suspend fun getUserInfo(@Body params:MutableMap<String,Any?>): MResult<UserInfoData>
 
     @POST("api/user/loginOut")
     suspend fun loginOut(): MResult<String>
 
-    @POST("main/queryAllByTab")
+    @POST("api/wallpaper/queryWallpaper")
     suspend fun getWallpaper(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperData>>
 
 
@@ -36,11 +36,17 @@ interface MineApi {
     @POST("/uploadFile")
     suspend fun uploadFile(@PartMap file: MutableMap<String, RequestBody>): MResult<MutableList<String>>
 
-    @POST("user/changePassword")
-    suspend fun changePassword(@Query("password") password:String): MResult<String>
 
-    @POST("user/changeUserInfo")
-    suspend fun changeUserInfo(@Body userInfoData: UserInfoData): MResult<UserInfoData>
+
+    @POST("api/user/updateUserInfo")
+    suspend fun updateUserInfo(@Body userInfoData: UserInfoData): MResult<UserInfoData>
+
+    @POST("api/user/sign")
+    suspend fun sign(@Body id: String): MResult<UserInfoData>
+
+
+    @POST("api/pay/alipay")
+    suspend fun alipay(): MResult<Any>
 
 
     @POST

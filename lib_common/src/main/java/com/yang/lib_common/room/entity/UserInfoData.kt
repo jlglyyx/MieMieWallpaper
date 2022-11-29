@@ -1,41 +1,44 @@
 package com.yang.lib_common.room.entity
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "user_info")
+//@Entity(tableName = "user_info")
 data class UserInfoData(
-    @PrimaryKey
-    var id: String,
-    var token: String?,
+    var id: String?,
     var rimToken: String?,
-    var userName: String?,
-    var userSex: Int = 0,
+    var token: String?,
+    var userAdNum: Int?,
     var userAge: Int?,
-    var userBirthDay: String?,
+    var userAppVersion: String?,
+    var userAttention: Int?,
+    var userAttr: String?,
+    var userBirthday: String?,
+    var userCredit: Int?,
     var userDescribe: String?,
-    var userAccount: String,
-    var userPassword: String,
-    var userAddress: String?,
-    var userIntegral: Int = 0 ,
-    var userAttention: Int = 0 ,
-    var userFan: Int = 0 ,
+    var userFan: Int?,
+    var userInfoBg: String?,
+    var userIntegral: Int?,
+    var userIsDelete: Boolean?,
+    var userIsSign: Boolean?,
+    var userSignReceive: Boolean?,
+    var userMaxAdNum: Int?,
+    var userCurrentAdNum: Int?,
+    var userAdReceive: Boolean?,
+    var userLastLoginTime: String?,
     var userLocationAddress: String?,
-    var userLeftBackgroundImage: String?,
-    var userInfoBackgroundImage: String?,
-    var userMineBackgroundImage: String?,
+    var userMoney: Int?,
+    var userName: String?,
     var userPhone: String?,
-    var userImage: String?,
-    var userVipLevel: Int = 0 ,
-    var userCredit: Int = 0 ,
-    var userVipExpired: Boolean = false ,
-    var userType: Int = 0 ,
-    var userObtain: String?,
+    var userQq: String?,
+    var userSex: Int?,
     var userSign: Int?,
-    var userIsSign: Boolean = false ,
-    var userExtension: String?,
-    var isAttention: Boolean = false,
+    var userType: Int?,
+    var userPassword: String,
+    var userVipExpired: Boolean?,
+    var userVipLevel: Int?,
+    var userWechat: String?,
     var updateTime: String?,
     var createTime: String?,
-    var userExtraInfo: String?
+    var userExtra: String?,
 )
+
+

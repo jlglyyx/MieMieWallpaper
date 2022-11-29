@@ -20,12 +20,15 @@ object UserInfoHold {
 
     val userId: String?
         get() = getMMKVValue(AppConstant.Constant.USER_INFO, "")
-            ?.fromJson<UserInfoData>()?.id
+            .fromJson<UserInfoData>().id
+    val userIsSign: Boolean?
+        get() = getMMKVValue(AppConstant.Constant.USER_INFO, "")
+            .fromJson<UserInfoData>().userIsSign
 
 
     val userName: String?
         get() = getMMKVValue(AppConstant.Constant.USER_INFO, "")
-            ?.fromJson<UserInfoData>()?.userName
+            .fromJson<UserInfoData>().userName
 
     val userWeChatCode: String?
         get() = getMMKVValue(AppConstant.WeChatConstant.CODE, "")

@@ -17,10 +17,9 @@ import java.io.File
  * @Description
  * @Date 2021/8/5 14:22
  */
-@Database(entities = [UserInfoData::class,ImageTypeData::class,VideoTypeData::class,SearchData::class, ImageDataItem::class, VideoDataItem::class,UploadTaskData::class,MineGoodsDetailData::class],version = 1,exportSchema = true)
+@Database(entities = [ImageTypeData::class,VideoTypeData::class,SearchData::class, ImageDataItem::class, VideoDataItem::class,UploadTaskData::class,MineGoodsDetailData::class],version = 1,exportSchema = true)
 abstract class BaseAppDatabase : RoomDatabase() {
 
-    abstract fun userInfoDao(): UserInfoDao
 
     abstract fun imageTypeDao(): ImageTypeDao
 

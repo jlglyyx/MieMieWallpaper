@@ -1,6 +1,5 @@
 package com.yang.module_main.ui.activity
 
-import android.graphics.Color
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.BarUtils
-import com.bytedance.tea.crash.R.string.app_name
 import com.google.gson.reflect.TypeToken
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.yang.apt_annotation.annotain.InjectViewModel
@@ -17,6 +15,7 @@ import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
@@ -77,7 +76,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
     /**
      * 是否是收藏数据
      */
-    private var isCollection = false
+    private var userId = ""
 
 
     /**
@@ -103,8 +102,8 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         mainViewModel.pageNum =
             intent.getIntExtra(AppConstant.Constant.PAGE_NUMBER, 0)+1
 
-        isCollection =
-            intent.getBooleanExtra(AppConstant.Constant.IS_COLLECTION, isCollection)
+        userId =
+            intent.getStringExtra(AppConstant.Constant.USER_ID)?:userId
 
 
 
@@ -122,15 +121,15 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
 
             if (index != -1) {
                 mWallpaperData = this[index]
-                mViewBinding.commonToolBar.centerContent = mWallpaperData?.title
+                mViewBinding.commonToolBar.centerContent = mWallpaperData?.wallName
                 mWallpaperData?.let {
                     if (it.imageName!!.isImage()) {
-                        preload(this@WallpaperDetailActivity,it.imageUrl)
+                        preload(this@WallpaperDetailActivity,it.wallUrl)
                     }
                     if (toLoad){
-                        //加载数据
+                        //加载数据  收藏数据
                         mainViewModel.order = order
-                        mainViewModel.getWallpaper(it.tabId,keyword,isCollection)
+                        mainViewModel.getWallpaper(it.tabId,keyword,userId)
                     }
                     mWallpaperViewPagerAdapter.addDataAll(this)
                     mViewBinding.viewPager.setCurrentItem(index,false)
@@ -154,7 +153,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         mViewBinding.smartRefreshLayout.setOnLoadMoreListener {
             mWallpaperData?.let {
                 mainViewModel.pageNum++
-                mainViewModel.getWallpaper(it.tabId,keyword,isCollection)
+                mainViewModel.getWallpaper(it.tabId,keyword,userId)
             }
 
         }
@@ -179,8 +178,8 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                     if (isFirst) {
                         findLast {
                             TextUtils.equals(
-                                mWallpaperViewPagerAdapter.data[0].imageUrl,
-                                it.imageUrl
+                                mWallpaperViewPagerAdapter.data[0].wallUrl,
+                                it.wallUrl
                             )
                         }?.let { find ->
                             remove(find)
@@ -236,10 +235,10 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             position: Int
         ) {
 
-            mViewBinding.commonToolBar.centerContent = data[position].title
+            mViewBinding.commonToolBar.centerContent = data[position].wallName
             holder.clControl.setPadding(0,0,0,BarUtils.getNavBarHeight())
 
-            holder.ivHead.loadCircle(this@WallpaperDetailActivity,data[position].imageUrl)
+            holder.ivHead.loadCircle(this@WallpaperDetailActivity,data[position].wallUrl)
 
             holder.ivHead.clicks().subscribe {
                 buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(AppConstant.Constant.ID,data[position].userId).navigation()
@@ -263,25 +262,25 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             holder.stvSetWallpaper.clicks().subscribe {
                 AdManager.instance.showReward(this@WallpaperDetailActivity){
                     data[position].imageName = "${System.currentTimeMillis()}.jpg"
-                    downAndSetWallpaper(data[position].imageUrl?:"", data[position].imageName?:"")
+                    downAndSetWallpaper(data[position].wallUrl?:"", data[position].imageName?:"")
                 }
             }
             holder.iivDown.clicks().subscribe {
                 AdManager.instance.showReward(this@WallpaperDetailActivity){
                     data[position].imageName = "${System.currentTimeMillis()}.jpg"
-                    downAndSetWallpaper(data[position].imageUrl?:"", data[position].imageName?:"", true)
+                    downAndSetWallpaper(data[position].wallUrl?:"", data[position].imageName?:"", true)
                 }
             }
             try {
                 if (data[position + 1].imageName!!.isVideo()) {
 
                 } else {
-                    preload(this@WallpaperDetailActivity,data[position + 1].imageUrl)
+                    preload(this@WallpaperDetailActivity,data[position + 1].wallUrl)
                 }
             } catch (e: Exception) {
 
             }
-            val isVideo = data[position].imageUrl!!.isVideo()
+            val isVideo = data[position].wallUrl!!.isVideo()
             if (isVideo) {
                 holder.ivImage.visibility = View.GONE
                 payVideo(holder, position)
@@ -298,7 +297,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                     holder.clControl.visibility = View.VISIBLE
                 }
 
-                holder.ivImage.loadBgImage(this@WallpaperDetailActivity,data[position].imageUrl)
+                holder.ivImage.loadBgImage(this@WallpaperDetailActivity,data[position].wallUrl)
 
             }
 
@@ -320,7 +319,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         }
 
         fun payVideo(holder: WallpaperViewPagerAdapter.ImageViewPagerViewHolder, position: Int) {
-            holder.gsyVideoPlayer.setUp(data[position].imageUrl, true, null, null, "")
+            holder.gsyVideoPlayer.setUp(data[position].wallUrl, true, null, null, "")
             holder.gsyVideoPlayer.startPlayLogic()
         }
 

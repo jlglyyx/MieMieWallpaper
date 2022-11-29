@@ -57,7 +57,7 @@ class MineDownFragment : BaseLazyFragment<FraMineFansBinding>(), OnRefreshListen
             BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_down_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                loadSpaceRadius(mContext, item.imageUrl, 10f, imageView, 4, 30f)
+                loadSpaceRadius(mContext, item.wallUrl, 10f, imageView, 4, 30f)
             }
         }
         mViewBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {

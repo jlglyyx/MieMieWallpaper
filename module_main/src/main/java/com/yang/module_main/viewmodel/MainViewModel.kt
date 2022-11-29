@@ -3,6 +3,8 @@ package com.yang.module_main.viewmodel
 import android.app.Application
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
+import com.czhj.sdk.common.utils.Md5Util
+import com.huawei.hms.ads.id
 import com.umeng.analytics.MobclickAgent
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
@@ -13,6 +15,7 @@ import com.yang.lib_common.util.updateUserInfo
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.data.WallpaperTabData
 import com.yang.lib_common.data.WallpaperTypeData
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.setMMKVValue
 import com.yang.module_main.repository.MainRepository
 import javax.inject.Inject
@@ -46,7 +49,6 @@ class MainViewModel @Inject constructor(
 
     var wallType = 0
 
-//    val taskLiveData = MutableLiveData<MutableList<TaskData>>()
 
     val pictureListLiveData = MutableLiveData<MutableList<String>>()
 
@@ -55,114 +57,120 @@ class MainViewModel @Inject constructor(
     val mWallpaperTypeData = MutableLiveData<MutableList<WallpaperTypeData>>()
 
     val mWallpaperTabData = MutableLiveData<MutableList<WallpaperTabData>>()
-//
-//    fun getA() {
-//        launch({
-//            mainRepository.getA()
-//        }, {
-//            //showShort(it)
-//        })
-//    }
-//
-//
+
+    var mUserInfoData = MutableLiveData<UserInfoData>()
+
+
     fun login() {
         if (!checkStatus) {
             showShort("请勾选协议")
             return
         }
-//        MobSDK.submitPolicyGrantResult(checkStatus)
         launch({
-            val params = mutableMapOf<String,Any>()
-            params[AppConstant.Constant.USER_ACCOUNT] = phoneText
+            val params = mutableMapOf<String, Any>()
+            params[AppConstant.Constant.PHONE] = phoneText
             if (loginType == 1) {
-                params[AppConstant.Constant.USER_PASSWORD] = passwordText
 
-            }else{
+                params[AppConstant.Constant.PASSWORD] = Md5Util.md5(passwordText)
+
+            } else {
                 params[AppConstant.Constant.VERIFICATION] = verificationText
             }
 
-           mainRepository.login(params)
+            mainRepository.login(params)
         }, {
             updateUserInfo(it.data)
-            setMMKVValue(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
-            LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).postValue(AppConstant.Constant.LOGIN_SUCCESS)
+            setMMKVValue(AppConstant.Constant.LOGIN_STATUS, AppConstant.Constant.LOGIN_SUCCESS)
+            LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS)
+                .postValue(AppConstant.Constant.LOGIN_SUCCESS)
 //            //当用户使用自有账号登录时，可以这样统计：
 //            MobclickAgent.onProfileSignIn("userID");
 ////当用户使用第三方账号（如新浪微博）登录时，可以这样统计：
 //            MobclickAgent.onProfileSignIn("WB"，"userID");
             finishActivity()
-        },{
+        }, {
 
-        },messages = arrayOf("登录中...","登录成功!"))
+        }, messages = arrayOf("登录中...", "登录成功!"))
     }
 
 
     /**
      * 获取壁纸类型
      */
-    fun getWallType(){
+    fun getWallType() {
         launch({
             mainRepository.getWallType()
-        },{
+        }, {
             mWallpaperTypeData.postValue(it.data)
-        },{
-          requestFail()
-        },errorDialog = false)
+        }, {
+            requestFail()
+        }, errorDialog = false)
     }
 
     /**
      * 获取壁纸类型 - 类型
      */
-    fun getTabs(){
+    fun getTabs() {
         launch({
             mainRepository.getTabs(wallType)
-        },{
+        }, {
             mWallpaperTabData.postValue(it.data)
-        },{
-          requestFail()
-        },errorDialog = false)
+        }, {
+            requestFail()
+        }, errorDialog = false)
     }
 
 
     /**
      * 关键字查询 收藏查询 tab查询
      */
-    fun getWallpaper(tabId:String?,keyword:String = "",isCollection:Boolean = false){
+    fun getWallpaper(tabId: String?, keyword: String = "", userId: String = "") {
         launch({
-            if (!TextUtils.isEmpty(keyword)){
-                params[AppConstant.Constant.KEYWORD] = keyword
-            }else if (isCollection){
-                params[AppConstant.Constant.USER_ID] = UserInfoHold.userId
-            }else{
+            if (!TextUtils.isEmpty(userId)) {
+                params[AppConstant.Constant.USER_ID] = userId
+            } else {
                 params[AppConstant.Constant.ORDER] = order
                 params[AppConstant.Constant.TAB_ID] = tabId
             }
+            params[AppConstant.Constant.KEYWORD] = keyword
             params[AppConstant.Constant.WALL_TYPE] = wallType
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
             params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
             mainRepository.getWallpaper(params)
-        },{
+        }, {
             mWallpaperData.postValue(it.data.list)
-        },{
+        }, {
             cancelRefreshLoadMore()
             showRecyclerViewErrorEvent()
-        },errorDialog = false)
+        }, errorDialog = false)
     }
+
     /**
      * 关键字查询 收藏查询 tab查询
      */
-    fun insertDeviceToken(deviceToken:String?){
+    fun insertDeviceToken(deviceToken: String?) {
         launch({
             params[AppConstant.Constant.WALL_TYPE] = deviceToken
             mainRepository.insertDeviceToken(params)
-        },{
+        }, {
 
-        },{
+        }, {
             cancelRefreshLoadMore()
             showRecyclerViewErrorEvent()
-        },errorDialog = false)
+        }, errorDialog = false)
     }
 
+
+    fun getUserInfo() {
+        launch({
+            mainRepository.getUserInfo()
+        }, {
+            mUserInfoData.postValue(it.data)
+            cancelRefresh()
+        }, {
+            cancelRefresh()
+        }, errorDialog = false)
+    }
 
 
 //

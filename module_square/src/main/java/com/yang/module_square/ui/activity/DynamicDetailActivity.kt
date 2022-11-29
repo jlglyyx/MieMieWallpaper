@@ -1,38 +1,24 @@
 package com.yang.module_square.ui.activity
 
-import android.graphics.Rect
 import android.text.TextUtils
 import android.view.View
-import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.widget.NestedScrollView
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.google.android.material.tabs.TabLayout
-import com.kuaishou.weapon.p0.WeaponHI.mContext
 import com.lxj.xpopup.XPopup
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.CommentAdapter
-import com.yang.lib_common.adapter.ImageViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.data.WallpaperDynamicData
 import com.yang.lib_common.dialog.EditBottomDialog
-import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.GridNinePictureView
-import com.yang.module_square.R
 import com.yang.module_square.databinding.ActDynamicDetailBinding
 import com.yang.module_square.viewmodel.SquareViewModel
-import com.youth.banner.transformer.ScaleInTransformer
 
 
 @Route(path = AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY)
@@ -69,7 +55,7 @@ class DynamicDetailActivity : BaseActivity<ActDynamicDetailBinding>() {
         mWallpaperDynamicData?.apply {
 
             mViewBinding.gridNinePictureView.data = wallList.map {
-                getRealUrl(it.imageUrl).toString()
+                getRealUrl(it.wallUrl).toString()
             } as MutableList<String>
             mViewBinding.gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback{
                 override fun imageClickListener(position: Int) {
@@ -93,9 +79,9 @@ class DynamicDetailActivity : BaseActivity<ActDynamicDetailBinding>() {
             mViewBinding.tvName.text = userName
             mViewBinding.tvAttention.text = if (isAttention) "取消关注" else "+关注"
             mViewBinding.tvText.text = dynamicContent
-            mViewBinding.tvFabulousNum.text = formatNumUnit(dynamicLikeNum)
-            mViewBinding.tvCommentNum.text = formatNumUnit(dynamicCommentNum)
-            mViewBinding.tvForwardNum.text = formatNumUnit(dynamicForwardNum)
+            mViewBinding.tvFabulousNum.text = dynamicLikeNum.formatNumUnit()
+            mViewBinding.tvCommentNum.text = dynamicCommentNum.formatNumUnit()
+            mViewBinding.tvForwardNum.text = dynamicForwardNum.formatNumUnit()
 
 
 

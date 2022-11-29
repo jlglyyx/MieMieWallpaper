@@ -22,11 +22,11 @@ interface MainApi {
     @GET("/")
     suspend fun getA():String
 
-    @POST("user/login")
+    @POST("api/user/login")
     suspend fun login(@Body params:MutableMap<String,Any>):MResult<UserInfoData>
 
-    @POST("api/user/query/userInfo")
-    suspend fun getUserInfo(@Query(AppConstant.Constant.ID) id:String):MResult<UserInfoData>
+    @POST("api/user/getUserInfo")
+    suspend fun getUserInfo(): MResult<UserInfoData>
 
     @POST("user/register")
     suspend fun register(@Query(AppConstant.Constant.ID) id:String):MResult<UserInfoData>
@@ -49,13 +49,16 @@ interface MainApi {
     @GET("main/queryWallType")
     suspend fun getWallType():MResult<MutableList<WallpaperTypeData>>
 
-    @GET("main/queryTabs")
+    @GET("api/wallpaper/queryTabs")
     suspend fun getTabs(@Query(AppConstant.Constant.WALL_TYPE) wallType:Int):MResult<MutableList<WallpaperTabData>>
 
-    @POST("main/queryAllByTab")
+    @POST("api/wallpaper/queryWallpaper")
     suspend fun getWallpaper(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperData>>
 
-    @POST("api/main/querySearchFind")
+    @POST("api/user/searchUser")
+    suspend fun searchUser(@Body params:MutableMap<String,Any?>):MResult<MListResult<UserInfoData>>
+
+    @POST("api/wallpaper/querySearchFind")
     suspend fun getSearchFind(@Body params:MutableMap<String,Any?>):MResult<MListResult<SearchFindData>>
 
 

@@ -74,7 +74,14 @@ class MainActivity : BaseActivity<ActMainBinding>() {
         return bind(ActMainBinding::inflate)
     }
 
+    override fun onResume() {
+        super.onResume()
+        LiveDataBus.instance.with(AppConstant.Constant.REFRESH).postValue(AppConstant.Constant.REFRESH)
+    }
+
     override fun initData() {
+
+
 
         initUM()
         lifecycleScope.launch {
@@ -238,6 +245,10 @@ class MainActivity : BaseActivity<ActMainBinding>() {
     override fun initViewModel() {
 
         InjectViewModelProxy.inject(this)
+
+        mainViewModel.mUserInfoData.observe(this){
+
+        }
 
 //        showReward()
 //        showInterstitial()

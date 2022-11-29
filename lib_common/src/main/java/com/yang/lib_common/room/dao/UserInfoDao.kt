@@ -9,36 +9,36 @@ import com.yang.lib_common.room.entity.UserInfoData
  * @Description
  * @Date 2021/8/5 14:28
  */
-@Dao
+//@Dao
 interface UserInfoDao {
 
-    @Update
+//    @Update
     fun updateData(data:MutableList<UserInfoData>)
 
-    @Update
+//    @Update
     fun updateData(data:UserInfoData)
 
-    @Query("select * from user_info")
+//    @Query("select * from user_info")
     fun queryData():MutableList<UserInfoData>
 
-    @Query("select * from user_info where id = :id")
+//    @Query("select * from user_info where id = :id")
     fun queryData(id:String):UserInfoData
 
-    @Query("select * from user_info where userAccount = :userAccount")
+//    @Query("select * from user_info where userAccount = :userAccount")
     fun queryDataByAccount(userAccount:String):UserInfoData
 
-    @Insert
+//    @Insert
     fun insertData(data:MutableList<UserInfoData>)
 
-    @Insert
+//    @Insert
     fun insertData(data:UserInfoData)
 
-    @Delete
+//    @Delete
     fun deleteData(data:UserInfoData)
 
-    @Delete
+//    @Delete
     fun deleteData(data:MutableList<UserInfoData>)
 
-    @Query("DELETE FROM user_info")
+//    @Query("DELETE FROM user_info")1
     fun deleteData()
 }

@@ -36,6 +36,8 @@ class MineSquareActivity : BaseActivity<ActMineSquareBinding>() , OnRefreshLoadM
 
     private lateinit var mAdapter: WallpaperDynamicAdapter
 
+    private var userId = ""
+
 
     override fun initViewBinding(): ActMineSquareBinding {
         return bind(ActMineSquareBinding::inflate)
@@ -53,9 +55,9 @@ class MineSquareActivity : BaseActivity<ActMineSquareBinding>() , OnRefreshLoadM
 
     override fun initData() {
 
-        val id = intent.getStringExtra(AppConstant.Constant.ID)
+        userId = intent.getStringExtra(AppConstant.Constant.USER_ID)?:userId
         UserInfoHold.userInfo?.apply {
-            if (!TextUtils.equals(id, this.id)) {
+            if (!TextUtils.equals(id, userId)) {
                 mViewBinding.commonToolBar.centerContent = "更多作品"
             }
         }
@@ -162,13 +164,13 @@ class MineSquareActivity : BaseActivity<ActMineSquareBinding>() , OnRefreshLoadM
     override fun onRefresh(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum = 1
-        mineViewModel.getWallpaper("1")
+        mineViewModel.getWallpaper(userId)
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum++
-        mineViewModel.getWallpaper("1")
+        mineViewModel.getWallpaper(userId)
 
     }
 }

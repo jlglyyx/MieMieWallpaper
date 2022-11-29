@@ -196,8 +196,10 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         if (index >= size) {
             return
         }
-        showDialog(messages[index])
-        delayTime()
+        if (messages[index].isNotEmpty()){
+            showDialog(messages[index])
+            delayTime()
+        }
     }
 
     /**

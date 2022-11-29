@@ -83,7 +83,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             buildARouterLogin(requireContext())
         }
         mViewBinding.clHeadLogin.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(AppConstant.Constant.ID,UserInfoHold.userId).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(AppConstant.Constant.USER_ID,UserInfoHold.userId).navigation()
         }
         mViewBinding.llWallet.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_BALANCE_ACTIVITY).navigation()
@@ -93,7 +93,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
 
         }
         mViewBinding.icvMyWork.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_SQUARE_ACTIVITY).withString(AppConstant.Constant.ID,UserInfoHold.userId).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_SQUARE_ACTIVITY).withString(AppConstant.Constant.USER_ID,UserInfoHold.userId).navigation()
         }
         mViewBinding.icvMyRights.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_RIGHTS_ACTIVITY).navigation()
@@ -102,7 +102,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             buildARouter(AppConstant.RoutePath.MINE_TASK_HISTORY_ACTIVITY).navigation()
         }
         mViewBinding.llSign.clicks().subscribe {
-            showShort("签到成功")
+            mineViewModel.sign(UserInfoHold.userId.toString())
         }
         mViewBinding.ivErCode.clicks().subscribe {
 
@@ -166,7 +166,21 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             }
         }
         mViewBinding.stvAwardAd.clicks().subscribe {
-            mViewBinding.stvAwardAd.text = "领取奖励"
+            UserInfoHold.userInfo?.apply {
+                if (userIsSign!!){
+                    //是否领取签到奖励
+                    if (!userSignReceive!!){
+                        val createUser = createUser()
+                        createUser.userSignReceive = true
+                        mineViewModel.updateUserInfo(createUser)
+                    }else{
+                        showShort("当日奖励已领取")
+                    }
+                }else{
+                    showShort("请先签到")
+                }
+            }
+
         }
         mViewBinding.llAttention.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_FANS_ACTIVITY).withInt(AppConstant.Constant.INDEX,0).navigation()
@@ -181,21 +195,21 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             buildARouter(AppConstant.RoutePath.MINE_COLLECTION_ACTIVITY).withInt(AppConstant.Constant.INDEX,1).navigation()
         }
 
+        initUserInfo(UserInfoHold.userInfo)
 
         initBanner()
         initRecyclerView()
 
-        initUserInfo(UserInfoHold.userInfo)
     }
 
 
     override fun initData() {
-        LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).observe(this) {
-            initUserInfo(UserInfoHold.userInfo)
-        }
+
+        //刷新用户信息
         LiveDataBus.instance.with(AppConstant.Constant.REFRESH).observe(this) {
             onRefresh(mViewBinding.smartRefreshLayout)
         }
+        //微信获取token
         LiveDataBus.instance.with(AppConstant.WeChatConstant.CODE).observe(this) {
             setMMKVValue(AppConstant.WeChatConstant.CODE,it.toString())
             mineViewModel.getWeChatToken(it.toString())
@@ -217,14 +231,29 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             updateUserInfo(it)
             mViewBinding.apply {
                 tvName.text = it.userName
-                tvAccount.text = it.userAccount
+                tvAccount.text = it.userPhone
                 tvDesc.text = it.userDescribe
-                tvAttention.text = it.userAttention.toString()
-                tvFan.text = it.userFan.toString()
-                if (it.userIsSign) {
+                tvAttention.text = it.userAttention?.formatNumUnit()
+                tvFan.text = it.userFan?.formatNumUnit()
+//                if (it.userVipLevel != 0 && !it.userVipExpired){
+//                    tvName.setTextColor(requireContext().getColor(R.color.red))
+//                }
+                tvMoney.text = "￥"+it.userMoney.toString()
+                tvIntegral.text = it.userIntegral.toString()
+                tvAdTicket.text = it.userAdNum.toString()
+//                tvMoney.text = "￥"+it.userMoney.formatNumUnit()
+//                tvIntegral.text = it.userIntegral.formatNumUnit()
+//                tvAdTicket.text = it.userAdNum.formatNumUnit()
+
+                if (it.userIsSign!!) {
                     tvSign.text = "已签到${it.userSign}天"
+                    stvAwardAd.text = "每日签到1/1"
+                }else{
+                    tvSign.text = "签到"
+                    stvAwardAd.text = "每日签到0/1"
                 }
-                loadCircle(requireContext(), it.userImage, sivHead)
+                llSign.isClickable = !it.userIsSign!!
+                loadCircle(requireContext(), it.userAttr, sivHead)
                 if (null == buildBitmap) {
                     buildBitmap = ScanUtil.buildBitmap("http://www.yyxjlgl.tk/module-main/image/apk/miemie_1.0.0.apk", 500, 500)
                     ivErCode.setImageBitmap(buildBitmap)
@@ -304,9 +333,15 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             .indicator = CircleIndicator(requireContext())
     }
 
+    private fun createUser():UserInfoData{
+        return "{}".fromJson<UserInfoData>().apply {
+            id = UserInfoHold.userId
+        }
+    }
+
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
-        mineViewModel.userInfoData.observe(this, Observer {
+        mineViewModel.mUserInfoData.observe(this, Observer {
             initUserInfo(it)
         })
     }

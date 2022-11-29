@@ -12,13 +12,12 @@ import android.os.Parcelable
 class WallpaperData(){
     var id:String? = null
     var userId:String? = null
-    var imageUrl:String? = ""
+    var wallUrl:String? = ""
     var imageName:String? = ""
     var tabId: String? = null
-    var headType: Int? = null
     var isVip: Boolean = false
     var wallType: Int? = null
-    var title: String? = null
+    var wallName: String? = null
     var likeNum: Int? = null
     var extra: String? = null
     var isEdit: Boolean = false
@@ -30,7 +29,6 @@ class WallpaperData(){
 data class WallpaperTabData(
     var id:String?,
     var name:String?,
-    var type:String?,//类型
     var wallType:String?,//动态 静态
     var extra:String?,
     var createTime:String?,

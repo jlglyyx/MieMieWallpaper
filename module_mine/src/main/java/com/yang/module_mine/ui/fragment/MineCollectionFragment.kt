@@ -13,6 +13,7 @@ import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
@@ -59,8 +60,8 @@ class MineCollectionFragment : BaseLazyFragment<FraMineFansBinding>(), OnRefresh
             BaseQuickAdapter<WallpaperData, BaseViewHolder>(R.layout.item_collection_image) {
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
-                loadSpaceRadius(mContext, item.imageUrl, 10f, imageView, 4, 30f)
-                helper.setText(R.id.tv_title, item.title)
+                loadSpaceRadius(mContext, item.wallUrl, 10f, imageView, 4, 30f)
+                helper.setText(R.id.tv_title, item.wallName)
                     .setText(R.id.tv_like_num, "${item.likeNum}")
                     .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }
@@ -90,7 +91,7 @@ class MineCollectionFragment : BaseLazyFragment<FraMineFansBinding>(), OnRefresh
                         )
                     )
                     .withString(AppConstant.Constant.DATA, mAdapter.data.toJson())
-                    .withBoolean(AppConstant.Constant.IS_COLLECTION, true)
+                    .withString(AppConstant.Constant.USER_ID, UserInfoHold.userId)
                     .withInt(AppConstant.Constant.INDEX, position)
                     .withInt(AppConstant.Constant.PAGE_NUMBER, mineViewModel.pageNum)
                     .navigation()
@@ -116,13 +117,13 @@ class MineCollectionFragment : BaseLazyFragment<FraMineFansBinding>(), OnRefresh
     override fun onRefresh(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum = 1
-        mineViewModel.getWallpaper()
+        mineViewModel.getWallpaper(UserInfoHold.userId!!)
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum++
-        mineViewModel.getWallpaper()
+        mineViewModel.getWallpaper(UserInfoHold.userId!!)
 
     }
 }

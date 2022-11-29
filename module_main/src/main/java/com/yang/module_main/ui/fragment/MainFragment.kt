@@ -111,17 +111,8 @@ class MainFragment : BaseLazyFragment<FraMainBinding>() {
 
 
         mainViewModel.mWallpaperTabData.observe(this) {
-            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.NORMAL
+            mViewBinding.errorReLoadView.showSuccessView(it)
             it.mapIndexed { index, wallpaperTabData ->
-                mFragments.add(
-                    buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
-                        .withInt(AppConstant.Constant.TYPE, index)
-                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
-                        .withInt(AppConstant.Constant.WALL_TYPE, mainViewModel.wallType)
-                        .navigation() as Fragment
-                )
-
-                // TODO:  删除
                 mFragments.add(
                     buildARouter(AppConstant.RoutePath.MAIN_ITEM_FRAGMENT)
                         .withInt(AppConstant.Constant.TYPE, index)
@@ -131,8 +122,6 @@ class MainFragment : BaseLazyFragment<FraMainBinding>() {
                 )
                 wallpaperTabData.name
             }.apply {
-                mTitles.addAll(this as MutableList<String>)
-                // TODO:  删除
                 mTitles.addAll(this as MutableList<String>)
             }
             initViewPager()
@@ -147,7 +136,9 @@ class MainFragment : BaseLazyFragment<FraMainBinding>() {
     private fun initViewPager() {
 
         mViewBinding.viewPager.adapter = TabAndViewPagerFragmentAdapter(this, mFragments, mTitles)
-        mViewBinding.viewPager.offscreenPageLimit = mFragments.size
+         if (mFragments.size != 0) {
+             mViewBinding.viewPager.offscreenPageLimit = mFragments.size
+        }
 
         val view: View = mViewBinding.viewPager.getChildAt(0)
         if (view is RecyclerView) {

@@ -41,6 +41,9 @@ class ErrorHandle(private val t: Throwable) {
                     }
                 }
             }
+            is HttpErrorException ->{
+                t.message
+            }
             is UnknownHostException -> {
 
                 IHttpException.OtherException.NO_NETWORK_ERROR.message
@@ -54,7 +57,7 @@ class ErrorHandle(private val t: Throwable) {
                 IHttpException.OtherException.JSON_SYNTAX_ERROR.message
             }
             else -> {
-                IHttpException.OtherException.UN_KNOWN_ERROR.message
+                IHttpException.OtherException.UN_KNOWN_ERROR.message+"${t.message}"
 
             }
         }

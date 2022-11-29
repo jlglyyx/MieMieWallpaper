@@ -4,7 +4,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -46,7 +45,8 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
     private lateinit var mAdapter: BaseQuickAdapter<SearchFindData, BaseViewHolder>
 
     private var mTitles : MutableList<String> = arrayListOf("静态壁纸","动态壁纸","用户")
-//    private var mTitles : MutableList<String> = arrayListOf("静态壁纸","动态壁纸","动态","用户")
+
+    private var mSearchHistory : MutableList<String> = mutableListOf()
 
     private lateinit var mFragments: MutableList<Fragment>
 
@@ -60,17 +60,12 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
         wallpaperViewModel.getSearchFind()
 
         mFragments = mutableListOf()
-        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_WALLPAPER_FRAGMENT)
-            .withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_STATIC_TYPE)
-            .navigation() as Fragment)
-        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_WALLPAPER_FRAGMENT)
-            .withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE)
-            .navigation() as Fragment)
+        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_WALLPAPER_FRAGMENT).navigation() as Fragment)
+        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_DYNAMIC_FRAGMENT).navigation() as Fragment)
 //        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_DYNAMIC_FRAGMENT)
 //            .withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE)
 //            .navigation() as Fragment)
-        mFragments.add(buildARouter(AppConstant.RoutePath.MINE_FANS_FRAGMENT)
-            .withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE)
+        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_USER_FRAGMENT)
             .navigation() as Fragment)
     }
 
@@ -98,55 +93,44 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
                 wallpaperViewModel.getSearchFind()
             }
 
-            val mutableList = mutableListOf<String>().apply {
-                add("1111111111111张三222张三222张三222张三222张三222张三222张三222张三222张三222张三")
-                add("春")
-                add("222")
-                add("222")
-                add("222")
-                add("222")
-                add("1")
-                add("1")
-                add("1")
-                add("1")
-                add("222")
-                add("张三222张三222张三222张三222张三222张三222张三222张三222张三222张三")
-                add("222")
-                add("222")
-                add("222")
-                add("222")
-                add("222")
-                add("4q1")
+            ivDelete.clicks().subscribe {
+                mSearchHistory.clear()
+                flowLayout.removeAllViews()
+                setMMKVValue(AppConstant.Constant.SEARCH_WALLPAPER_HISTORY, "[]")
             }
 
-            val mapIndexed = mutableList.mapIndexed { index, s ->
-                SearchFindData("$index", s)
-            }
+            val searchWallpaperHistory = getMMKVValue(AppConstant.Constant.SEARCH_WALLPAPER_HISTORY, "[]")
+            val fromJson = searchWallpaperHistory.fromJson<MutableList<String>>()
+            mSearchHistory.addAll(fromJson)
 
-            flowLayout.addChildView(R.layout.item_search_history, mutableList){ view, position, item ->
-                view.setOnClickListener {
-                    doSearch(item)
-//                    showShort("${position}  "+item)
-                }
-                val bind = ItemSearchHistoryBinding.bind(view)
-                bind.stvTv.text = item
-            }
+
+            initFlowLayout()
 
             mAdapter = object : BaseQuickAdapter<SearchFindData, BaseViewHolder>(R.layout.item_search_find) {
                 override fun convert(helper: BaseViewHolder, item: SearchFindData) {
-                    helper.setText(R.id.stv_tv,item.title)
+                    helper.setText(R.id.stv_tv,item.text)
                     .setText(R.id.stv_order,"${helper.bindingAdapterPosition+1}")
                 }
             }
 
             mViewBinding.recyclerView.adapter = mAdapter
-            mAdapter.setNewData(mapIndexed)
             mAdapter.setOnItemClickListener { adapter, view, position ->
-                doSearch(mAdapter.getItem(position)?.title?:"")
+                doSearch(mAdapter.getItem(position)?.text?:"")
             }
         }
 
 
+    }
+
+    private fun initFlowLayout(){
+        mViewBinding.flowLayout.addChildView(R.layout.item_search_history, mSearchHistory){ view, position, item ->
+            view.setOnClickListener {
+                doSearch(item)
+//                    showShort("${position}  "+item)
+            }
+            val bind = ItemSearchHistoryBinding.bind(view)
+            bind.stvTv.text = item
+        }
     }
 
     fun doSearch(keyword:String){
@@ -159,6 +143,9 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
             llSearch.visibility = View.GONE
             llViewPager.visibility = View.VISIBLE
         }
+        mSearchHistory.add(keyword)
+        initFlowLayout()
+        setMMKVValue(AppConstant.Constant.SEARCH_WALLPAPER_HISTORY, mSearchHistory.toJson())
     }
 
     override fun initViewModel() {
