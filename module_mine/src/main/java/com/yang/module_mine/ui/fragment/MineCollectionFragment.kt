@@ -61,7 +61,7 @@ class MineCollectionFragment : BaseLazyFragment<FraMineFansBinding>(), OnRefresh
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
                 loadSpaceRadius(mContext, item.wallUrl, 10f, imageView, 4, 30f)
-                helper.setText(R.id.tv_title, item.wallName)
+                helper.setText(R.id.tv_title, item.wallDesc)
                     .setText(R.id.tv_like_num, "${item.likeNum}")
                     .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }
@@ -117,13 +117,15 @@ class MineCollectionFragment : BaseLazyFragment<FraMineFansBinding>(), OnRefresh
     override fun onRefresh(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum = 1
-        mineViewModel.getWallpaper(UserInfoHold.userId!!)
+        mineViewModel.queryCollectionWallpaper(UserInfoHold.userId)
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum++
-        mineViewModel.getWallpaper(UserInfoHold.userId!!)
+        mineViewModel.queryCollectionWallpaper(UserInfoHold.userId)
 
     }
+
+
 }

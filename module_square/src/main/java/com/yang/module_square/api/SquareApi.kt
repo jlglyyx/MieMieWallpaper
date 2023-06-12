@@ -1,9 +1,7 @@
 package com.yang.module_square.api
 
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.WallpaperData
-import com.yang.lib_common.data.WallpaperTabData
-import com.yang.lib_common.data.WallpaperTypeData
+import com.yang.lib_common.data.*
 import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
@@ -55,6 +53,18 @@ interface SquareApi {
     suspend fun getWallpaper(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperData>>
 
 
+
+    @POST("api/dynamic/getDynamicList")
+    suspend fun getDynamicList(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperDynamicData>>
+
+    @POST("api/dynamic/getDynamicDetail")
+    suspend fun getDynamicDetail(@Body params:MutableMap<String,Any?>):MResult<WallpaperDynamicData>
+
+    @POST("api/dynamic/getDynamicCommentList")
+    suspend fun getDynamicCommentList(@Body params:MutableMap<String,Any?>):MResult<MutableList<WallpaperDynamicCommentData>>
+
+    @POST("api/dynamic/insertDynamicComment")
+    suspend fun insertDynamicComment(@Body params:MutableMap<String,Any?>):MResult<WallpaperDynamicCommentData>
 
 
 

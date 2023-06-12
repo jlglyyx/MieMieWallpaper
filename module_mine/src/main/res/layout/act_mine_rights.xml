@@ -86,6 +86,7 @@
 
 
 
+
                 <TextView
                     android:id="@+id/tv_vip_level"
                     android:layout_width="wrap_content"
@@ -98,6 +99,18 @@
                     android:textSize="@dimen/sp_14"
                     app:layout_constraintLeft_toRightOf="@+id/siv_img"
                     app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+                <TextView
+                    android:id="@+id/tv_vip_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="2022-10-10 10:20:30 到期"
+                    android:layout_marginTop="@dimen/dp_6"
+                    android:textColor="@color/white10"
+                    android:textSize="@dimen/sp_13"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_vip_level"
+                    app:layout_constraintStart_toStartOf="@+id/tv_vip_level" />
 
 
 

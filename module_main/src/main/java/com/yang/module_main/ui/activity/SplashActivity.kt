@@ -19,6 +19,7 @@ import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.dialog.PermissionDialog
 import com.yang.lib_common.dialog.PrivacyAgreementDialog
+import com.yang.lib_common.helper.AdManager
 import com.yang.lib_common.helper.PushHelper
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getMMKVValue
@@ -55,7 +56,7 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
             if (isGrantAll) {
 //                createAppId(getAppId(path = obbDir.absolutePath))
 
-                //AdManager.instance.splashAd(this, mViewBinding.container) {
+                AdManager.instance.splashAd(this, mViewBinding.container) {
 //                buildARouter(AppConstant.RoutePath.MINE_SEND_MESSAGE_ACTIVITY)
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY)
                     .withOptionsCompat(
@@ -80,7 +81,7 @@ class SplashActivity : BaseActivity<ActSplashBinding>() {
                         }
 
                     })
-                //}
+                }
             } else {
                 initDialog()
             }

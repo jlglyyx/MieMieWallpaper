@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">咩咩壁纸</string>
     <string name="string_input_account">请输入账号</string>
     <string name="string_input_password">请输入密码</string>
     <string name="string_confirm_password">请确认密码</string>
@@ -32,7 +33,10 @@
     <string name="string_requesting">请求中…</string>
     <string name="string_loading">加载中…</string>
     <string name="string_uploading">上传中…</string>
-    <string name="string_insert_success">添加成功</string>
+    <string name="string_insert_success">上传成功</string>
+
+    <string name="string_add_wallpaper_loading">发表中…</string>
+    <string name="string_add_wallpaper_success">发表成功</string>
 
     <string name="string_password_digits">~!@#$%^&amp;*():";',./\|[]{}?-=+_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
@@ -65,7 +69,8 @@
 
     <string name="string_fans_attention_num"><Data><![CDATA[粉丝 <font color="#ffa500"><b>%1$s</b></font> 人 关注 <font color="#ffa500"><b>%2$s</b></font> 人]]></Data></string>
     <string name="string_vip_level"><Data><![CDATA[等级：<font color="#ff0000"><b>VIP%1$s</b></font>]]></Data></string>
-    <string name="string_upload_regulations">上传要求：\n&#160;&#160;1.清晰无水印，分辨率不得低于480*480；\n&#160;&#160;2.确认上传内容是原创内容或者获得他人授予权限内容；\n&#160;&#160;3.严禁上传色情、反动等违反中国法律条例内容，\n&#160;&#160;&#160;&#160;违者封禁账号并追究法律责任；</string>
+    <string name="string_upload_regulations">上传要求：\n&#160;&#160;1.确认上传内容是原创内容或者获得他人授予权限内容；\n&#160;&#160;2.严禁上传色情、反动等违反中国法律条例内容，\n&#160;&#160;&#160;&#160;违者封禁账号并追究法律责任；</string>
+<!--    <string name="string_upload_regulations">上传要求：\n&#160;&#160;1.清晰无水印，分辨率不得低于480*480；\n&#160;&#160;2.确认上传内容是原创内容或者获得他人授予权限内容；\n&#160;&#160;3.严禁上传色情、反动等违反中国法律条例内容，\n&#160;&#160;&#160;&#160;违者封禁账号并追究法律责任；</string>-->
 
     <string name="string_privacy_agreement_and_service_agreement"><p> &#160;&#160;&#160;&#160;感谢您使用咩咩壁纸，在您使用本软件过程中，我们可能会对您的部分个人信息进行收集、使用和共享。请您仔细阅读<a href="./example.pdf"><font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font></a>与<a href="../power_statement.html"><font color="#ffa500">《<u>隐私政策</u>》</font></a>，并确定完全了解我们对您个人信息的处理规则。如您同意<font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font>与<font color="#ffa500">《<u>隐私政策</u>》</font>，请点击“已阅读并同意”开始使用咩咩壁纸，我们会尽全力保护您的个人信息安全。</p></string>
 <!--    <string name="string_privacy_agreement_and_service_agreement">&#160;&#160;&#160;&#160;感谢您使用咩咩壁纸，在您使用本软件过程中，我们可能会对您的部分个人信息进行收集、使用和共享。请您仔细阅读<font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font>与<font color="#ffa500">《<u>隐私政策</u>》</font>，并确定完全了解我们对您个人信息的处理规则。如您同意<font color="#ffa500">《<u>咩咩壁纸服务协议</u>》</font>与<font color="#ffa500">《<u>隐私政策</u>》</font>，请点击“已阅读并同意”开始使用咩咩壁纸，我们会尽全力保护您的个人信息安全。</string>-->

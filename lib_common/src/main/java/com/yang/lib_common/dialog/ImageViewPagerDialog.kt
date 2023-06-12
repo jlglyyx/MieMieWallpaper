@@ -185,7 +185,6 @@ class ImageViewPagerDialog(
                     gsyVideoPlayer.visibility = View.GONE
                     Glide.with(photoView)
                         .load(data[position])
-                        .fitCenter()
                         .error(R.drawable.iv_image_error)
                         .placeholder(R.drawable.iv_image_placeholder)
                         .into(photoView)

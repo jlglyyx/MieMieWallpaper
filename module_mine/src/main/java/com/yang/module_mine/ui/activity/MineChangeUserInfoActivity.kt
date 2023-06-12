@@ -31,11 +31,12 @@ class MineChangeUserInfoActivity : BaseActivity<ActChangeUserInfoBinding>() {
 
     private var imageUrl = ""
 
-    private var selectSex = ""
+    private var selectSex = 0
 
-    private var sexArray = arrayOf("男", "女")
+    private var sexArray = arrayOf("男", "女","保密")
 
     private var url: String? = null
+
 
 
     override fun initViewBinding(): ActChangeUserInfoBinding {
@@ -53,7 +54,8 @@ class MineChangeUserInfoActivity : BaseActivity<ActChangeUserInfoBinding>() {
                 mViewBinding.sivImage.loadCircle(this@MineChangeUserInfoActivity,userAttr)
             }
             mViewBinding.etName.setText(userName)
-            mViewBinding.tvSex.text = sexArray[userSex!!]
+            mViewBinding.tvSex.text = sexArray[userSex?:2]
+            selectSex = userSex?:2
             mViewBinding.etDesc.setText(userDescribe)
         }
 
@@ -72,7 +74,11 @@ class MineChangeUserInfoActivity : BaseActivity<ActChangeUserInfoBinding>() {
             override fun tvRightClickListener() {
 
                 val userInfoData = "{}".fromJson<UserInfoData>().apply {
+                    id = UserInfoHold.userId
+                    userAttr = url
+                    userSex = selectSex
                     userName = mViewBinding.etName.text.toString()
+                    userDescribe = mViewBinding.etDesc.text.toString()
                 }
                 mineViewModel.updateUserInfo(userInfoData)
             }
@@ -83,8 +89,8 @@ class MineChangeUserInfoActivity : BaseActivity<ActChangeUserInfoBinding>() {
             XPopup.Builder(this).asBottomList(
                 "", sexArray
             ) { position, text ->
-                selectSex = sexArray[position]
-                mViewBinding.tvSex.text = selectSex
+                selectSex = position
+                mViewBinding.tvSex.text = sexArray[position]
             }.show()
         }
 
@@ -95,7 +101,7 @@ class MineChangeUserInfoActivity : BaseActivity<ActChangeUserInfoBinding>() {
                 it?.let {
                     if (it.isNotEmpty()) {
                         imageUrl = it[0].realPath.toString()
-                        mineViewModel.uploadFile(mutableListOf(imageUrl))
+                        mineViewModel.uploadFile(mutableListOf(imageUrl),false)
                         mViewBinding.sivImage.loadCircle(this@MineChangeUserInfoActivity,imageUrl)
                     }
                 }

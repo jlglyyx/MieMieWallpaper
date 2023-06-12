@@ -8,6 +8,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.Nullable
 import com.yang.lib_common.util.getScreenPx
 import com.yang.lib_common.util.showShort
+import com.yang.lib_common.util.userIsVip
 import io.dcloud.ads.core.entry.DCloudAdSlot
 import io.dcloud.ads.core.entry.SplashConfig
 import io.dcloud.ads.core.v2.reward.DCRewardAd
@@ -102,6 +103,11 @@ class AdManager {
 
 
     fun showReward(context: Activity,finish:() -> Unit) {
+        if (userIsVip()){
+            finish()
+            return
+        }
+
         var isSuccess = false
         val rewardAd = DCRewardAd(context)
         rewardAd.setRewardAdListener(object : DCRewardAdListener {

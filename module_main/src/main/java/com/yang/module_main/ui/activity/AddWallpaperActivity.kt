@@ -14,14 +14,12 @@ import com.yang.lib_common.adapter.PictureAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.MediaInfoBean
+import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.dialog.SearchRecyclerViewDialog
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
-import com.yang.module_main.R
-import com.yang.module_main.adapter.UploadWallpaperAdapter
 import com.yang.module_main.databinding.ActAddWallpaperBinding
 import com.yang.module_main.viewmodel.WallpaperViewModel
 
@@ -54,15 +52,12 @@ class AddWallpaperActivity : BaseActivity<ActAddWallpaperBinding>() {
     override fun initView() {
         mViewBinding.commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
-                if (mPictureAdapter.data.isEmpty()){
-                    if (!TextUtils.isEmpty(mViewBinding.etDynamic.text.toString())){
-                        addDynamic()
-                    }else{
-                        showShort("要说些什么才能发表哦")
-                    }
+                val etDynamicText = mViewBinding.etDynamic.text.toString()
+                if (mPictureAdapter.data.isEmpty() && TextUtils.isEmpty(etDynamicText)){
+                    showShort("要说些什么才能发表哦")
                     return
                 }
-                uploadFile(mPictureAdapter.data)
+                wallpaperViewModel.publishDynamic(mPictureAdapter.data,UserInfoHold.userId?:"",etDynamicText)
             }
         }
 
@@ -85,17 +80,7 @@ class AddWallpaperActivity : BaseActivity<ActAddWallpaperBinding>() {
         initRecyclerView()
     }
 
-    private fun addDynamic() {
-//        val dynamicData = DynamicData()
-//        dynamicData.userId = getUserInfo()?.id
-//        dynamicData.content = et_dynamic.text.toString()
-//        dynamicData.imageUrls = wallpaperViewModel.pictureListLiveData.value?.formatWithSymbol("#")
-//        wallpaperViewModel.addDynamic(dynamicData)
-    }
 
-    private fun uploadFile(data: MutableList<String>) {
-        wallpaperViewModel.uploadFile(data)
-    }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
         return wallpaperViewModel.uC
@@ -104,7 +89,7 @@ class AddWallpaperActivity : BaseActivity<ActAddWallpaperBinding>() {
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
         wallpaperViewModel.pictureListLiveData.observe(this)  {
-            addDynamic()
+            finish()
         }
     }
 

@@ -60,7 +60,7 @@ class SearchDynamicFragment : BaseLazyFragment<FraSearchWallpaperBinding>() ,OnR
             override fun convert(helper: BaseViewHolder, item: WallpaperData) {
                 val imageView = helper.getView<ShapeImageView>(R.id.iv_image)
                 loadSpaceRadius(mContext,item.wallUrl,20f,imageView,3,30f)
-                helper.setText(R.id.tv_title,item.wallName)
+                helper.setText(R.id.tv_title,item.wallDesc)
                     .setText(R.id.tv_like_num,"${item.likeNum}")
                     .setText(R.id.stv_vip, if (item.isVip) "原创" else "平台")
             }

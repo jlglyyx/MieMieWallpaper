@@ -94,6 +94,7 @@
             android:layout_marginBottom="@dimen/dp_15"
             android:orientation="vertical"
             android:animateLayoutChanges="true"
+            android:id="@+id/ll_right_control"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 

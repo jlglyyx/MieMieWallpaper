@@ -14,6 +14,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.yang.lib_common.R
 import com.yang.lib_common.util.dip2px
+import com.yang.lib_common.util.getRealUrl
+import com.yang.lib_common.util.loadImage
+import com.yang.lib_common.util.loadWithRequestOptions
 import kotlin.math.abs
 import kotlin.math.ceil
 
@@ -51,30 +54,16 @@ class GridNinePictureView : ViewGroup {
                     childView = LayoutInflater.from(mContext)
                         .inflate(R.layout.view_item_grid_nine_picture, this, false) as ViewGroup
                     val imageView = childView.findViewById<ImageView>(R.id.iv_nine_image)
+                    imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                     imageView.setOnClickListener {
                         imageCallback?.imageClickListener(i)
                     }
                     if (data[i].endsWith(".mp4")) {
                         val ivPlay = childView.findViewById<ImageView>(R.id.iv_play)
                         ivPlay.visibility = View.VISIBLE
-                        Glide.with(mContext)
-                            .setDefaultRequestOptions(RequestOptions().frame(1000))
-                            .load(
-                                data[i]
-                            )
-                            .centerCrop()
-                            .error(R.drawable.iv_image_error)
-                            .placeholder(R.drawable.iv_image_placeholder)
-                            .into(imageView)
+                        loadWithRequestOptions(mContext,data[i],imageView,RequestOptions().frame(1000))
                     } else {
-                        Glide.with(mContext)
-                            .load(
-                                data[i]
-                            )
-                            .centerCrop()
-                            .error(R.drawable.iv_image_error)
-                            .placeholder(R.drawable.iv_image_placeholder)
-                            .into(imageView)
+                        loadImage(mContext,data[i],imageView)
                     }
                     addView(childView)
                 }

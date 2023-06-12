@@ -1,5 +1,6 @@
 package com.yang.lib_common.proxy
 
+import android.util.Log
 import com.yang.apt_annotation.manager.InjectManager
 import org.jetbrains.annotations.NotNull
 
@@ -26,6 +27,7 @@ class InjectViewModelProxy {
                 injectManager.inject(any)
             } catch (e: Exception) {
                 e.printStackTrace()
+                Log.i(TAG, "inject: ${e.message}")
             }
         }
     }

@@ -25,7 +25,7 @@ data class UserInfoData(
     var userAdReceive: Boolean?,
     var userLastLoginTime: String?,
     var userLocationAddress: String?,
-    var userMoney: Int?,
+    var userMoney: Double?,
     var userName: String?,
     var userPhone: String?,
     var userQq: String?,
@@ -33,11 +33,12 @@ data class UserInfoData(
     var userSign: Int?,
     var userType: Int?,
     var userPassword: String,
-    var userVipExpired: Boolean?,
+    var userVipExpired: Boolean,
     var userVipLevel: Int?,
     var userWechat: String?,
     var updateTime: String?,
     var createTime: String?,
+    var userVipTime: String?,
     var userExtra: String?,
 )
 

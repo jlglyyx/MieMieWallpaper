@@ -48,6 +48,14 @@ fun preload(mContext: Context, url: String?) {
             getScreenPx(mContext)[1]
         )
 }
+fun loadWithRequestOptions(mContext: Context, url: String?, imageView: ImageView,requestOptions:RequestOptions) {
+    Glide.with(mContext)
+        .setDefaultRequestOptions(requestOptions)
+        .load(getRealUrl(url))
+        .placeholder(R.drawable.iv_image_placeholder)
+        .error(R.drawable.iv_image_error)
+        .into(imageView)
+}
 fun loadImage(mContext: Context, url: String?, imageView: ImageView) {
     Glide.with(mContext).asBitmap()
         .load(getRealUrl(url))
@@ -100,8 +108,9 @@ fun loadRadius(mContext: Context, url: String?,radius:Float, imageView: ImageVie
         .into(imageView)
 }
 fun loadSpaceRadius(mContext: Context, url: String?, radius:Float, imageView: ShapeImageView, count:Int = 1, space:Float = 0f) {
-    imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).setRadius((radius+2f).dip2px(mContext).toFloat()).intoBackground()
-    val options = RequestOptions.bitmapTransform(RoundedCorners(radius.dip2px(mContext)))
+    imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).intoBackground()
+//    imageView.shapeDrawableBuilder.setSolidColor(getRandomColor()).setRadius((radius+2f).dip2px(mContext).toFloat()).intoBackground()
+//    val options = RequestOptions.bitmapTransform(RoundedCorners(radius.dip2px(mContext)))
     var width = 0
     var height = 0
     Glide.with(mContext).asBitmap()
@@ -118,7 +127,7 @@ fun loadSpaceRadius(mContext: Context, url: String?, radius:Float, imageView: Sh
         .load(getRealUrl(url))
         .dontAnimate()
         .fitCenter()
-        .apply(options)
+//        .apply(options)
         .override(width,height)
         .into(imageView)
 //    Glide.with(mContext).asBitmap()

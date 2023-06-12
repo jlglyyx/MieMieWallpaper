@@ -1,7 +1,9 @@
 package com.yang.lib_common.util
 
+import android.Manifest
 import android.content.Context
 import android.util.Log
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -30,43 +32,50 @@ class LocationUtil constructor(val context: Context): LifecycleObserver {
     }
 
     fun startLocation() {
-        AMapLocationClient.updatePrivacyAgree(context,true)
-        AMapLocationClient.updatePrivacyShow(context,true,true)
-        aMapLocationClientOption = AMapLocationClientOption()
-        aMapLocationClient = AMapLocationClient(BaseApplication.baseApplication)
-        //回调监听
-        mLocationListener = AMapLocationListener {
-            locationListener?.onLocationListener(it)
-            if (it.errorCode == 0) {
-                Log.i(TAG, "startLocation: ${it.toString()}  ${it.toStr()}")
-            } else {
-                Log.e(TAG, "location Error, ErrCode:${it.errorCode}, errInfo:${it.errorInfo}")
+        (context as FragmentActivity).requestPermission({
+            AMapLocationClient.updatePrivacyAgree(context,true)
+            AMapLocationClient.updatePrivacyShow(context,true,true)
+            aMapLocationClientOption = AMapLocationClientOption()
+            aMapLocationClient = AMapLocationClient(BaseApplication.baseApplication)
+            //回调监听
+            mLocationListener = AMapLocationListener {
+                locationListener?.onLocationListener(it)
+                if (it.errorCode == 0) {
+                    Log.i(TAG, "startLocation: ${it.toString()}  ${it.toStr()}")
+                } else {
+                    Log.e(TAG, "location Error, ErrCode:${it.errorCode}, errInfo:${it.errorInfo}")
+                }
+                aMapLocationClient.stopLocation()
             }
+            aMapLocationClient.setLocationListener(mLocationListener)
+
+            //场景模式
+            aMapLocationClientOption.locationPurpose =
+                AMapLocationClientOption.AMapLocationPurpose.SignIn
             aMapLocationClient.stopLocation()
-        }
-        aMapLocationClient.setLocationListener(mLocationListener)
 
-        //场景模式
-        aMapLocationClientOption.locationPurpose =
-            AMapLocationClientOption.AMapLocationPurpose.SignIn
-        aMapLocationClient.stopLocation()
+            //定位模式
 
-        //定位模式
+            if (NetworkUtil.isNetworkClient(BaseApplication.baseApplication)) {
+                aMapLocationClientOption.locationMode =
+                    AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+            } else {
+                aMapLocationClientOption.locationMode =
+                    AMapLocationClientOption.AMapLocationMode.Device_Sensors
+            }
 
-        if (NetworkUtil.isNetworkClient(BaseApplication.baseApplication)) {
-            aMapLocationClientOption.locationMode =
-                AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
-        } else {
-            aMapLocationClientOption.locationMode =
-                AMapLocationClientOption.AMapLocationMode.Device_Sensors
-        }
+            aMapLocationClientOption.isNeedAddress = true
+            aMapLocationClientOption.isMockEnable = true
+            aMapLocationClientOption.httpTimeOut = 20000
+            aMapLocationClientOption.isLocationCacheEnable = false
+            aMapLocationClient.setLocationOption(aMapLocationClientOption)
+            aMapLocationClient.startLocation()
+        },{
+          showShort("定位权限未打开，请先打开定位权限")
+        },  Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_PHONE_STATE)
 
-        aMapLocationClientOption.isNeedAddress = true
-        aMapLocationClientOption.isMockEnable = true
-        aMapLocationClientOption.httpTimeOut = 20000
-        aMapLocationClientOption.isLocationCacheEnable = false
-        aMapLocationClient.setLocationOption(aMapLocationClientOption)
-        aMapLocationClient.startLocation()
     }
 
 

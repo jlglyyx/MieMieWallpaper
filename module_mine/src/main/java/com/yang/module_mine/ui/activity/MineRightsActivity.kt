@@ -1,7 +1,9 @@
 package com.yang.module_mine.ui.activity
 
+import android.text.Html
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,10 +15,10 @@ import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.showShort
-import com.yang.lib_common.util.toJson
+import com.yang.lib_common.room.entity.UserInfoData
+import com.yang.lib_common.util.*
 import com.yang.module_mine.adapter.PayTypeAdapter
 import com.yang.module_mine.adapter.VipPackageAdapter
 import com.yang.module_mine.adapter.VipRightsAdapter
@@ -54,14 +56,58 @@ class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
         EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX)
     }
 
+    override fun onResume() {
+        super.onResume()
+        mineViewModel.getUserInfo(UserInfoHold.userId)
+    }
+
     override fun initView() {
+
         initVipRecyclerView()
         initPayRecyclerView()
         initRightsRecyclerView()
+        mineViewModel.getVipPackage()
         mViewBinding.apply {
             stvPay.clicks().subscribe {
                 openPay()
             }
+        }
+    }
+
+    private fun initUserInfo(userInfo: UserInfoData?){
+        userInfo?.apply {
+            if (userAttr.isNullOrEmpty()) {
+                mViewBinding.sivImg.loadImage(
+                    this@MineRightsActivity,
+                    R.drawable.iv_attr
+                )
+            } else {
+                mViewBinding.sivImg.loadCircle(this@MineRightsActivity, userAttr)
+            }
+            mViewBinding.tvName.text = userName
+            mViewBinding.tvVipTime.visibility = View.GONE
+            if (userVipLevel == 0 || userVipLevel == null) {
+                mViewBinding.tvVipLevel.text = "暂未开通会员"
+                mViewBinding.tvVipLevel.setTextColor(getColor(R.color.textColor_999999))
+            } else {
+                if (userVipExpired){
+                    mViewBinding.tvVipLevel.text = "会员已到期"
+                }else{
+                    mViewBinding.tvVipLevel.text = Html.fromHtml(
+                        String.format(
+                            getString(R.string.string_vip_level),
+                            userVipLevel
+                        ), Html.FROM_HTML_OPTION_USE_CSS_COLORS
+                    )
+                    mViewBinding.tvVipTime.text = userVipTime.emptyOtherString(""," 到期")
+                    mViewBinding.tvVipTime.visibility = View.VISIBLE
+                }
+            }
+
+            val payTypeData = mPayTypeAdapter.data[1]
+            payTypeData.balance = "￥"+(userMoney?:"0.0")
+            mPayTypeAdapter.setData(1,payTypeData)
+            Log.i(TAG, "initUserInfo: $userMoney  ${payTypeData.toJson()}")
         }
     }
 
@@ -72,7 +118,7 @@ class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
     override fun initViewModel() {
 
         InjectViewModelProxy.inject(this)
-        mineViewModel.body.observe(this){
+        mineViewModel.mAlipayBody.observe(this){
             lifecycleScope.launch {
                 val async = async(Dispatchers.IO) {
                     val alipay = PayTask(this@MineRightsActivity)
@@ -97,26 +143,27 @@ class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
                 Log.i(TAG, "openPay: ${await.toJson()}")
             }
         }
+
+
+        mineViewModel.mUserInfoData.observe(this) {
+            initUserInfo(it)
+        }
+
+        mineViewModel.mVipPackageListData.observe(this){
+            mVipPackageAdapter.replaceData(it)
+        }
     }
 
 
 
     private fun openPay(){
+        if (null == mVipPackageAdapter.getSelectItem()){
+            showShort("请选择会员套餐")
+            return
+        }
 
         mPayTypeAdapter.getSelectItem()?.apply {
-            when(id){
-                "0" ->{
-                    //支付宝
-                    mineViewModel.alipay()
-
-                }
-                "1" ->{
-                    //微信
-                }
-                "2" ->{
-                    //余额
-                }
-            }
+            mineViewModel.openVip(id, mVipPackageAdapter.getSelectItem()!!.id)
         }
 
 //        val req = SendAuth.Req()
@@ -142,14 +189,13 @@ class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         mViewBinding.vipRecyclerView.adapter = mVipPackageAdapter
 
-        val list = mutableListOf<VipPackageData>().apply {
-            add(VipPackageData("0", "限时5折", "1年", "90", "180", true))
-            add(VipPackageData("1", "超值低价", "3个月", "27", "45"))
-            add(VipPackageData("2", "最划算", "1个月", "9.9", "15"))
-
-
-        }
-        mVipPackageAdapter.setNewData(list)
+//        val list = mutableListOf<VipPackageData>().apply {
+//            add(VipPackageData("0", "限时5折", "1年", "90", "180", true))
+//            add(VipPackageData("1", "超值低价", "3个月", "27", "45"))
+//            add(VipPackageData("2", "最划算", "1个月", "9.9", "15"))
+//
+//
+//        }
         mVipPackageAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mVipPackageAdapter.getItem(position)
             item?.let {
@@ -170,10 +216,11 @@ class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, true)
         mViewBinding.payRecyclerView.adapter = mPayTypeAdapter
 
+
         val list = mutableListOf<PayTypeData>().apply {
-            add(PayTypeData("0", "支付宝", R.drawable.iv_alipay, "",false))
-            add(PayTypeData("1", "微信", R.drawable.iv_we_chat, "",false))
-            add(PayTypeData("2", "余额", R.drawable.iv_we_chat, "20.23",true))
+            add(PayTypeData("1", "支付宝", R.drawable.iv_alipay, "",false))
+//            add(PayTypeData("2", "微信", R.drawable.iv_we_chat, "",false))
+            add(PayTypeData("0", "余额", R.drawable.iv_yue, "￥0.0",true))
         }
         mPayTypeAdapter.setNewData(list)
 
@@ -197,9 +244,9 @@ class MineRightsActivity : BaseActivity<ActMineRightsBinding>() {
         mViewBinding.rightsRecyclerView.adapter = mVipRightsAdapter
 
         val list = mutableListOf<VipRightsData>().apply {
-            add(VipRightsData(R.drawable.iv_kf,"非任务功能免广告"))
-            add(VipRightsData(R.drawable.iv_kf,"会员专属标识"))
-            add(VipRightsData(R.drawable.iv_down,"壁纸无限下载"))
+            add(VipRightsData(R.drawable.iv_vip_no_ad,"非任务免广告"))
+            add(VipRightsData(R.drawable.iv_vip,"会员专属标识"))
+            add(VipRightsData(R.drawable.iv_right_down,"壁纸无限下载"))
             add(VipRightsData(R.drawable.iv_kf,"专属客服"))
         }
         mVipRightsAdapter.setNewData(list)

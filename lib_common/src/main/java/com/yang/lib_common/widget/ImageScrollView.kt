@@ -48,7 +48,7 @@ class ImageScrollView : FrameLayout, DefaultLifecycleObserver {
 
     var speed = 0.5f
 
-    var imageUrl = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic2.zhimg.com%2Fv2-583a86cd154739160d2e17e185dcc8f2_r.jpg%3Fsource%3D1940ef5c&refer=http%3A%2F%2Fpic2.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638427892&t=e2a584b32bb0b6f820613078d552716c"
+    var imageUrl = ""
     set(value) {
         field = value
         if (w == 0 || h == 0){

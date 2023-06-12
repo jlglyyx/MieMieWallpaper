@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
+import android.text.Html
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
@@ -86,7 +87,7 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(AppConstant.Constant.USER_ID,UserInfoHold.userId).navigation()
         }
         mViewBinding.llWallet.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_BALANCE_ACTIVITY).navigation()
+//            buildARouter(AppConstant.RoutePath.MINE_BALANCE_ACTIVITY).navigation()
         }
         mViewBinding.tvWalletDetail.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_WALLET_DETAIL_ACTIVITY).navigation()
@@ -214,6 +215,12 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
             setMMKVValue(AppConstant.WeChatConstant.CODE,it.toString())
             mineViewModel.getWeChatToken(it.toString())
         }
+        //退出登录
+        LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS).observe(this) {
+            if (AppConstant.Constant.LOGIN_FAIL == it){
+                initUserInfo(null)
+            }
+        }
     }
 
 
@@ -228,36 +235,54 @@ class MineFragment : BaseFragment<FraMineBinding>(), OnRefreshListener {
         }
 
         userInfoData?.let {
-            updateUserInfo(it)
+            updateLocalUserInfo(it)
             mViewBinding.apply {
                 tvName.text = it.userName
                 tvAccount.text = it.userPhone
-                tvDesc.text = it.userDescribe
-                tvAttention.text = it.userAttention?.formatNumUnit()
-                tvFan.text = it.userFan?.formatNumUnit()
+                tvDesc.text = it.userDescribe?: "人生在世总要留点什么吧..."
+                tvAttention.text = if (it.userAttention == null) "0" else it.userAttention?.formatNumUnit()
+                tvFan.text = if (it.userFan == null) "0" else it.userFan?.formatNumUnit()
 //                if (it.userVipLevel != 0 && !it.userVipExpired){
 //                    tvName.setTextColor(requireContext().getColor(R.color.red))
 //                }
-                tvMoney.text = "￥"+it.userMoney.toString()
-                tvIntegral.text = it.userIntegral.toString()
-                tvAdTicket.text = it.userAdNum.toString()
+                tvMoney.text = "￥"+(it.userMoney?:"0")
+                tvIntegral.text = (it.userIntegral?:"0").toString()
+                tvAdTicket.text = (it.userAdNum?:"0").toString()
 //                tvMoney.text = "￥"+it.userMoney.formatNumUnit()
 //                tvIntegral.text = it.userIntegral.formatNumUnit()
 //                tvAdTicket.text = it.userAdNum.formatNumUnit()
 
-                if (it.userIsSign!!) {
+                if (it.userIsSign == true) {
                     tvSign.text = "已签到${it.userSign}天"
                     stvAwardAd.text = "每日签到1/1"
                 }else{
                     tvSign.text = "签到"
                     stvAwardAd.text = "每日签到0/1"
                 }
-                llSign.isClickable = !it.userIsSign!!
+                llSign.isClickable = it.userIsSign != true
                 loadCircle(requireContext(), it.userAttr, sivHead)
+                if (it.userAttr.isNullOrEmpty()) {
+                    sivHead.loadImage(requireContext(), R.drawable.iv_attr)
+                } else {
+                    sivHead.loadCircle(requireContext(), it.userAttr)
+                }
+
                 if (null == buildBitmap) {
                     buildBitmap = ScanUtil.buildBitmap("http://www.yyxjlgl.tk/module-main/image/apk/miemie_1.0.0.apk", 500, 500)
                     ivErCode.setImageBitmap(buildBitmap)
                 }
+
+
+                if (it.userVipLevel == 0 || it.userVipLevel == null) {
+                    icvMyRights.rightContent= "限时优惠,立即开通"
+                } else {
+                    if (it.userVipExpired) {
+                        icvMyRights.rightContent= "会员已到期"
+                    } else {
+                        icvMyRights.rightContent= ""
+                    }
+                }
+
             }
         }
     }

@@ -53,6 +53,7 @@
             android:paddingHorizontal="@dimen/dp_10"
             android:paddingVertical="@dimen/dp_3"
             android:text="+关注"
+            android:id="@+id/tv_attention"
             android:textColor="@color/appColor"
             android:textSize="@dimen/sp_14"
             app:layout_constraintBottom_toBottomOf="parent"

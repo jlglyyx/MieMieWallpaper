@@ -20,6 +20,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
 
     var params = mutableMapOf<String,Any?>()
 
+
     /**
      * 广告Manager
      */
@@ -167,14 +168,19 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         onSuccess: suspend (t: T) -> Unit = {},
         onError: suspend (t: Throwable) -> Unit = {},
         errorDialog: Boolean = true,
-        vararg messages: String = arrayOf()
+        vararg messages: String = arrayOf(),
+        showDialog:Boolean = true
     ) {
         params.clear()
         viewModelScope.launch {
             try {
-                requestDialogMessage(0, *messages)
+                if (showDialog){
+                    requestDialogMessage(0, *messages)
+                }
                 onSuccess(onRequest())
-                requestDialogMessage(1, *messages)
+                if (showDialog){
+                    requestDialogMessage(1, *messages)
+                }
                 dismissDialog()
             } catch (t: Throwable) {
                 onError(t)

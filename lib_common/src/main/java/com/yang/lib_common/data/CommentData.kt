@@ -12,13 +12,15 @@ import java.util.*
  */
 class CommentData constructor(var mLevel: Int,var mItemType : Int):AbstractExpandableItem<CommentData>(),MultiItemEntity {
 
-    var comment:String? = null
 
     var parentPosition:Int? = null
 
     var id = UUID.randomUUID().toString()
 
     var parentId :String? = null
+
+
+    var data:WallpaperDynamicCommentData? = null
 
     override fun getLevel(): Int {
 

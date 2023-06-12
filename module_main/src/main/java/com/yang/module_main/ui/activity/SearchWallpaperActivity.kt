@@ -1,5 +1,6 @@
 package com.yang.module_main.ui.activity
 
+import android.text.TextUtils
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +45,7 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
 
     private lateinit var mAdapter: BaseQuickAdapter<SearchFindData, BaseViewHolder>
 
-    private var mTitles : MutableList<String> = arrayListOf("静态壁纸","动态壁纸","用户")
+    private var mTitles : MutableList<String> = arrayListOf("静态壁纸","动态","用户")
 
     private var mSearchHistory : MutableList<String> = mutableListOf()
 
@@ -61,10 +62,12 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
 
         mFragments = mutableListOf()
         mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_WALLPAPER_FRAGMENT).navigation() as Fragment)
-        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_DYNAMIC_FRAGMENT).navigation() as Fragment)
+//        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_DYNAMIC_FRAGMENT).navigation() as Fragment)
 //        mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_DYNAMIC_FRAGMENT)
 //            .withInt(AppConstant.Constant.WALL_TYPE,AppConstant.Constant.WALL_VIDEO_TYPE)
 //            .navigation() as Fragment)
+        mFragments.add(buildARouter(AppConstant.RoutePath.SQUARE_ITEM_FRAGMENT)
+            .navigation() as Fragment)
         mFragments.add(buildARouter(AppConstant.RoutePath.SEARCH_USER_FRAGMENT)
             .navigation() as Fragment)
     }
@@ -89,7 +92,8 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
                 }
             }
 
-            tvChange.clicks().subscribe {
+            tvChange.setOnClickListener {
+                wallpaperViewModel.pageNum++
                 wallpaperViewModel.getSearchFind()
             }
 
@@ -143,9 +147,12 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
             llSearch.visibility = View.GONE
             llViewPager.visibility = View.VISIBLE
         }
-        mSearchHistory.add(keyword)
-        initFlowLayout()
-        setMMKVValue(AppConstant.Constant.SEARCH_WALLPAPER_HISTORY, mSearchHistory.toJson())
+        if (!mSearchHistory.contains(keyword) && !TextUtils.isEmpty(keyword)){
+            mSearchHistory.add(keyword)
+            initFlowLayout()
+            setMMKVValue(AppConstant.Constant.SEARCH_WALLPAPER_HISTORY, mSearchHistory.toJson())
+        }
+
     }
 
     override fun initViewModel() {
@@ -153,6 +160,9 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
         wallpaperViewModel.mSearchFindData.observe(this){
             if (!it.isNullOrEmpty()){
                 mAdapter.replaceData(it)
+            }else{
+                wallpaperViewModel.pageNum = 1
+                wallpaperViewModel.getSearchFind()
             }
         }
     }
@@ -215,10 +225,18 @@ class SearchWallpaperActivity:BaseActivity<ActSearchWallpaperBinding>() {
     }
 
     override fun onBackPressed() {
+
         if (mViewBinding.llViewPager.visibility == View.VISIBLE){
             mViewBinding.commonToolBar.etSearch.setText("")
         }else{
             super.onBackPressed()
         }
     }
+
+    override fun onDestroy() {
+        LiveDataBus.instance.with(AppConstant.Constant.KEYWORD).postValue("")
+        super.onDestroy()
+    }
+
+
 }

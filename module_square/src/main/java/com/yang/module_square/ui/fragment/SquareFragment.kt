@@ -63,77 +63,74 @@ class SquareFragment : BaseLazyFragment<FraSquareBinding>() {
             buildARouter(AppConstant.RoutePath.ADD_WALLPAPER_ACTIVITY).navigation()
         }
 
-        mViewBinding.llMore.setOnClickListener {
+//        mViewBinding.llMore.setOnClickListener {
+//
+//            XPopup.Builder(requireContext())
+//                .atView(mViewBinding.tabLayout)
+//                .asCustom(FilterDialog(requireContext()).apply {
+//                    block = {
+//                        it.sllContainer.shapeDrawableBuilder.setSolidColor(
+//                            ContextCompat.getColor(
+//                                requireContext(),
+//                                com.yang.lib_common.R.color.color_F3F4F6
+//                            )
+//                        ).intoBackground()
+//                        it.recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
+//                        if (null == mTabMoreAdapter){
+//                            mTabMoreAdapter = TabMoreAdapter()
+//                        }
+//                        mTabMoreAdapter!!.currentPosition = mViewBinding.tabLayout.selectedTabPosition
+//                        mTabMoreAdapter!!.setOnItemClickListener { _, _, position ->
+//                            mViewBinding.viewPager.setCurrentItem(position, false)
+//                            dismiss()
+//                        }
+//                        it.recyclerView.adapter = mTabMoreAdapter
+//                        mTabMoreAdapter!!.setNewData(mTitles)
+//                    }
+//                }).show()
+//        }
+//
+//        mViewBinding.errorReLoadView.onClick = {
+//            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
+//            squareViewModel.getTabs()
+//        }
 
-            XPopup.Builder(requireContext())
-                .atView(mViewBinding.tabLayout)
-                .asCustom(FilterDialog(requireContext()).apply {
-                    block = {
-                        it.sllContainer.shapeDrawableBuilder.setSolidColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                com.yang.lib_common.R.color.color_F3F4F6
-                            )
-                        ).intoBackground()
-                        it.recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
-                        if (null == mTabMoreAdapter){
-                            mTabMoreAdapter = TabMoreAdapter()
-                        }
-                        mTabMoreAdapter!!.currentPosition = mViewBinding.tabLayout.selectedTabPosition
-                        mTabMoreAdapter!!.setOnItemClickListener { _, _, position ->
-                            mViewBinding.viewPager.setCurrentItem(position, false)
-                            dismiss()
-                        }
-                        it.recyclerView.adapter = mTabMoreAdapter
-                        mTabMoreAdapter!!.setNewData(mTitles)
-                    }
-                }).show()
-        }
-
-        mViewBinding.errorReLoadView.onClick = {
-            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
-            squareViewModel.getTabs()
-        }
-
+        mFragments.add(
+            buildARouter(AppConstant.RoutePath.SQUARE_ITEM_FRAGMENT)
+                .navigation() as Fragment
+        )
+        mTitles.add("广场")
+        initViewPager()
+        initTabLayout()
     }
 
     override fun initData() {
-        squareViewModel.wallType = arguments?.getInt(AppConstant.Constant.WALL_TYPE)?:squareViewModel.wallType
-        mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
-        squareViewModel.getTabs()
-
-
-        squareViewModel.mWallpaperTabData.observe(this) {
+//        squareViewModel.wallType = arguments?.getInt(AppConstant.Constant.WALL_TYPE)?:squareViewModel.wallType
+//        mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.LOADING
+//        squareViewModel.getTabs()
+//
+//
+//        squareViewModel.mWallpaperTabData.observe(this) {
             mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.NORMAL
-            it.mapIndexed { index, wallpaperTabData ->
-                mFragments.add(
-                    buildARouter(AppConstant.RoutePath.SQUARE_ITEM_FRAGMENT)
-                        .withInt(AppConstant.Constant.TYPE, index)
-                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
-                        .withInt(AppConstant.Constant.WALL_TYPE, squareViewModel.wallType)
-                        .navigation() as Fragment
-                )
-
-                // TODO:  删除
-                mFragments.add(
-                    buildARouter(AppConstant.RoutePath.SQUARE_ITEM_FRAGMENT)
-                        .withInt(AppConstant.Constant.TYPE, index)
-                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
-                        .withInt(AppConstant.Constant.WALL_TYPE, squareViewModel.wallType)
-                        .navigation() as Fragment
-                )
-                wallpaperTabData.name
-            }.apply {
-                mTitles.addAll(this as MutableList<String>)
-                // TODO:  删除
-                mTitles.addAll(this as MutableList<String>)
-            }
-            initViewPager()
-            initTabLayout()
-        }
-        squareViewModel.uC.requestFailEvent.observe(this){
-            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.ERROR
-        }
+//            it.mapIndexed { index, wallpaperTabData ->
+//                mFragments.add(
+//                    buildARouter(AppConstant.RoutePath.SQUARE_ITEM_FRAGMENT)
+//                        .withInt(AppConstant.Constant.TYPE, index)
+//                        .withString(AppConstant.Constant.ID, wallpaperTabData.id)
+//                        .withInt(AppConstant.Constant.WALL_TYPE, squareViewModel.wallType)
+//                        .navigation() as Fragment
+//                )
+//
+//                wallpaperTabData.name
+//            }.apply {
+//                mTitles.addAll(this as MutableList<String>)
+//            }
+//            initViewPager()
+//            initTabLayout()
+//        }
+//        squareViewModel.uC.requestFailEvent.observe(this){
+//            mViewBinding.errorReLoadView.status = ErrorReLoadView.Status.ERROR
+//        }
     }
 
 

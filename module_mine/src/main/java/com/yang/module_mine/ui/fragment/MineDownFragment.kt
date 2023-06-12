@@ -1,5 +1,6 @@
 package com.yang.module_mine.ui.fragment
 
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -14,8 +15,10 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.proxy.InjectViewModelProxy
+import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.loadSpaceRadius
 import com.yang.lib_common.util.smartRefreshLayoutData
+import com.yang.lib_common.util.toJson
 import com.yang.module_mine.R
 import com.yang.module_mine.databinding.FraMineFansBinding
 import com.yang.module_mine.viewmodel.MineViewModel
@@ -81,12 +84,19 @@ class MineDownFragment : BaseLazyFragment<FraMineFansBinding>(), OnRefreshListen
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mAdapter.getItem(position)
             item?.let {
-//                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
-//                    .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(requireContext(), com.yang.lib_common.R.anim.fade_in, com.yang.lib_common.R.anim.fade_out))
-//                    .withString(AppConstant.Constant.DATA,mAdapter.data.toJson())
-//                    .withInt(AppConstant.Constant.INDEX,position)
-//                    .withInt(AppConstant.Constant.PAGE_NUMBER,wallpaperViewModel.pageNum)
-//                    .navigation()
+                buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
+                    .withOptionsCompat(
+                        ActivityOptionsCompat.makeCustomAnimation(
+                            requireContext(),
+                            com.yang.lib_common.R.anim.fade_in,
+                            com.yang.lib_common.R.anim.fade_out
+                        )
+                    )
+                    .withString(AppConstant.Constant.DATA, mAdapter.data.toJson())
+                    .withInt(AppConstant.Constant.INDEX, position)
+                    .withBoolean(AppConstant.Constant.TO_LOAD, false)
+                    .withBoolean(AppConstant.Constant.IS_DOWN, true)
+                    .navigation()
             }
         }
 

@@ -1,11 +1,13 @@
 package com.yang.module_mine.api
 
-import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.WallpaperData
+import com.yang.lib_common.data.WallpaperDynamicData
 import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
-import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.room.entity.UserInfoData
+import com.yang.lib_common.data.FansData
+import com.yang.module_mine.data.VipPackageData
+import com.yang.module_mine.data.WalletDetailData
 import com.yang.module_mine.data.WeChatInfoData
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -30,10 +32,13 @@ interface MineApi {
     @POST("api/wallpaper/queryWallpaper")
     suspend fun getWallpaper(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperData>>
 
+    @POST("api/wallpaper/queryCollectionWallpaper")
+    suspend fun queryCollectionWallpaper(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperData>>
+
 
 
     @Multipart
-    @POST("/uploadFile")
+    @POST("api/file/uploadFile")
     suspend fun uploadFile(@PartMap file: MutableMap<String, RequestBody>): MResult<MutableList<String>>
 
 
@@ -45,8 +50,8 @@ interface MineApi {
     suspend fun sign(@Body id: String): MResult<UserInfoData>
 
 
-    @POST("api/pay/alipay")
-    suspend fun alipay(): MResult<Any>
+    @POST("api/pay/openVip")
+    suspend fun openVip(@Body params:MutableMap<String,Any?>): MResult<Any>
 
 
     @POST
@@ -57,6 +62,27 @@ interface MineApi {
 
 
 
+    @POST("api/dynamic/getDynamicList")
+    suspend fun getDynamicList(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperDynamicData>>
+
+
+
+    @POST("api/dynamic/getDynamicDetail")
+    suspend fun getDynamicDetail(@Body params:MutableMap<String,Any?>):MResult<WallpaperDynamicData>
+
+    @POST("api/follow/getMineFollowList")
+    suspend fun getMineFollowList(@Body params:MutableMap<String,Any?>):MResult<MListResult<FansData>>
+
+    @POST("api/follow/addFollow")
+    suspend fun addFollow(@Body params:MutableMap<String,Any?>):MResult<FansData>
+
+
+
+    @POST("api/pay/getVipPackage")
+    suspend fun getVipPackage():MResult<MutableList<VipPackageData>>
+
+    @POST("api/pay/getWalletDetail")
+    suspend fun getWalletDetail(@Body params:MutableMap<String,Any?>):MResult<MListResult<WalletDetailData>>
 
 
 

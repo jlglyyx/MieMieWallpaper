@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.hjq.shape.layout.ShapeLinearLayout
 import com.yang.module_mine.R
+import com.yang.module_mine.data.PayTypeData
 import com.yang.module_mine.data.VipPackageData
 
 /**
@@ -22,7 +23,7 @@ class VipPackageAdapter :
         val tvOriginalPrice = helper.getView<TextView>(R.id.tv_original_price)
         tvOriginalPrice.paintFlags = tvOriginalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         helper.setText(R.id.stv_desc, item.desc)
-            .setText(R.id.tv_time, item.time)
+            .setText(R.id.tv_time, item.timeDesc)
             .setText(R.id.tv_price, item.price)
             .setText(R.id.tv_original_price,"原价"+ item.originalPrice)
         val shapeLinearLayout = helper.itemView as ShapeLinearLayout
@@ -30,4 +31,10 @@ class VipPackageAdapter :
 
     }
 
+
+    fun getSelectItem(): VipPackageData?{
+        return data.findLast {
+            it.isSelect
+        }
+    }
 }

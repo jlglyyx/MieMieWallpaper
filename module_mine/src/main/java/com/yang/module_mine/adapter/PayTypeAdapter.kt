@@ -19,7 +19,7 @@ class PayTypeAdapter : BaseQuickAdapter<PayTypeData, BaseViewHolder>(R.layout.it
 
         val ivPayType = helper.getView<ImageTintView>(R.id.iv_pay_type)
 
-        helper.setText(R.id.tv_pay_type,if (TextUtils.equals(item.id , "2")) "${item.desc} (${item.balance}元)" else item.desc)
+        helper.setText(R.id.tv_pay_type,if (TextUtils.equals(item.id , "0")) "${item.desc} (${item.balance}元)" else item.desc)
             .setImageResource(R.id.iv_pay_type,item.imgResourceId)
 //        ivPayType.tintClick = item.isSelect
         if (item.isSelect){

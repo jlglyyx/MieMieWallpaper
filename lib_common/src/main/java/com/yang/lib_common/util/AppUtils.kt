@@ -419,18 +419,14 @@ fun String.isPhone(): Boolean {
 /**
  *
  */
-fun toCloseAd(vipLevel: Int): Boolean {
+fun userIsVip(): Boolean {
     val userInfo = UserInfoHold.userInfo
-    userInfo?.let {
-        /*如果过期了返回*/
-        if (it.userVipExpired!!) {
-            return false
-        }
-        if (it.userVipLevel!! >= vipLevel) {
-            return true
-        }
+    return if (userInfo == null){
+        false
+    }else{
+        (null != userInfo.userVipLevel && userInfo.userVipLevel != 0 && !userInfo.userVipExpired)
     }
-    return false
+
 }
 
 /**
@@ -741,7 +737,7 @@ fun Int.formatNumUnit(): String {
 }
 
 
-fun FragmentActivity.requestPermission(vararg permissions:String,granted:() ->Unit,error:() ->Unit = {}){
+fun FragmentActivity.requestPermission(granted:() ->Unit,error:() ->Unit = {},vararg permissions:String){
         RxPermissions(this).requestEachCombined(
             *permissions
         )
@@ -818,4 +814,19 @@ fun <T> SmartRefreshLayout.smartRefreshLayoutData(
 
 }
 
+
+
+fun String?.emptyOtherString(data:String,append:String = "",dataAppend: Boolean = false):String{
+   return if (TextUtils.isEmpty(this)){
+        data+if (dataAppend) append else ""
+    }else{
+        this+append
+    }
+}
+
+fun viewStatus(status:Int,vararg view: View){
+    view.forEach {
+        it.visibility = status
+    }
+}
 

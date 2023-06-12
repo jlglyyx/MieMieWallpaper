@@ -1,9 +1,7 @@
 package com.yang.module_square.repository
 
 import com.yang.lib_common.base.repository.BaseRepository
-import com.yang.lib_common.data.WallpaperData
-import com.yang.lib_common.data.WallpaperTabData
-import com.yang.lib_common.data.WallpaperTypeData
+import com.yang.lib_common.data.*
 import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
@@ -77,6 +75,28 @@ class SquareRepository @Inject constructor(private val squareApi: SquareApi) :Ba
     suspend fun uploadFileAndParam(filePaths: MutableList<RequestBody>): MResult<MutableList<String>> {
         return withContextIO {
             squareApi.uploadFileAndParam(filePaths)
+        }
+    }
+
+    suspend fun getDynamicList(params:MutableMap<String,Any?>): MResult<MListResult<WallpaperDynamicData>> {
+        return withContextIO {
+            squareApi.getDynamicList(params)
+        }
+    }
+
+    suspend fun getDynamicDetail(params:MutableMap<String,Any?>): MResult<WallpaperDynamicData> {
+        return withContextIO {
+            squareApi.getDynamicDetail(params)
+        }
+    }
+    suspend fun getDynamicCommentList(params:MutableMap<String,Any?>): MResult<MutableList<WallpaperDynamicCommentData>> {
+        return withContextIO {
+            squareApi.getDynamicCommentList(params)
+        }
+    }
+    suspend fun insertDynamicComment(params:MutableMap<String,Any?>): MResult<WallpaperDynamicCommentData> {
+        return withContextIO {
+            squareApi.insertDynamicComment(params)
         }
     }
 }

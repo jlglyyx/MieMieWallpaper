@@ -9,7 +9,7 @@ package com.yang.module_mine.data
 class VipFunctionData {
 }
 
-data class VipPackageData(var id:String,var desc:String,var time:String,var price:String,var originalPrice:String,var isSelect:Boolean = false)
+data class VipPackageData(var id:String,var desc:String,var time:String,var timeDesc:String,var price:String,var originalPrice:String,var isSelect:Boolean = false)
 
 data class PayTypeData(var id:String,var desc:String,var imgResourceId:Int,var balance:String,var isSelect:Boolean = false)
 

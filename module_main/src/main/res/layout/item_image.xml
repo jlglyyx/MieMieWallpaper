@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/iv_image"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         />
     <com.hjq.shape.view.ShapeTextView
@@ -32,7 +32,6 @@
         android:paddingHorizontal="@dimen/dp_12"
         android:paddingVertical="@dimen/dp_1"
         app:shape_bottomLeftRadius="@dimen/dp_8"
-        app:shape_topRightRadius="@dimen/dp_6"
         app:shape_topLeftRadius="@dimen/dp_8"
         app:layout_constraintTop_toTopOf="@+id/iv_image"
         app:layout_constraintEnd_toEndOf="@+id/iv_image"

@@ -68,6 +68,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="私信"
+                    android:visibility="gone"
                     android:gravity="center"
                     android:layout_marginTop="@dimen/dp_10"
                     app:layout_constraintStart_toStartOf="@+id/stv_attention"

@@ -6,25 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.viewpager2.widget.ViewPager2
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.BarUtils
 import com.google.gson.reflect.TypeToken
 import com.shuyu.gsyvideoplayer.GSYVideoManager
+import com.umeng.analytics.AnalyticsConfig.enable
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoHold
+import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
+import com.yang.lib_common.helper.AdManager
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
-import com.yang.lib_common.data.WallpaperData
-import com.yang.lib_common.helper.AdManager
 import com.yang.module_main.databinding.ActWallpaperDetailBinding
 import com.yang.module_main.databinding.ViewWallpaperDetailBinding
-import com.yang.module_main.viewmodel.MainViewModel
+import com.yang.module_main.viewmodel.WallpaperViewModel
 import java.io.File
+
 
 /**
  * @ClassName: WallpaperDetailActivity
@@ -38,7 +42,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
     private var isFirst = true
 
     @InjectViewModel
-    lateinit var mainViewModel: MainViewModel
+    lateinit var mWallpaperViewModel: WallpaperViewModel
 
     private lateinit var mWallpaperViewPagerAdapter: WallpaperViewPagerAdapter
 
@@ -84,6 +88,11 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
      */
     private var toLoad = true
 
+    /**
+     * 是否显示右侧操作界面
+     */
+    private var isDown = false
+
 
     override fun initViewBinding(): ActWallpaperDetailBinding {
         return bind(ActWallpaperDetailBinding::inflate)
@@ -93,25 +102,29 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
         initSmartRefreshLayout()
         initViewPager()
         mWallpaperDataList =
-            intent.getStringExtra(AppConstant.Constant.DATA)?.fromJson<MutableList<WallpaperData>>(object : TypeToken<MutableList<WallpaperData>>(){}.type)
+            intent.getStringExtra(AppConstant.Constant.DATA)
+                ?.fromJson<MutableList<WallpaperData>>(object :
+                    TypeToken<MutableList<WallpaperData>>() {}.type)
         order =
             intent.getIntExtra(AppConstant.Constant.ORDER, order)
         index =
             intent.getIntExtra(AppConstant.Constant.INDEX, index)
 
-        mainViewModel.pageNum =
-            intent.getIntExtra(AppConstant.Constant.PAGE_NUMBER, 0)+1
+        mWallpaperViewModel.pageNum =
+            intent.getIntExtra(AppConstant.Constant.PAGE_NUMBER, 0) + 1
 
         userId =
-            intent.getStringExtra(AppConstant.Constant.USER_ID)?:userId
+            intent.getStringExtra(AppConstant.Constant.USER_ID) ?: userId
 
 
 
-        keyword = intent.getStringExtra(AppConstant.Constant.KEYWORD)?:keyword
+        keyword = intent.getStringExtra(AppConstant.Constant.KEYWORD) ?: keyword
 
 
 
         toLoad = intent.getBooleanExtra(AppConstant.Constant.TO_LOAD, toLoad)
+
+        isDown = intent.getBooleanExtra(AppConstant.Constant.IS_DOWN, isDown)
 
 
         mViewBinding.smartRefreshLayout.setEnableLoadMore(toLoad)
@@ -124,15 +137,15 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                 mViewBinding.commonToolBar.centerContent = mWallpaperData?.wallName
                 mWallpaperData?.let {
                     if (it.imageName!!.isImage()) {
-                        preload(this@WallpaperDetailActivity,it.wallUrl)
+                        preload(this@WallpaperDetailActivity, it.wallUrl)
                     }
-                    if (toLoad){
+                    if (toLoad) {
                         //加载数据  收藏数据
-                        mainViewModel.order = order
-                        mainViewModel.getWallpaper(it.tabId,keyword,userId)
+                        mWallpaperViewModel.order = order
+                        mWallpaperViewModel.getWallpaper(it.tabId, keyword, userId)
                     }
                     mWallpaperViewPagerAdapter.addDataAll(this)
-                    mViewBinding.viewPager.setCurrentItem(index,false)
+                    mViewBinding.viewPager.setCurrentItem(index, false)
 
                 }
             }
@@ -143,17 +156,14 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
     override fun initView() {
 
 
-
-
-
     }
 
     private fun initSmartRefreshLayout() {
         mViewBinding.smartRefreshLayout.setEnableRefresh(false)
         mViewBinding.smartRefreshLayout.setOnLoadMoreListener {
             mWallpaperData?.let {
-                mainViewModel.pageNum++
-                mainViewModel.getWallpaper(it.tabId,keyword,userId)
+                mWallpaperViewModel.pageNum++
+                mWallpaperViewModel.getWallpaper(it.tabId, keyword, userId)
             }
 
         }
@@ -163,12 +173,35 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
 
         mWallpaperViewPagerAdapter = WallpaperViewPagerAdapter(mutableListOf())
         mViewBinding.viewPager.adapter = mWallpaperViewPagerAdapter
+        for (i in 0 until mViewBinding.viewPager.childCount) {
+            val view: View = mViewBinding.viewPager.getChildAt(i)
+            if (view is RecyclerView) {
+                view.itemAnimator = null
+                break
+            }
+        }
+        mViewBinding.viewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val wallpaperData = mWallpaperViewPagerAdapter.data[position]
+                mViewBinding.commonToolBar.centerContent =
+                    wallpaperData.wallDesc
+                if (!isDown) {
+                    mWallpaperViewModel.queryWallpaperDetail(wallpaperData.id)
+                    mWallpaperViewModel.currentPosition = position
+                }
+
+            }
+
+        })
     }
 
     override fun initViewModel() {
 
         InjectViewModelProxy.inject(this)
-        mainViewModel.mWallpaperData.observe(this) {
+        mWallpaperViewModel.mWallpaperData.observe(this) {
             mViewBinding.smartRefreshLayout.finishLoadMore()
             if (it.isNullOrEmpty()) {
                 mViewBinding.smartRefreshLayout.setNoMoreData(true)
@@ -187,6 +220,14 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                         }
                     }
                 })
+            }
+
+        }
+
+        mWallpaperViewModel.mWallpaperDetailData.observe(this){
+            it?.let {
+                mWallpaperViewPagerAdapter.data[mWallpaperViewModel.currentPosition] = it
+                mWallpaperViewPagerAdapter.notifyItemChanged(mWallpaperViewModel.currentPosition)
             }
 
         }
@@ -235,71 +276,17 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             position: Int
         ) {
 
-            mViewBinding.commonToolBar.centerContent = data[position].wallName
-            holder.clControl.setPadding(0,0,0,BarUtils.getNavBarHeight())
-
-            holder.ivHead.loadCircle(this@WallpaperDetailActivity,data[position].wallUrl)
-
-            holder.ivHead.clicks().subscribe {
-                buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(AppConstant.Constant.ID,data[position].userId).navigation()
-            }
-            holder.stvAttention.clicks().subscribe {
-                holder.stvAttention.visibility = View.INVISIBLE
-            }
-
-            holder.iivLikeNum.setOnClickListener {
-                holder.iivLikeNum.mViewItemImageBinding.ivImage.tintClick = !holder.iivLikeNum.mViewItemImageBinding.ivImage.tintClick
-            }
-            holder.iivShare.clicks().subscribe {
-
-            }
-
-
-
-            holder.clControl.setOnClickListener {
-                holder.clControl.visibility = View.GONE
-            }
-            holder.stvSetWallpaper.clicks().subscribe {
-                AdManager.instance.showReward(this@WallpaperDetailActivity){
-                    data[position].imageName = "${System.currentTimeMillis()}.jpg"
-                    downAndSetWallpaper(data[position].wallUrl?:"", data[position].imageName?:"")
-                }
-            }
-            holder.iivDown.clicks().subscribe {
-                AdManager.instance.showReward(this@WallpaperDetailActivity){
-                    data[position].imageName = "${System.currentTimeMillis()}.jpg"
-                    downAndSetWallpaper(data[position].wallUrl?:"", data[position].imageName?:"", true)
-                }
-            }
             try {
                 if (data[position + 1].imageName!!.isVideo()) {
 
                 } else {
-                    preload(this@WallpaperDetailActivity,data[position + 1].wallUrl)
+                    preload(this@WallpaperDetailActivity, data[position + 1].wallUrl)
                 }
             } catch (e: Exception) {
 
             }
-            val isVideo = data[position].wallUrl!!.isVideo()
-            if (isVideo) {
-                holder.ivImage.visibility = View.GONE
-                payVideo(holder, position)
-                holder.gsyVideoPlayer.findViewById<View>(com.shuyu.gsyvideoplayer.R.id.surface_container)
-                    .setOnClickListener {
-                        holder.clControl.visibility = View.VISIBLE
-                    }
-            } else {
-                holder.gsyVideoPlayer.visibility = View.GONE
-                holder.ivImage.setOnPhotoTapListener { view, x, y ->
-                    holder.clControl.visibility = View.VISIBLE
-                }
-                holder.ivImage.setOnClickListener {
-                    holder.clControl.visibility = View.VISIBLE
-                }
-
-                holder.ivImage.loadBgImage(this@WallpaperDetailActivity,data[position].wallUrl)
-
-            }
+            initWallpaperView(holder, position)
+            addClickListener(holder, position)
 
         }
 
@@ -318,9 +305,131 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             notifyDataSetChanged()
         }
 
-        fun payVideo(holder: WallpaperViewPagerAdapter.ImageViewPagerViewHolder, position: Int) {
+        private fun payVideo(
+            holder: WallpaperViewPagerAdapter.ImageViewPagerViewHolder,
+            position: Int
+        ) {
             holder.gsyVideoPlayer.setUp(data[position].wallUrl, true, null, null, "")
             holder.gsyVideoPlayer.startPlayLogic()
+        }
+
+
+        private fun initWallpaperView(
+            holder: WallpaperViewPagerAdapter.ImageViewPagerViewHolder,
+            position: Int
+        ) {
+
+            val currentData = data[position]
+            holder.apply {
+
+                if (isDown) {
+                    llRightControl.visibility = View.GONE
+                } else {
+                    llRightControl.visibility = View.VISIBLE
+                }
+
+                clControl.setPadding(0, 0, 0, BarUtils.getNavBarHeight())
+
+                ivHead.loadCircle(this@WallpaperDetailActivity, currentData.userAttr)
+
+                iivLikeNum.mViewItemImageBinding.tvTv.text =
+                    if (currentData.likeNum == null) "0" else currentData.likeNum?.formatNumUnit()
+
+                iivLikeNum.mViewItemImageBinding.ivImage.tintClick = currentData.isCollection
+
+                viewStatus(if (currentData.isAttention) View.GONE else View.VISIBLE,stvAttention)
+
+
+                val isVideo = currentData.wallUrl!!.isVideo()
+                if (isVideo) {
+                    ivImage.visibility = View.GONE
+                    payVideo(holder, position)
+                    gsyVideoPlayer.findViewById<View>(com.shuyu.gsyvideoplayer.R.id.surface_container)
+                        .setOnClickListener {
+                            clControl.visibility = View.VISIBLE
+                        }
+                } else {
+                    gsyVideoPlayer.visibility = View.GONE
+                    ivImage.setOnPhotoTapListener { view, x, y ->
+                        clControl.visibility = View.VISIBLE
+                    }
+                    ivImage.setOnClickListener {
+                        clControl.visibility = View.VISIBLE
+                    }
+                    ivImage.loadBgImage(this@WallpaperDetailActivity, currentData.wallUrl)
+                }
+            }
+        }
+
+
+        private fun addClickListener(
+            holder: WallpaperViewPagerAdapter.ImageViewPagerViewHolder,
+            position: Int
+        ) {
+            val currentData = data[position]
+            holder.apply {
+
+                ivHead.clicks().subscribe {
+                    buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(
+                        AppConstant.Constant.USER_ID,
+                        currentData.userId
+                    ).navigation()
+                }
+
+                stvAttention.clicks().subscribe {
+                    mWallpaperViewModel.addFollow(UserInfoHold.userId, currentData.userId,currentData.id,!currentData.isAttention)
+                    mWallpaperViewModel.currentPosition = position
+//                    holder.stvAttention.visibility = View.INVISIBLE
+                }
+
+
+                iivLikeNum.setOnClickListener {
+                    mWallpaperViewModel.addOrCancelCollect(
+                        currentData.id,
+                        currentData.userId,
+                        currentData.isCollection
+                    )
+                    mWallpaperViewModel.currentPosition = position
+                }
+
+
+                iivShare.clicks().subscribe {
+
+                }
+
+
+
+                clControl.setOnClickListener {
+                    holder.clControl.visibility = View.GONE
+                }
+                stvSetWallpaper.clicks().subscribe {
+                    if (isDown) {
+                        WallpaperUtil.setWallpaper(
+                            this@WallpaperDetailActivity,
+                            currentData.wallUrl!!
+                        )
+                    } else {
+                        AdManager.instance.showReward(this@WallpaperDetailActivity) {
+                            currentData.imageName = "${System.currentTimeMillis()}.jpg"
+                            downAndSetWallpaper(
+                                currentData.wallUrl ?: "",
+                                currentData.imageName ?: ""
+                            )
+                        }
+                    }
+                }
+                iivDown.clicks().subscribe {
+                    AdManager.instance.showReward(this@WallpaperDetailActivity) {
+                        currentData.imageName = "${System.currentTimeMillis()}.jpg"
+                        downAndSetWallpaper(
+                            currentData.wallUrl ?: "",
+                            currentData.imageName ?: "",
+                            true
+                        )
+                    }
+                }
+
+            }
         }
 
 
@@ -330,6 +439,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
             var stvSetWallpaper = itemView.stvSetWallpaper
             var clContainer = itemView.clContainer
             var clControl = itemView.clControl
+            var llRightControl = itemView.llRightControl
             var gsyVideoPlayer = itemView.detailPlayer
 
             var ivHead = itemView.ivHead
@@ -343,13 +453,16 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
 
     }
 
+    /**
+     * 下载和设置壁纸
+     */
     private fun downAndSetWallpaper(
         imageUrl: String,
         imageName: String,
         justDown: Boolean = false
     ) {
         MultiMoreThreadDownload.Builder(this)
-            .parentFilePath(externalCacheDir?.absolutePath?:cacheDir.absolutePath)
+            .parentFilePath(externalCacheDir?.absolutePath ?: cacheDir.absolutePath)
             .filePath(imageName).fileUrl(AppConstant.ClientInfo.IMAGE_MODULE + imageUrl)
             .downListener(object : MultiMoreThreadDownload.DownListener {
                 override fun downSuccess(file: File) {
@@ -361,7 +474,11 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
                             file.absolutePath
                         )
                     }
-                    save2Album(file, getString(com.yang.module_main.R.string.app_name), this@WallpaperDetailActivity)
+                    save2Album(
+                        file,
+                        getString(com.yang.module_main.R.string.app_name),
+                        this@WallpaperDetailActivity
+                    )
                 }
 
                 override fun downStart() {
@@ -380,7 +497,7 @@ class WallpaperDetailActivity : BaseActivity<ActWallpaperDetailBinding>() {
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return mainViewModel.uC
+        return mWallpaperViewModel.uC
     }
 
 

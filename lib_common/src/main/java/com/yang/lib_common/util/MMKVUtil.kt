@@ -25,7 +25,7 @@ fun getDefaultMMKV(): MMKV {
 /**
  * @return 更新用户缓存
  */
-fun updateUserInfo(userInfoData: UserInfoData) {
+fun updateLocalUserInfo(userInfoData: UserInfoData) {
     setMMKVValue(AppConstant.Constant.USER_INFO, userInfoData.toJson())
 }
 

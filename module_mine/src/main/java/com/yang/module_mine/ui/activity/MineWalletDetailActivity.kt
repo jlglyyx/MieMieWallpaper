@@ -1,7 +1,6 @@
 package com.yang.module_mine.ui.activity
 
 import android.widget.ImageView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -11,18 +10,15 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.yang.apt_annotation.annotain.InjectViewModel
+import com.yang.lib_common.R
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.dialog.FilterDialog
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.smartRefreshLayoutData
-import com.yang.lib_common.util.toJson
-import com.yang.lib_common.R
 import com.yang.module_mine.adapter.WalletDetailAdapter
 import com.yang.module_mine.adapter.WalletDetailFilterAdapter
-import com.yang.module_mine.data.WalletDetailData
 import com.yang.module_mine.databinding.ActMineWalletDetailBinding
 import com.yang.module_mine.viewmodel.MineViewModel
 
@@ -50,7 +46,8 @@ class MineWalletDetailActivity:BaseActivity<ActMineWalletDetailBinding>(), OnRef
 
     private lateinit var mWalletDetailAdapter: WalletDetailAdapter
 
-    private val allList = mutableListOf("默认","支付","积分","广告券",)
+    private val allList = mutableListOf("默认","支付","广告券",)
+//    private val allList = mutableListOf("默认","支付","积分","广告券",)
 
     private val filterList = mutableListOf("默认","时间升序","时间降序")
 
@@ -71,18 +68,51 @@ class MineWalletDetailActivity:BaseActivity<ActMineWalletDetailBinding>(), OnRef
 
             llAll.setOnClickListener {
                 initFilterDialog(ivAll,allList){ item,position ->
+                    when(position){
+                        0 -> {
+                            mineViewModel.payType = null
+                        }
+                        1 -> {
+                            mineViewModel.payType = 2
+                        }
+                        2 -> {
+                            mineViewModel.payType = 4
+                        }
+
+//                        2 -> {
+//                            mineViewModel.payType = 3
+//                        }
+//                        3 -> {
+//                            mineViewModel.payType = 4
+//                        }
+
+                    }
                     if (position == 0){
                         tvAll.text = "全部"
+
                     }else{
                         item?.let {
                             tvAll.text = item
                         }
                     }
+                    onRefresh(smartRefreshLayout)
                 }
             }
 
             llFilter.setOnClickListener {
                 initFilterDialog(ivFilter,filterList){ item,position ->
+                    when(position){
+                        0 -> {
+                            mineViewModel.order = position
+                        }
+                        1 -> {
+                            mineViewModel.order = position
+                        }
+                        2 -> {
+                            mineViewModel.order = 0
+                        }
+                    }
+
                     if (position == 0){
                         tvFilter.text = "筛选"
                     }else{
@@ -90,7 +120,7 @@ class MineWalletDetailActivity:BaseActivity<ActMineWalletDetailBinding>(), OnRef
                             tvFilter.text = item
                         }
                     }
-
+                    onRefresh(smartRefreshLayout)
                 }
             }
         }
@@ -169,11 +199,9 @@ class MineWalletDetailActivity:BaseActivity<ActMineWalletDetailBinding>(), OnRef
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
-        mineViewModel.mWallpaperData.observe(this) {
-           val map =  it.map {
-                WalletDetailData("")
-            } as MutableList
-            smartRefreshLayout.smartRefreshLayoutData(map, mWalletDetailAdapter, mineViewModel)
+        mineViewModel.mWalletDetailListData.observe(this) {
+
+            smartRefreshLayout.smartRefreshLayoutData(it, mWalletDetailAdapter, mineViewModel)
         }
     }
 
@@ -184,13 +212,13 @@ class MineWalletDetailActivity:BaseActivity<ActMineWalletDetailBinding>(), OnRef
     override fun onRefresh(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum = 1
-        mineViewModel.getWallpaper("1")
+        mineViewModel.getWalletDetail()
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
 
         mineViewModel.pageNum++
-        mineViewModel.getWallpaper("1")
+        mineViewModel.getWalletDetail()
 
     }
 }

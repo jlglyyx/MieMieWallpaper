@@ -4,14 +4,12 @@ import android.app.Application
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import com.czhj.sdk.common.utils.Md5Util
-import com.huawei.hms.ads.id
-import com.umeng.analytics.MobclickAgent
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoHold
 import com.yang.lib_common.util.showShort
-import com.yang.lib_common.util.updateUserInfo
+import com.yang.lib_common.util.updateLocalUserInfo
 import com.yang.lib_common.data.WallpaperData
 import com.yang.lib_common.data.WallpaperTabData
 import com.yang.lib_common.data.WallpaperTypeData
@@ -79,7 +77,7 @@ class MainViewModel @Inject constructor(
 
             mainRepository.login(params)
         }, {
-            updateUserInfo(it.data)
+            updateLocalUserInfo(it.data)
             setMMKVValue(AppConstant.Constant.LOGIN_STATUS, AppConstant.Constant.LOGIN_SUCCESS)
             LiveDataBus.instance.with(AppConstant.Constant.LOGIN_STATUS)
                 .postValue(AppConstant.Constant.LOGIN_SUCCESS)
@@ -135,6 +133,7 @@ class MainViewModel @Inject constructor(
             params[AppConstant.Constant.KEYWORD] = keyword
             params[AppConstant.Constant.WALL_TYPE] = wallType
             params[AppConstant.Constant.PAGE_NUMBER] = pageNum
+            params[AppConstant.Constant.CURRENT_USER_ID] = UserInfoHold.userId
             params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
             mainRepository.getWallpaper(params)
         }, {
@@ -144,6 +143,28 @@ class MainViewModel @Inject constructor(
             showRecyclerViewErrorEvent()
         }, errorDialog = false)
     }
+
+//    /**
+//     * 关键字查询 收藏查询 tab查询
+//     */
+//    fun queryWallpaperDetail(tabId: String?, keyword: String = "", userId: String = "") {
+//        launch({
+//            params[AppConstant.Constant.USER_ID] = userId
+//            params[AppConstant.Constant.ORDER] = order
+//            params[AppConstant.Constant.TAB_ID] = tabId
+//            params[AppConstant.Constant.KEYWORD] = keyword
+//            params[AppConstant.Constant.WALL_TYPE] = wallType
+//            params[AppConstant.Constant.PAGE_NUMBER] = pageNum
+//            params[AppConstant.Constant.CURRENT_USER_ID] = UserInfoHold.userId
+//            params[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
+//            mainRepository.queryWallpaperDetail(params)
+//        }, {
+//            mWallpaperData.postValue(it.data)
+//        }, {
+//            cancelRefreshLoadMore()
+//            showRecyclerViewErrorEvent()
+//        }, errorDialog = false)
+//    }
 
     /**
      * 关键字查询 收藏查询 tab查询

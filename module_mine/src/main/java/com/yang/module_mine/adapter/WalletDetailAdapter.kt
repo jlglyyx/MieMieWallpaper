@@ -18,16 +18,11 @@ class WalletDetailAdapter : BaseQuickAdapter<WalletDetailData, BaseViewHolder>(R
 
     override fun convert(helper: BaseViewHolder, item: WalletDetailData) {
 
-//        val ivPayType = helper.getView<ImageTintView>(R.id.iv_pay_type)
-//
-//        helper.setText(R.id.tv_pay_type,if (TextUtils.equals(item.id , "2")) "${item.desc} (${item.balance}元)" else item.desc)
-//            .setImageResource(R.id.iv_pay_type,item.imgResourceId)
-//        ivPayType.tintClick = item.isSelect
-//        if (item.isSelect){
-//            helper.setTextColor(R.id.tv_pay_type,mContext.getColor(com.yang.lib_common.R.color.appColor))
-//        }else{
-//            helper.setTextColor(R.id.tv_pay_type,mContext.getColor(com.yang.lib_common.R.color.textColor_999999))
-//        }
+        helper.setText(R.id.tv_title,item.title)
+        .setText(R.id.tv_name,item.payTypeDesc)
+        .setText(R.id.tv_time,item.createTime)
+        .setText(R.id.tv_price,(if (item.revenueOrExpenditure == 0) "-" else "+") + item.price)
+
     }
 
 }

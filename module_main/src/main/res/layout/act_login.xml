@@ -33,12 +33,24 @@
         <com.yang.lib_common.widget.CustomEditView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:ceHint=""
+            app:ceType="normal"
+            android:visibility="gone"
+            android:id="@+id/et_ip"
+            app:ceLeftSrc="@drawable/iv_phone"
+            app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+            android:layout_marginTop="@dimen/dp_10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <com.yang.lib_common.widget.CustomEditView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:ceHint="请输入手机号"
             app:ceType="normal"
             app:ceMaxLength="11"
             android:id="@+id/et_phone"
             app:ceLeftSrc="@drawable/iv_phone"
-            app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+            app:layout_constraintTop_toBottomOf="@+id/et_ip"
             android:layout_marginTop="@dimen/dp_10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

@@ -2,9 +2,10 @@ package com.yang.module_square.ui.activity
 
 import android.text.TextUtils
 import android.view.View
-import androidx.core.app.ActivityOptionsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.huawei.hms.ads.id
 import com.lxj.xpopup.XPopup
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.CommentAdapter
@@ -12,13 +13,19 @@ import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.CommentData
+import com.yang.lib_common.data.UserInfoHold
+import com.yang.lib_common.data.UserInfoHold.userName
+import com.yang.lib_common.data.WallpaperDynamicCommentData
 import com.yang.lib_common.data.WallpaperDynamicData
 import com.yang.lib_common.dialog.EditBottomDialog
+import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.GridNinePictureView
 import com.yang.module_square.databinding.ActDynamicDetailBinding
 import com.yang.module_square.viewmodel.SquareViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Route(path = AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY)
@@ -26,10 +33,16 @@ class DynamicDetailActivity : BaseActivity<ActDynamicDetailBinding>() {
 
     private lateinit var commentAdapter: CommentAdapter
 
-    private var mWallpaperDynamicData: WallpaperDynamicData? = null
-
     @InjectViewModel
     lateinit var squareViewModel: SquareViewModel
+
+    private var mid: String = ""
+
+    private var mPosition: Int = -1
+
+    private var mType: Int = -1
+
+    private var mDynamicData: WallpaperDynamicData? = null
 
 
     override fun initViewBinding(): ActDynamicDetailBinding {
@@ -37,62 +50,34 @@ class DynamicDetailActivity : BaseActivity<ActDynamicDetailBinding>() {
     }
 
 
-
     override fun initData() {
-        val sid = intent.getStringExtra(AppConstant.Constant.ID)
-        val openComment = intent.getBooleanExtra(AppConstant.Constant.OPEN_COMMENT,false)
-        val data = intent.getStringExtra(AppConstant.Constant.DATA)
-        mWallpaperDynamicData = data?.fromJson(WallpaperDynamicData::class.java)
-//        squareViewModel.getImageItemData(sid ?: "")
+        mid = intent.getStringExtra(AppConstant.Constant.ID) ?: ""
+        val openComment = intent.getBooleanExtra(AppConstant.Constant.OPEN_COMMENT, false)
+        squareViewModel.getDynamicDetail(mid)
+        squareViewModel.getDynamicCommentList(mid)
+
         addViewHistory()
 
-        if (openComment){
+        if (openComment) {
             openCommentDialog()
         }
     }
 
     override fun initView() {
-        mWallpaperDynamicData?.apply {
 
-            mViewBinding.gridNinePictureView.data = wallList.map {
-                getRealUrl(it.wallUrl).toString()
-            } as MutableList<String>
-            mViewBinding.gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback{
-                override fun imageClickListener(position: Int) {
-                    buildARouter(AppConstant.RoutePath.WALLPAPER_DETAIL_ACTIVITY)
-                        .withOptionsCompat(
-                            ActivityOptionsCompat.makeCustomAnimation(
-                                this@DynamicDetailActivity,
-                                com.yang.lib_common.R.anim.fade_in,
-                                com.yang.lib_common.R.anim.fade_out
-                            )
-                        )
-                        .withString(AppConstant.Constant.DATA, wallList.toJson())
-                        .withInt(AppConstant.Constant.INDEX, position)
-                        .withBoolean(AppConstant.Constant.TO_LOAD, false)
-                        .navigation()
-                }
-
-            }
-
-            mViewBinding.ivImage.loadCircle(this@DynamicDetailActivity, getRealUrl(userImage).toString())
-            mViewBinding.tvName.text = userName
-            mViewBinding.tvAttention.text = if (isAttention) "取消关注" else "+关注"
-            mViewBinding.tvText.text = dynamicContent
-            mViewBinding.tvFabulousNum.text = dynamicLikeNum.formatNumUnit()
-            mViewBinding.tvCommentNum.text = dynamicCommentNum.formatNumUnit()
-            mViewBinding.tvForwardNum.text = dynamicForwardNum.formatNumUnit()
-
-
-
-        }
 
         mViewBinding.apply {
 
             ivImage.clicks().subscribe {
                 buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(
-                    AppConstant.Constant.ID,
-                    ""
+                    AppConstant.Constant.USER_ID,
+                    mDynamicData?.userId
+                ).navigation()
+            }
+            tvName.clicks().subscribe {
+                buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(
+                    AppConstant.Constant.USER_ID,
+                    mDynamicData?.userId
                 ).navigation()
             }
             tvAttention.clicks().subscribe {
@@ -117,21 +102,10 @@ class DynamicDetailActivity : BaseActivity<ActDynamicDetailBinding>() {
         }
 
 
-
-
         initRecyclerView()
 
     }
 
-    override fun initViewModel() {
-        InjectViewModelProxy.inject(this)
-    }
-
-    private fun insertComment(comment: String) {
-        val mutableMapOf = mutableMapOf<String, String>()
-        mutableMapOf[AppConstant.Constant.COMMENT] = comment
-//        squareViewModel.insertComment(mutableMapOf)
-    }
 
     private fun addViewHistory() {
 //        squareViewModel.addViewHistory("", "")
@@ -154,66 +128,36 @@ class DynamicDetailActivity : BaseActivity<ActDynamicDetailBinding>() {
             CommentAdapter(mutableListOf()).also {
                 it.setOnItemChildClickListener { adapter, view, position ->
                     val item = commentAdapter.getItem(position)
-                    item?.let {
+                    item?.let { dataItem ->
                         when (view.id) {
-                            com.yang.lib_common.R.id.siv_img -> {
+                            com.yang.lib_common.R.id.siv_img,
+                            com.yang.lib_common.R.id.tv_name,
+                            -> {
+                                //点击头像跳转个人信息页面
                                 buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(
-                                    AppConstant.Constant.ID,
-                                    ""
+                                    AppConstant.Constant.USER_ID,
+                                    dataItem.data?.userId
                                 ).navigation()
                             }
-                            com.yang.lib_common.R.id.siv_reply_img -> {
+                            com.yang.lib_common.R.id.siv_img,
+                            com.yang.lib_common.R.id.tv_reply_name -> {
+                                //点击头像跳转个人信息页面
                                 buildARouter(AppConstant.RoutePath.MINE_USER_INFO_ACTIVITY).withString(
-                                    AppConstant.Constant.ID,
-                                    ""
+                                    AppConstant.Constant.USER_ID,
+                                    dataItem.data?.replyUserId
                                 ).navigation()
                             }
-                            com.yang.lib_common.R.id.tv_reply -> {
-                                XPopup.Builder(this@DynamicDetailActivity)
-                                    .autoOpenSoftInput(true)
-                                    .asCustom(EditBottomDialog(this@DynamicDetailActivity).apply {
-                                        dialogCallBack = object : EditBottomDialog.DialogCallBack {
-                                            override fun getComment(s: String) {
-                                                when (it.itemType) {
-                                                    AppConstant.Constant.PARENT_COMMENT_TYPE -> {
-                                                        it.addSubItem(CommentData( AppConstant.Constant.CHILD_COMMENT_TYPE,  AppConstant.Constant.CHILD_COMMENT_TYPE).apply {
-                                                            comment = s
-                                                            parentId = it.id
-
-                                                        })
-                                                        commentAdapter.collapse(position)
-                                                        commentAdapter.expand(position)
-                                                    }
-                                                    AppConstant.Constant.CHILD_COMMENT_TYPE, AppConstant.Constant.CHILD_REPLY_COMMENT_TYPE -> {
-                                                        it.parentId?.let { mParentId ->
-                                                            val mPosition =
-                                                                commentAdapter.data.indexOf(
-                                                                    commentAdapter.data.findLast {
-                                                                        TextUtils.equals(
-                                                                            it.parentId,
-                                                                            mParentId
-                                                                        )
-                                                                    }?.apply {
-                                                                        addSubItem(
-                                                                            CommentData(
-                                                                                AppConstant.Constant.CHILD_COMMENT_TYPE,
-                                                                                AppConstant.Constant.CHILD_REPLY_COMMENT_TYPE
-                                                                            ).apply {
-                                                                                comment = s
-                                                                                parentId = mParentId
-                                                                            })
-                                                                    })
-
-                                                            commentAdapter.collapse(mPosition)
-                                                            commentAdapter.expand(mPosition)
-                                                        }
-                                                    }
-                                                }
-                                                insertComment(s)
-                                            }
-
-                                        }
-                                    }).show()
+                            com.yang.lib_common.R.id.tv_open_comment -> {
+                                //展开更多数据
+                                if (dataItem.isExpanded) {
+                                    commentAdapter.collapse(position, false, true)
+                                } else {
+                                    commentAdapter.expand(position, false, true)
+                                }
+                            }
+                            com.yang.lib_common.R.id.ll_sq -> {
+                                //展开更多数据
+                                commentAdapter.collapse(position, false, true)
                             }
                             else -> {
 
@@ -221,21 +165,173 @@ class DynamicDetailActivity : BaseActivity<ActDynamicDetailBinding>() {
                         }
                     }
                 }
+
+                it.setOnItemClickListener { adapter, view, position ->
+                    val item = commentAdapter.getItem(position)
+                    item?.let {
+                        //点击回复
+                        XPopup.Builder(this@DynamicDetailActivity)
+                            .autoOpenSoftInput(true)
+                            .asCustom(EditBottomDialog(this@DynamicDetailActivity).apply {
+                                dialogCallBack = object : EditBottomDialog.DialogCallBack {
+                                    override fun getComment(s: String) {
+                                        when (it.itemType) {
+                                            //父层级回复
+                                            AppConstant.Constant.PARENT_COMMENT_TYPE -> {
+
+                                                insertComment(s, it.data?.id, null)
+                                                mPosition = position
+                                                mType = AppConstant.Constant.CHILD_COMMENT_TYPE
+                                            }
+                                            //子层级回复
+                                            AppConstant.Constant.CHILD_COMMENT_TYPE, AppConstant.Constant.CHILD_REPLY_COMMENT_TYPE -> {
+                                                if (TextUtils.equals(
+                                                        it.data?.userId,
+                                                        UserInfoHold.userId
+                                                    )
+                                                ) {
+                                                    mType = AppConstant.Constant.CHILD_COMMENT_TYPE
+                                                    insertComment(s, it.data?.parentId, null)
+                                                } else {
+                                                    mType =
+                                                        AppConstant.Constant.CHILD_REPLY_COMMENT_TYPE
+                                                    insertComment(
+                                                        s,
+                                                        it.data?.parentId,
+                                                        it.data?.userId
+                                                    )
+                                                }
+                                                mPosition = position
+                                            }
+                                        }
+
+                                    }
+
+                                }
+                            }).show()
+                    }
+                }
             }
         mViewBinding.recyclerView.adapter = commentAdapter
     }
 
-    private fun openCommentDialog(){
+    private fun insertComment(comment: String, parentId: String?, replyUserId: String?) {
+
+        squareViewModel.insertDynamicComment(
+            UserInfoHold.userId,
+            parentId,
+            mid,
+            replyUserId,
+            comment
+        )
+
+
+    }
+
+    private fun openCommentDialog() {
         XPopup.Builder(this).autoOpenSoftInput(true).asCustom(EditBottomDialog(this).apply {
             dialogCallBack = object : EditBottomDialog.DialogCallBack {
                 override fun getComment(s: String) {
-                    commentAdapter.addData(0, CommentData(0, 0).apply {
-                        comment = s
-                    })
-                    insertComment(s)
+
+
+                    insertComment(s, null, null)
+                    mPosition = 0
+                    mType = AppConstant.Constant.PARENT_COMMENT_TYPE
+
+                }
+
+            }
+        }).show()
+    }
+
+
+    override fun initViewModel() {
+        InjectViewModelProxy.inject(this)
+        squareViewModel.mWallpaperDynamicDetailData.observe(this) {
+            mDynamicData = it
+            it?.apply {
+                resourceUrls?.fromJson<MutableList<String>>()?.let {
+                    mViewBinding.gridNinePictureView.data = it
+                }
+                mViewBinding.gridNinePictureView.imageCallback =
+                    object : GridNinePictureView.ImageCallback {
+                        override fun imageClickListener(position: Int) {
+                            XPopup.Builder(this@DynamicDetailActivity)
+                                .asCustom(ImageViewPagerDialog(this@DynamicDetailActivity,
+                                    resourceUrls?.fromJson<MutableList<String>>()!!.map {
+                                        getRealUrl(it)
+                                    } as MutableList<String>, position)).show()
+                        }
+
+                    }
+                mViewBinding.ivImage.loadCircle(
+                    this@DynamicDetailActivity,
+                    getRealUrl(userAttr).toString()
+                )
+                mViewBinding.tvName.text = userName
+                mViewBinding.tvAttention.text = if (isAttention) "取消关注" else "+关注"
+                mViewBinding.tvText.text = content
+                mViewBinding.tvFabulousNum.text =
+                    if (likeNum == null) "0" else likeNum?.formatNumUnit()
+                mViewBinding.tvCommentNum.text =
+                    if (commentNum == null) "0" else commentNum?.formatNumUnit()
+                mViewBinding.tvForwardNum.text =
+                    if (forwardNum == null) "0" else forwardNum?.formatNumUnit()
+                mViewBinding.tvDegree.text =
+                    "浏览" + if (seeNum == null) "0" else seeNum?.formatNumUnit() + "次"
+                mViewBinding.tvTime.text = createTime
+                mViewBinding.tvLocation.text = sendLocation
+            }
+        }
+
+        squareViewModel.mWallpaperDynamicCommentData.observe(this) {
+            val mutableListOf = mutableListOf<CommentData>()
+            it.forEach { item ->
+                val element = CommentData(
+                    AppConstant.Constant.PARENT_COMMENT_TYPE,
+                    AppConstant.Constant.PARENT_COMMENT_TYPE
+                ).apply {
+                    data = item
+                }
+                mutableListOf.add(element)
+                item.children?.forEach { child ->
+                    if (child.replyUserId.isNullOrEmpty()) {
+                        element.addSubItem(CommentData(
+                            AppConstant.Constant.CHILD_COMMENT_TYPE,
+                            AppConstant.Constant.CHILD_COMMENT_TYPE
+                        ).apply {
+                            data = child
+                        })
+                    } else {
+                        element.addSubItem(CommentData(
+                            AppConstant.Constant.CHILD_COMMENT_TYPE,
+                            AppConstant.Constant.CHILD_REPLY_COMMENT_TYPE
+                        ).apply {
+                            data = child
+                        })
+                    }
+                }
+            }
+            commentAdapter.replaceData(mutableListOf)
+
+        }
+
+
+        squareViewModel.mWallpaperDynamicCommentDetailData.observe(this) {
+
+            when (mType) {
+                AppConstant.Constant.PARENT_COMMENT_TYPE -> {
+                    commentAdapter.addData(
+                        mPosition,
+                        CommentData(
+                            AppConstant.Constant.PARENT_COMMENT_TYPE,
+                            AppConstant.Constant.PARENT_COMMENT_TYPE
+                        ).apply {
+                            data = it
+                        })
                     commentAdapter.getViewByPosition(
                         mViewBinding.recyclerView,
-                        0,
+                        mPosition,
                         com.yang.lib_common.R.id.siv_img
                     )?.let { it1 ->
                         it1.isFocusable = true
@@ -244,8 +340,38 @@ class DynamicDetailActivity : BaseActivity<ActDynamicDetailBinding>() {
                     }
                     mViewBinding.nestedScrollView.fullScroll(View.FOCUS_DOWN)
                 }
+                AppConstant.Constant.CHILD_COMMENT_TYPE -> {
+                    val item = commentAdapter.getItem(mPosition)
+                    item?.addSubItem(0,
+                        CommentData(
+                            AppConstant.Constant.CHILD_COMMENT_TYPE,
+                            AppConstant.Constant.CHILD_COMMENT_TYPE
+                        ).apply {
+                            data = it
+                        })
+//                    commentAdapter.collapse(mPosition)
+//                    commentAdapter.notifyItemInserted(mPosition)
+//                    commentAdapter.notifyDataSetChanged()
+//                    commentAdapter.expand(mPosition)
+                    commentAdapter.collapse(mPosition, false)
+                    commentAdapter.expand(mPosition, false)
 
+                }
+                AppConstant.Constant.CHILD_REPLY_COMMENT_TYPE -> {
+                    val item = commentAdapter.getItem(mPosition)
+                    item?.addSubItem(0,
+                        CommentData(
+                            AppConstant.Constant.CHILD_COMMENT_TYPE,
+                            AppConstant.Constant.CHILD_REPLY_COMMENT_TYPE
+                        ).apply {
+                            data = it
+                        })
+//                    commentAdapter.collapse(mPosition)
+//                    commentAdapter.notifyDataSetChanged()
+                    commentAdapter.collapse(mPosition, false)
+                    commentAdapter.expand(mPosition, false)
+                }
             }
-        }).show()
+        }
     }
 }

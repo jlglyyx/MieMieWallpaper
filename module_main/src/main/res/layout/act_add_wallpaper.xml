@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:gravity="top"
-                android:hint="发表些什么..."
+                android:hint="描述些什么..."
                 android:minLines="5"
                 android:padding="@dimen/dp_10"
                 android:textSize="@dimen/sp_14" />
@@ -44,6 +44,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"

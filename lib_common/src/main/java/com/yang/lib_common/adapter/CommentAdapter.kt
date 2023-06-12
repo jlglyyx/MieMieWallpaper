@@ -30,9 +30,11 @@ class CommentAdapter(data: MutableList<CommentData>?) :
 
     override fun convert(helper: BaseViewHolder, item: CommentData) {
 
-        helper.setText(R.id.tv_comment, item.comment)
+        helper.setText(R.id.tv_comment, item.data?.content)
+        .setText(R.id.tv_name, item.data?.userName)
+        .setText(R.id.tv_time, item.data?.updateTime)
         val sivImg = helper.getView<ImageView>(R.id.siv_img)
-        sivImg.loadCircle(mContext,"https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg",R.drawable.iv_attr,R.drawable.iv_attr)
+        sivImg.loadCircle(mContext,item.data?.userAttr,R.drawable.iv_attr,R.drawable.iv_attr)
 
 
 
@@ -43,16 +45,15 @@ class CommentAdapter(data: MutableList<CommentData>?) :
                     R.id.tv_open_comment,
                     !(null == item.subItems || item.subItems.size == 0 || item.isExpanded)
                 )
+                helper.setGone(
+                    R.id.ll_sq,
+                    item.isExpanded
+                )
                 childSize = 0
                 getSubItemsSize(item)
                 helper.setText(R.id.tv_open_comment, "-----展开${childSize}条评论-----")
-                helper.itemView.setOnClickListener {
-                    if (item.isExpanded) {
-                        collapse(helper.layoutPosition,false,true)
-                    } else {
-                        expand(helper.layoutPosition,false,true)
-                    }
-                }
+                .addOnClickListener(R.id.tv_open_comment)
+                .addOnClickListener(R.id.ll_sq)
             }
             AppConstant.Constant.CHILD_COMMENT_TYPE -> {
                 when (item.mItemType) {
@@ -61,15 +62,17 @@ class CommentAdapter(data: MutableList<CommentData>?) :
                     }
                     AppConstant.Constant.CHILD_REPLY_COMMENT_TYPE -> {
                         helper.addOnClickListener(R.id.siv_reply_img)
+                        .setText(R.id.tv_reply_name,item.data?.replyUserName)
                         val sivReplyImg = helper.getView<ImageView>(R.id.siv_reply_img)
-                        sivReplyImg.loadCircle(mContext,"https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg",R.drawable.iv_attr,R.drawable.iv_attr)
+                        sivReplyImg.loadCircle(mContext,item.data?.replyUserAttr,R.drawable.iv_attr,R.drawable.iv_attr)
                     }
                 }
             }
         }
 
         helper.addOnClickListener(R.id.siv_img)
-            .addOnClickListener(R.id.tv_reply)
+            .addOnClickListener(R.id.tv_name)
+            .addOnClickListener(R.id.tv_reply_name)
     }
 
     private fun getSubItemsSize(item: CommentData){
@@ -82,4 +85,6 @@ class CommentAdapter(data: MutableList<CommentData>?) :
             }
         }
     }
+
+
 }

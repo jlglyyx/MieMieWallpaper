@@ -1,6 +1,7 @@
 package com.yang.module_main.api
 
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.FansData
 import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
@@ -38,12 +39,12 @@ interface MainApi {
 //    suspend fun getTaskList(@Body params:MutableMap<String,Any>):MResult<MutableList<TaskData>>
 
     @Multipart
-    @POST("/uploadFile")
+    @POST("/api/file/uploadFile")
     suspend fun uploadFile(@PartMap file: MutableMap<String, RequestBody>): MResult<MutableList<String>>
 
     @Multipart
-    @POST("/uploadFile")
-    suspend fun uploadFileAndParam(@Body file: MutableList<RequestBody>): MResult<MutableList<String>>
+    @POST("/api/dynamic/publishDynamic")
+    suspend fun publishDynamic(@PartMap file: MutableMap<String, RequestBody>,@Part("userId") userId:String,@Part("content") content:String,@Part("sendLocation") sendLocation:String): MResult<MutableList<String>>
 
 
     @GET("main/queryWallType")
@@ -55,6 +56,9 @@ interface MainApi {
     @POST("api/wallpaper/queryWallpaper")
     suspend fun getWallpaper(@Body params:MutableMap<String,Any?>):MResult<MListResult<WallpaperData>>
 
+    @POST("api/wallpaper/queryWallpaperDetail")
+    suspend fun queryWallpaperDetail(@Body params:MutableMap<String,Any?>):MResult<WallpaperData>
+
     @POST("api/user/searchUser")
     suspend fun searchUser(@Body params:MutableMap<String,Any?>):MResult<MListResult<UserInfoData>>
 
@@ -64,5 +68,11 @@ interface MainApi {
 
     @POST("api/main/insertDeviceToken")
     suspend fun insertDeviceToken(@Body params:MutableMap<String,Any?>):MResult<MListResult<String>>
+
+    @POST("api/follow/addFollow")
+    suspend fun addFollow(@Body params:MutableMap<String,Any?>):MResult<FansData>
+
+    @POST("api/wallpaper/addOrCancelCollect")
+    suspend fun addOrCancelCollect(@Body params:MutableMap<String,Any?>):MResult<WallpaperData>
 
 }

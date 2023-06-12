@@ -1,6 +1,7 @@
 package com.yang.lib_common.constant
 
 import com.kuaishou.weapon.p0.jni.A
+import com.yang.lib_common.util.getMMKVValue
 
 interface AppConstant {
 
@@ -10,7 +11,9 @@ interface AppConstant {
 
         const val BASE_PORT = "20000"
 
-        const val BASE_URL = "http://192.168.174.116:20000/"
+//        const val BASE_URL = "http://192.168.174.116:20000/"
+        const val BASE_URL:String = "http://192.168.31.89:20000/"
+//        var BASE_URL:String = getMMKVValue(Constant.IP,"http://192.168.31.188:20000/")
 //        const val BASE_URL = "http://www.yyxjlgl.tk/"
 //        const val BASE_URL = "https://www.baidu.com/"
 //        const val BASE_URL = "https://www.wanandroid.com/"
@@ -276,6 +279,8 @@ interface AppConstant {
 
         const val ID = "id"
 
+        const val RESOURCE_ID = "resourceId"
+
         const val TOKEN = "token"
 
         const val URL = "url"
@@ -300,9 +305,13 @@ interface AppConstant {
 
         const val TO_LOAD = "toLoad"
 
+        const val IS_DOWN = "is_down"
+
         const val OPEN_COMMENT = "open_comment"
 
         const val CONTENT = "content"
+
+        const val REPLY_USER_ID = "replyUserId"
 
         const val PAGE_SIZE_COUNT = 20
 
@@ -315,6 +324,26 @@ interface AppConstant {
         const val LOGIN_USER_TYPE = "login_user_type"
 
         const val USER_ID = "userId"
+
+        const val CURRENT_USER_ID = "currentUserId"
+
+        const val PAY_TYPE = "payType"
+
+        const val VIP_PACKAGE_ID = "vipPackageId"
+
+        const val FOLLOW_USER_ID = "followUserId"
+
+        const val IS_FOLLOW = "isFollow"
+
+        const val COLLECTION_USER_ID = "collectionUserId"
+
+        const val COLLECTION_ID = "collectionId"
+
+        const val COLLECTION_TYPE = "collectionType"
+
+        const val IS_DELETE_FLAG = "isDeleteFlag"
+
+        const val PARENT_ID = "parentId"
 
         const val PAGE_SIZE = "pageSize"
 
@@ -378,6 +407,9 @@ interface AppConstant {
         const val BUNDLE = "bundle"
 
         const val REFRESH = "refresh"
+
+
+        const val REFRESH_USER_INFO = "refresh_user_info"
 
         const val LAST_TIME = "last_time"
 

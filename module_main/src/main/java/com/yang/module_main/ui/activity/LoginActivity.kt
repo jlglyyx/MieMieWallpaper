@@ -75,12 +75,19 @@ class LoginActivity : BaseActivity<ActLoginBinding>() {
         }
 
         mViewBinding.btToLogin.clicks().subscribe {
+            setMMKVValue(AppConstant.Constant.IP,mViewBinding.etIp.getText())
             hideSoftInput(this, mViewBinding.btToLogin)
             mainViewModel.login()
         }
         mViewBinding.tvOtherToLogin.clicks().subscribe {
 
 
+        }
+
+        mViewBinding.tvDesc.setOnLongClickListener {
+            mViewBinding.etIp.visibility = View.VISIBLE
+            mViewBinding.etIp.setText(AppConstant.ClientInfo.BASE_URL)
+            return@setOnLongClickListener false
         }
 
 

@@ -1,6 +1,7 @@
 package com.yang.module_main.repository
 
 import com.yang.lib_common.base.repository.BaseRepository
+import com.yang.lib_common.data.FansData
 import com.yang.lib_common.remote.di.response.MListResult
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.UserInfoData
@@ -55,6 +56,11 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) :BaseRepo
             mainApi.getWallpaper(params)
         }
     }
+    suspend fun queryWallpaperDetail(params:MutableMap<String,Any?>): MResult<WallpaperData> {
+        return withContextIO {
+            mainApi.queryWallpaperDetail(params)
+        }
+    }
     suspend fun searchUser(params:MutableMap<String,Any?>): MResult<MListResult<UserInfoData>> {
         return withContextIO {
             mainApi.searchUser(params)
@@ -89,9 +95,20 @@ class MainRepository @Inject constructor(private val mainApi: MainApi) :BaseRepo
         }
     }
 
-    suspend fun uploadFileAndParam(filePaths: MutableList<RequestBody>): MResult<MutableList<String>> {
+    suspend fun publishDynamic(filePaths: MutableMap<String, RequestBody>,userId:String,content:String,sendLocation:String): MResult<MutableList<String>> {
         return withContextIO {
-            mainApi.uploadFileAndParam(filePaths)
+            mainApi.publishDynamic(filePaths,userId,content,sendLocation)
+        }
+    }
+
+    suspend fun addFollow(params:MutableMap<String,Any?>): MResult<FansData> {
+        return withContextIO {
+            mainApi.addFollow(params)
+        }
+    }
+    suspend fun addOrCancelCollect(params:MutableMap<String,Any?>): MResult<WallpaperData> {
+        return withContextIO {
+            mainApi.addOrCancelCollect(params)
         }
     }
 }
